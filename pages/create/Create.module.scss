@@ -1,0 +1,32 @@
+.tokenTypes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) 0;
+}
+
+.tokenType {
+  border: 1px solid var(--color-primary-dark);
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  height: 400px;
+  justify-content: space-between;
+  max-width: 400px;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
+.tag {
+  background-color: var(--color-primary-dark);
+  color: var(--color-primary-light);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-xs);
+  padding: var(--spacing-xs);
+}
