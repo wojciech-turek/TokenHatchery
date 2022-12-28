@@ -1,0 +1,13 @@
+.drawer {
+  height: 200px;
+  position: absolute;
+  top: -200px;
+  left: 0;
+  width: 100%;
+  z-index: 101;
+  background-color: var(--color-primary-light);
+  transition: top 0.2s ease-in-out;
+  &.open {
+    top: 40px;
+  }
+}
