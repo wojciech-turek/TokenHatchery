@@ -9,12 +9,11 @@
   opacity: 0;
   display: none;
   animation: fadeOut 0.2s ease-in-out forwards;
-}
-
-.active {
-  opacity: 1;
-  display: block;
-  animation: fadeIn 0.2s ease-in-out forwards;
+  &.active {
+    opacity: 1;
+    display: block;
+    animation: fadeIn 0.2s ease-in-out forwards;
+  }
 }
 
 @keyframes fadeIn {
