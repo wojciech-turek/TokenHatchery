@@ -1,0 +1,39 @@
+.bar {
+  height: 40px;
+  display: flex;
+  z-index: 102;
+  justify-content: space-around;
+  background-color: var(--color-primary-dark);
+  box-shadow: var(--shadow-sm);
+}
+
+.content {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logoText {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-primary-light);
+}
+
+.desktopRight {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.mobileRight {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .desktopRight {
+    display: none;
+  }
+  .mobileRight {
+    display: flex;
+  }
+}

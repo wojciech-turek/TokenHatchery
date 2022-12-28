@@ -1,10 +1,10 @@
+import FlexibleContainer from "components/FlexibleContainer/FlexibleContainer";
 import { ethers } from "ethers";
 import Head from "next/head";
 import { useState } from "react";
-import { useAccount, useConnect, useNetwork, useSigner } from "wagmi";
+import { useAccount, useNetwork, useSigner } from "wagmi";
 
 export default function Home() {
-  const { connect, connectors } = useConnect();
   const [deployedContract, setDeployedContract] = useState<string>("");
   const [verificationGuid, setVerificationGuid] = useState<string>("");
   const [verificationStatus, setVerificationStatus] = useState<string>("");
@@ -29,10 +29,6 @@ export default function Home() {
     const deployedContract = await contract.deploy();
     await deployedContract.deployTransaction.wait();
     setDeployedContract(deployedContract.address);
-  };
-
-  const connectWallet = () => {
-    connect({ connector: connectors[0] });
   };
 
   const generateContract = async () => {
@@ -98,13 +94,10 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
+      <FlexibleContainer>
         <div>Current connected network: {chain?.name}</div>
         <div>
-          <button onClick={() => connectWallet()}>Connect</button>
-        </div>
-        <div>
-          <p>Address: {address}</p>
+          <p>Address: {address || ""}</p>
         </div>
         <div>
           <button onClick={deployNewErc20}>Deploy erc20</button>
@@ -118,7 +111,7 @@ export default function Home() {
           <button onClick={checkVerifyStatus}>Check verification status</button>
         </div>
         {verificationStatus && <div>{verificationStatus}</div>}
-      </main>
+      </FlexibleContainer>
     </>
   );
 }
