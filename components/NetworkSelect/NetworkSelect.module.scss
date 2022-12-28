@@ -1,0 +1,26 @@
+.networks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.network {
+  display: flex;
+  cursor: pointer;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  border: 1px solid var(--color-primary-dark);
+  border-radius: 4px;
+  padding: var(--spacing-sm);
+  background-color: #ddd;
+  &:hover {
+    background-color: #ccc;
+  }
+  .name {
+    display: flex;
+    gap: var(--spacing-sm);
+  }
+  .radio {
+    cursor: pointer;
+  }
+}

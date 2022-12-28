@@ -70,12 +70,14 @@ const Body = ({
   moveNext,
   lastChild,
   setCompleted,
+  canMoveNext,
 }: {
   children: React.ReactNode;
   active?: boolean;
   moveNext?: () => void;
   lastChild?: boolean;
   setCompleted?: () => void;
+  canMoveNext?: boolean;
 }) => {
   const handleContinue = () => {
     setCompleted && setCompleted();
@@ -90,7 +92,9 @@ const Body = ({
       {children}
       {!lastChild && (
         <div>
-          <button onClick={handleContinue}>Next</button>
+          <button onClick={handleContinue} disabled={!canMoveNext}>
+            Next
+          </button>
         </div>
       )}
     </div>

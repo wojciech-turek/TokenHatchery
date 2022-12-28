@@ -11,14 +11,7 @@ import Container from "components/Container/Container";
 const Drawer = dynamic(() => import("components/Drawer/Drawer"));
 
 const Header = () => {
-  const { connect, connectors } = useConnect();
-  const { address, isConnected } = useAccount();
-
   const [drawerOpen, setDrawerOpen] = useState(false);
-
-  const connectWallet = () => {
-    connect({ connector: connectors[0] });
-  };
 
   const navigationItems = [
     {
@@ -49,11 +42,6 @@ const Header = () => {
                   <Link href={item.link}>{item.name}</Link>
                 </div>
               ))}
-              {!isConnected ? (
-                <button onClick={() => connectWallet()}>Connect Wallet</button>
-              ) : (
-                truncateAddress(address)
-              )}
             </div>
             <div className={styles.mobileRight}>
               <SlMenu
