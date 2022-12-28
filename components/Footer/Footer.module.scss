@@ -1,0 +1,13 @@
+.wrapper {
+  background-color: var(--color-primary-dark);
+  color: var(--color-primary-light);
+  display: flex;
+  height: 80px;
+}
+
+.content {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
