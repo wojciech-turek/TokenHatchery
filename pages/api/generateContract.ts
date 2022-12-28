@@ -1,4 +1,4 @@
-import { compileContract } from "./../../utils/compile";
+import { compileContract } from "../../utils/api/compile";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { v4 as uuidv4 } from "uuid";
 
@@ -11,8 +11,9 @@ export default async function handler(
   const { name, symbol, types } = req.body;
   const { mintable } = types;
 
+  const hasMoidfiers = Object.values(types).some((type) => type);
+
   const contractId = uuidv4();
-  // first letter of name and symbol to uppercase
   const nameCapitalized = name.charAt(0).toUpperCase() + name.slice(1);
 
   const newContract = `
@@ -22,7 +23,9 @@ pragma solidity 0.8.17;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 ${mintable ? `import "@openzeppelin/contracts/access/Ownable.sol";` : ""}
 
-contract ${nameCapitalized} is ERC20, ${mintable ? "Ownable" : ""} {
+contract ${nameCapitalized} is ERC20${hasMoidfiers ? "," : ""} ${
+    mintable ? "Ownable" : ""
+  } {
     constructor() ERC20("MyTokeeen", "MTK") {}
     string public poopty = "${name}";
     string public pants = "${symbol}";
