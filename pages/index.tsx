@@ -1,11 +1,95 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from '../styles/Home.module.css'
-
-const inter = Inter({ subsets: ['latin'] })
+import { ethers } from "ethers";
+import Head from "next/head";
+import { useState } from "react";
+import { useAccount, useConnect, useNetwork, useSigner } from "wagmi";
 
 export default function Home() {
+  const { connect, connectors } = useConnect();
+  const [deployedContract, setDeployedContract] = useState<string>("");
+  const [verificationGuid, setVerificationGuid] = useState<string>("");
+  const [verificationStatus, setVerificationStatus] = useState<string>("");
+  const [contractId, setContractId] = useState<string>("");
+  const { address } = useAccount();
+  const { chain } = useNetwork();
+  const { data: signer } = useSigner();
+
+  const deployNewErc20 = async () => {
+    if (!signer) return;
+    const tokenContractJson = await generateContract();
+    setContractId(tokenContractJson.contractId);
+    const abi =
+      tokenContractJson.result.contracts[`${tokenContractJson.contractId}.sol`][
+        "Zeberka"
+      ].abi;
+    const bytecode =
+      tokenContractJson.result.contracts[`${tokenContractJson.contractId}.sol`][
+        "Zeberka"
+      ].evm.bytecode.object;
+    const contract = new ethers.ContractFactory(abi, bytecode, signer);
+    const deployedContract = await contract.deploy();
+    await deployedContract.deployTransaction.wait();
+    setDeployedContract(deployedContract.address);
+  };
+
+  const connectWallet = () => {
+    connect({ connector: connectors[0] });
+  };
+
+  const generateContract = async () => {
+    const response = await fetch("/api/generateContract", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: "Zeberka",
+        symbol: "Zabudeewqenia",
+        types: {
+          mintable: true,
+        },
+      }),
+    });
+    const data = await response.json();
+    return data;
+  };
+
+  const handleVerify = async () => {
+    try {
+      const response = await fetch("/api/verifyContract", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          address: deployedContract,
+          contractId,
+          contractName: "Zeberka",
+          types: {
+            mintable: true,
+          },
+        }),
+      });
+      const data = await response.json();
+      setVerificationGuid(data.guid);
+    } catch (e: any) {
+      setVerificationGuid(e.message);
+    }
+  };
+
+  const checkVerifyStatus = async () => {
+    const response = await fetch("/api/verificationStatus", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        guid: verificationGuid,
+      }),
+    });
+    const data = await response.json();
+    setVerificationStatus(data);
+  };
+
   return (
     <>
       <Head>
@@ -14,110 +98,27 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        <div className={styles.description}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>pages/index.tsx</code>
-          </p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              By{' '}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
-          </div>
+      <main>
+        <div>Current connected network: {chain?.name}</div>
+        <div>
+          <button onClick={() => connectWallet()}>Connect</button>
         </div>
-
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-          <div className={styles.thirteen}>
-            <Image
-              src="/thirteen.svg"
-              alt="13"
-              width={40}
-              height={31}
-              priority
-            />
-          </div>
+        <div>
+          <p>Address: {address}</p>
         </div>
-
-        <div className={styles.grid}>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Docs <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Learn <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Templates <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
-            </p>
-          </a>
+        <div>
+          <button onClick={deployNewErc20}>Deploy erc20</button>
         </div>
+        {deployedContract && <div>{deployedContract}</div>}
+        <div>
+          <button onClick={handleVerify}>Verify new contract</button>
+        </div>
+        {verificationGuid && <div>{verificationGuid}</div>}
+        <div>
+          <button onClick={checkVerifyStatus}>Check verification status</button>
+        </div>
+        {verificationStatus && <div>{verificationStatus}</div>}
       </main>
     </>
-  )
+  );
 }
