@@ -1,0 +1,37 @@
+:root {
+  --max-width: min(100%, 1280px);
+
+  // font sizes
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+
+  --font-size-heading: 2.5rem;
+
+  // line heights
+  --line-height-xs: 1rem;
+  --line-height-sm: 1.25rem;
+  --line-height-md: 1.5rem;
+  --line-height-lg: 1.75rem;
+  --line-height-xl: 2rem;
+
+  //colors
+  --color-primary: #0070f3;
+  --color-primary-dark: #1a1a1a;
+  --color-primary-light: #f3f3f3;
+  --color-gray-dark: #232323;
+
+  // spacing
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  // shadows
+  --shadow-xs: 0 0 4px 0 rgba(0, 0, 0, 0.2);
+  --shadow-sm: 0 0 8px 0 rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 0 16px 0 rgba(0, 0, 0, 0.2);
+}
