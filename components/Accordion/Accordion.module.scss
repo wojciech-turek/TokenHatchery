@@ -1,0 +1,44 @@
+.accordion {
+  border: 1px solid #ccc;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  @media screen and (max-width: 768px) {
+    padding: 0;
+  }
+}
+
+.item {
+  position: relative;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 0;
+  padding: 0;
+  background-color: #eee;
+  overflow: hidden;
+  transition: height 0.2s ease-in-out, padding 0.2s ease-in-out;
+  &.active {
+    padding: var(--spacing-sm);
+    height: 200px;
+  }
+}
+
+.header {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  padding: var(--spacing-sm);
+  border-radius: 4px;
+  background-color: #ccc;
+  color: #999;
+  &.active {
+    background-color: var(--color-primary-dark);
+    color: var(--color-primary-light);
+  }
+}
