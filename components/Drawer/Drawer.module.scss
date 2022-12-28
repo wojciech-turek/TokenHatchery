@@ -5,9 +5,11 @@
   left: 0;
   width: 100%;
   z-index: 101;
+  opacity: 0;
   background-color: var(--color-primary-light);
-  transition: top 0.2s ease-in-out;
+  transition: top 0.2s ease-in-out, opacity 0.2s ease-in-out;
   &.open {
     top: 40px;
+    opacity: 1;
   }
 }

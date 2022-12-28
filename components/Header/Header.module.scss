@@ -20,6 +20,21 @@
   color: var(--color-primary-light);
 }
 
+.menuItem {
+  font-size: var(--font-size-md);
+  color: var(--color-primary-light);
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  cursor: pointer;
+  &:hover {
+    color: var(--color-primary-hover);
+  }
+  &.dark {
+    color: var(--color-gray-dark);
+  }
+}
+
 .desktopRight {
   display: flex;
   gap: var(--spacing-md);
