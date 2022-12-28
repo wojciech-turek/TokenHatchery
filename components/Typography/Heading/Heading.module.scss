@@ -2,4 +2,7 @@
   font-size: var(--font-size-heading);
   margin: 1rem;
   color: var(--color-gray-dark);
+  &.centered {
+    text-align: center;
+  }
 }
