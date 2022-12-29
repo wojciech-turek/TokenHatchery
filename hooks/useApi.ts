@@ -17,17 +17,19 @@ const useApi = () => {
         symbol: tokenData.symbol,
         decimals: tokenData.decimals,
         initialSupply: tokenData.initialSupply,
-        extensions: extensions,
+        extensions: extensions.map((extension) => extension.toLowerCase()),
       }),
     });
     const data = await response.json();
     const { contractId, result } = data;
+    const nameCapitalized =
+      tokenData.name.charAt(0).toUpperCase() + tokenData.name.slice(1);
 
     return {
       contractId: "",
-      abi: result.contracts[`${contractId}.sol`][tokenData.name].abi,
+      abi: result.contracts[`${contractId}.sol`][nameCapitalized].abi,
       bytecode:
-        result.contracts[`${contractId}.sol`][tokenData.name].evm.bytecode
+        result.contracts[`${contractId}.sol`][nameCapitalized].evm.bytecode
           .object,
     };
   };

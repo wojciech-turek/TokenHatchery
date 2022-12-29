@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import useApi from "hooks/useApi";
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { BaseTokenData } from "types/tokens";
 import { useSigner } from "wagmi";
 
@@ -24,6 +24,7 @@ const ContractDeploy = ({
 }: ContractDeployProps) => {
   const { data: signer } = useSigner();
   const { generateContract } = useApi();
+  const [deploying, setDeploying] = useState(false);
 
   const deployNewErc20 = async () => {
     if (!signer) return;
@@ -31,11 +32,13 @@ const ContractDeploy = ({
       tokenData,
       extensions,
     });
-    console.log(contractId, abi, bytecode);
-    //     const contract = new ethers.ContractFactory(abi, bytecode, signer);
-    //     const deployedContract = await contract.deploy();
-    //     await deployedContract.deployTransaction.wait();
-    //     setDeployedTokenAddress(deployedContract.address);
+    const contract = new ethers.ContractFactory(abi, bytecode, signer);
+    const deployedContract = await contract.deploy();
+    await deployedContract.deployTransaction.wait();
+    setDeployedToken({
+      address: deployedContract.address,
+      id: contractId,
+    });
   };
 
   const { name, symbol, decimals, initialSupply } = tokenData;
@@ -52,7 +55,11 @@ const ContractDeploy = ({
 
       <button onClick={deployNewErc20}>Deploy</button>
 
-      <p>Deployed token address: {deployedToken.address}</p>
+      {deploying ? (
+        <p>Please wait, you token deployment is pending...</p>
+      ) : (
+        <p> Success! Deployed token address: {deployedToken.address}</p>
+      )}
     </div>
   );
 };
