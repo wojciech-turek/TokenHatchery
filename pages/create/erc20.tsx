@@ -1,15 +1,19 @@
+import React, { useState } from "react";
 import Accordion from "components/Accordion/Accordion";
 import Container from "components/Container/Container";
+import ExtensionSelect from "components/ExtensionSelect/ExtensionSelect";
 import FlexibleContainer from "components/FlexibleContainer/FlexibleContainer";
 import NetworkSelect from "components/NetworkSelect/NetworkSelect";
 import BodyText from "components/Typography/BodyText/BodyText";
 import Heading from "components/Typography/Heading/Heading";
 import WalletConnect from "components/WalletConnect/WalletConnect";
-import React from "react";
+import { erc20Extensions } from "constants/availableTokenTypes";
 
 const Erc20 = () => {
   const [connectionEstablished, setConnectionEstablished] =
-    React.useState<boolean>(false);
+    useState<boolean>(false);
+
+  const [selectedExtensions, setSelectedExtensions] = useState<string[]>([]);
 
   const handleConnected = (val: boolean) => {
     setConnectionEstablished(val);
@@ -31,7 +35,13 @@ const Erc20 = () => {
         </Accordion.Item>
         <Accordion.Item>
           <Accordion.Header>Select extensions</Accordion.Header>
-          <Accordion.Body>Body1</Accordion.Body>
+          <Accordion.Body canMoveNext={true}>
+            <ExtensionSelect
+              extensions={erc20Extensions}
+              setSelectedExtensions={setSelectedExtensions}
+              selectedExtensions={selectedExtensions}
+            />
+          </Accordion.Body>
         </Accordion.Item>
         <Accordion.Item>
           <Accordion.Header>Personalize</Accordion.Header>

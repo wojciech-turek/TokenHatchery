@@ -1,0 +1,35 @@
+.extensions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) 0;
+}
+
+.extension {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  align-items: center;
+  justify-content: space-between;
+  width: 200px;
+  border: 1px solid var(--color-primary-dark);
+
+  .name {
+    font-weight: 700;
+  }
+  .description {
+    text-align: center;
+    font-size: var(--font-size-xs);
+  }
+  .advanced {
+    font-weight: 700;
+    font-size: var(--font-size-xs);
+    color: var(--color-primary-dark);
+  }
+  input {
+    margin-bottom: 0;
+    justify-self: flex-end;
+  }
+}
