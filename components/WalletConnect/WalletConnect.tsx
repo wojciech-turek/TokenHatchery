@@ -17,7 +17,7 @@ const WalletConnect = () => {
         {!isConnected ? (
           <button onClick={() => connectWallet()}>Connect Wallet</button>
         ) : (
-          `Connected with wallet: ${truncateAddress(address)}`
+          `Connected with injected wallet: ${truncateAddress(address)}`
         )}
       </p>
     </div>

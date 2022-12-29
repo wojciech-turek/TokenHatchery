@@ -8,8 +8,19 @@ import BodyText from "components/Typography/BodyText/BodyText";
 import Heading from "components/Typography/Heading/Heading";
 import WalletConnect from "components/WalletConnect/WalletConnect";
 import { erc20Extensions } from "constants/availableTokenTypes";
+import Form from "components/Form/Form";
+import Input from "components/Input/Input";
+import ContractDeploy from "components/ContractDeploy/ContractDeploy";
 
 const Erc20 = () => {
+  const [tokenName, setTokenName] = useState<string>("");
+  const [tokenSymbol, setTokenSymbol] = useState<string>("");
+  const [tokenSupply, setTokenSupply] = useState<string>("");
+  const [tokenDecimals, setTokenDecimals] = useState<string>("18");
+  const [deployedToken, setDeployedToken] = useState({
+    address: "",
+    id: "",
+  });
   const [connectionEstablished, setConnectionEstablished] =
     useState<boolean>(false);
 
@@ -45,10 +56,65 @@ const Erc20 = () => {
         </Accordion.Item>
         <Accordion.Item>
           <Accordion.Header>Personalize</Accordion.Header>
-          <Accordion.Body>Body1</Accordion.Body>
+          <Accordion.Body
+            canMoveNext={
+              tokenName !== "" &&
+              tokenSymbol !== "" &&
+              tokenSupply !== "" &&
+              tokenDecimals !== ""
+            }
+          >
+            <Form>
+              <Input
+                name="tokenName"
+                label="Token Name:"
+                value={tokenName}
+                onChange={(e) => setTokenName(e.target.value)}
+                type="text"
+              />
+              <Input
+                name="tokenSymbol"
+                label="Token Symbol:"
+                value={tokenSymbol}
+                onChange={(e) => setTokenSymbol(e.target.value)}
+                type="text"
+              />
+              <Input
+                name="tokenDecimals"
+                label="Token Decimals:"
+                value={tokenDecimals}
+                onChange={(e) => setTokenDecimals(e.target.value)}
+                type="number"
+              />
+              <Input
+                name="tokenSupply"
+                label="Initial Supply:"
+                value={tokenSupply}
+                onChange={(e) => setTokenSupply(e.target.value)}
+                type="number"
+              />
+            </Form>
+          </Accordion.Body>
         </Accordion.Item>
         <Accordion.Item>
           <Accordion.Header>Deploy to network</Accordion.Header>
+          <Accordion.Body>
+            <ContractDeploy
+              type="erc20"
+              tokenData={{
+                name: tokenName,
+                symbol: tokenSymbol,
+                decimals: tokenDecimals,
+                initialSupply: tokenSupply,
+              }}
+              extensions={selectedExtensions}
+              setDeployedToken={setDeployedToken}
+              deployedToken={deployedToken}
+            />
+          </Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item>
+          <Accordion.Header>Verify your contract (optional)</Accordion.Header>
           <Accordion.Body>Body1</Accordion.Body>
         </Accordion.Item>
       </Accordion>
