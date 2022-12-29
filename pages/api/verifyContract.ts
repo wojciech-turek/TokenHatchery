@@ -82,7 +82,6 @@ export default async function handler(
   });
 
   const parsedResponse = await response.json();
-  console.log(parsedResponse);
   const { status, result } = parsedResponse;
   if (status === "1") {
     res
