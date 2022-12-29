@@ -1,5 +1,5 @@
 import BodyText from "components/Typography/BodyText/BodyText";
-import { Extension } from "constants/availableTokenTypes";
+import { AccessControl, Extension } from "constants/availableTokenTypes";
 import React, { Dispatch, SetStateAction } from "react";
 import styles from "./ExtensionSelect.module.scss";
 
@@ -7,10 +7,16 @@ const ExtensionSelect = ({
   extensions,
   selectedExtensions,
   setSelectedExtensions,
+  controlTypes,
+  managementType,
+  setManagementType,
 }: {
   extensions: Extension[];
   selectedExtensions: string[];
   setSelectedExtensions: Dispatch<SetStateAction<string[]>>;
+  controlTypes: AccessControl[];
+  managementType: string;
+  setManagementType: Dispatch<SetStateAction<string>>;
 }) => {
   const handleSelect = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -42,6 +48,20 @@ const ExtensionSelect = ({
               type="checkbox"
               checked={selectedExtensions.includes(extension.name)}
               onChange={(e) => handleSelect(e, extension.name)}
+            />
+          </div>
+        ))}
+      </div>
+      <BodyText>Select management type</BodyText>
+      <div className={styles.extensions}>
+        {controlTypes.map((controlType) => (
+          <div key={controlType.name} className={styles.extension}>
+            <p className={styles.name}>{controlType.name}</p>
+            <p className={styles.description}>{controlType.description}</p>
+            <input
+              type="radio"
+              checked={managementType === controlType.name}
+              onChange={(e) => setManagementType(controlType.type)}
             />
           </div>
         ))}

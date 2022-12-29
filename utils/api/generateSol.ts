@@ -4,6 +4,7 @@ interface ContractGenerationProps {
   decimals: number;
   initialSupply: number;
   extensions: string[];
+  managementType: string;
 }
 
 export const generateSolFile = ({
@@ -12,8 +13,8 @@ export const generateSolFile = ({
   decimals,
   initialSupply,
   extensions,
+  managementType,
 }: ContractGenerationProps) => {
-  const hasModifiers = extensions.length > 0;
   const mintable = extensions.includes("mintable");
   const burnable = extensions.includes("burnable");
   const pausable = extensions.includes("pausable");
@@ -45,12 +46,22 @@ export const generateSolFile = ({
 
   const extensionsString = Array.from(extensionsSet).join(", ");
 
+  const accessTypeName =
+    managementType === "AccessControl" ? "AccessControl" : "Ownable";
+
+  const isAccessControl = managementType === "AccessControl";
+
+  const accessTypeImport =
+    managementType === "AccessControl"
+      ? "@openzeppelin/contracts/access/AccessControl.sol"
+      : "@openzeppelin/contracts/access/Ownable.sol";
+
   const newErc20Contract = `
     // SPDX-License-Identifier: MIT
   pragma solidity 0.8.17;
   
   import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-  ${mintable ? `import "@openzeppelin/contracts/access/Ownable.sol";` : ""}
+  ${mintable || pausable || snapshots ? `import ${accessTypeImport};` : ""}
     ${
       burnable
         ? `import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";`
@@ -81,12 +92,45 @@ export const generateSolFile = ({
   contract ${name} is ERC20${
     extensionsString !== "" ? `, ${extensionsString}` : ""
   } {
+    ${
+      mintable && isAccessControl
+        ? 'bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");'
+        : ""
+    }
+    ${
+      pausable && isAccessControl
+        ? 'bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");'
+        : ""
+    }
+    ${
+      snapshots && isAccessControl
+        ? 'bytes32 public constant SNAPSHOT_ROLE = keccak256("SNAPSHOT_ROLE");'
+        : ""
+    }
+    
       constructor() ERC20("${name.toUpperCase()}", "${symbol.toUpperCase()}") {
         ${
           initialSupply > 0
             ? `_mint(msg.sender, ${initialSupply} * 10 ** ${decimals});`
             : ""
-        }}
+        }
+        ${isAccessControl ? `_setupRole(DEFAULT_ADMIN_ROLE, msg.sender);` : ""}
+        ${
+          mintable && isAccessControl
+            ? `_setupRole(MINTER_ROLE, msg.sender);`
+            : ""
+        }
+        ${
+          pausable && isAccessControl
+            ? `_setupRole(PAUSER_ROLE, msg.sender);`
+            : ""
+        }
+        ${
+          snapshots && isAccessControl
+            ? `_setupRole(SNAPSHOT_ROLE, msg.sender);`
+            : ""
+        }
+    }
 
         ${
           decimals !== 18
@@ -96,12 +140,34 @@ export const generateSolFile = ({
   
       ${
         mintable
-          ? "function mint(address to, uint256 amount) public onlyOwner {_mint(to, amount);}"
+          ? `function mint(address to, uint256 amount) public ${
+              isAccessControl ? "onlyRole(MINTER_ROLE)" : "onlyOwner"
+            } {_mint(to, amount);}`
           : ""
       } 
 
-      ${pausable ? "function pause() public onlyOwner {_pause();}" : ""}
-      ${pausable ? "function unpause() public onlyOwner { _unpause();}" : ""}
+      ${
+        snapshots
+          ? `function snapshot() public ${
+              isAccessControl ? "onlyRole(SNAPSHOT_ROLE)" : "onlyOwner"
+            } returns (uint256) {return _snapshot();}`
+          : ""
+      }
+
+      ${
+        pausable
+          ? `function pause() public ${
+              isAccessControl ? "onlyRole(PAUSER_ROLE)" : "onlyOwner"
+            } {_pause();}`
+          : ""
+      }
+      ${
+        pausable
+          ? `function unpause() public ${
+              isAccessControl ? "onlyRole(PAUSER_ROLE)" : "onlyOwner"
+            } { _unpause();}`
+          : ""
+      }
      
       ${
         snapshots || votes

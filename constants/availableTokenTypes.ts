@@ -4,6 +4,27 @@ export type Extension = {
   advanced?: boolean;
 };
 
+export type AccessControl = {
+  name: string;
+  type: "Ownable" | "AccessControl";
+  description: string;
+};
+
+export const accessControl: AccessControl[] = [
+  {
+    name: "Single Admin",
+    type: "Ownable",
+    description:
+      "Single admin. Admin account will be able to transfer ownership.",
+  },
+  {
+    name: "Role Based Access Control",
+    type: "AccessControl",
+    description:
+      "Multiple roles. Admin accounts will be able to grant and revoke roles.",
+  },
+];
+
 export const erc20Extensions: Extension[] = [
   {
     name: "Mintable",

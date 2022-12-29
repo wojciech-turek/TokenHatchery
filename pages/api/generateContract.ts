@@ -8,7 +8,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { name, symbol, decimals, initialSupply, extensions } = req.body;
+  const { name, symbol, decimals, initialSupply, extensions, managementType } =
+    req.body;
 
   const contractId = uuidv4();
   const nameCapitalized = name.charAt(0).toUpperCase() + name.slice(1);
@@ -18,6 +19,7 @@ export default async function handler(
     decimals,
     initialSupply,
     extensions,
+    managementType,
   });
 
   fs.writeFileSync(`./contracts/${contractId}.sol`, newContract);

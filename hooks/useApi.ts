@@ -3,9 +3,11 @@ const useApi = () => {
   const generateContract = async ({
     tokenData,
     extensions,
+    managementType,
   }: {
     tokenData: BaseTokenData;
     extensions: string[];
+    managementType: string;
   }) => {
     const response = await fetch("/api/generateContract", {
       method: "POST",
@@ -18,6 +20,7 @@ const useApi = () => {
         decimals: tokenData.decimals,
         initialSupply: tokenData.initialSupply,
         extensions: extensions.map((extension) => extension.toLowerCase()),
+        managementType: managementType.toLowerCase(),
       }),
     });
     const data = await response.json();

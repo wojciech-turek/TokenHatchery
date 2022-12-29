@@ -7,7 +7,7 @@ import NetworkSelect from "components/NetworkSelect/NetworkSelect";
 import BodyText from "components/Typography/BodyText/BodyText";
 import Heading from "components/Typography/Heading/Heading";
 import WalletConnect from "components/WalletConnect/WalletConnect";
-import { erc20Extensions } from "constants/availableTokenTypes";
+import { erc20Extensions, accessControl } from "constants/availableTokenTypes";
 import Form from "components/Form/Form";
 import Input from "components/Input/Input";
 import ContractDeploy from "components/ContractDeploy/ContractDeploy";
@@ -25,6 +25,7 @@ const Erc20 = () => {
     useState<boolean>(false);
 
   const [selectedExtensions, setSelectedExtensions] = useState<string[]>([]);
+  const [managementType, setManagementType] = useState<string>("Ownable");
 
   const handleConnected = (val: boolean) => {
     setConnectionEstablished(val);
@@ -51,6 +52,9 @@ const Erc20 = () => {
               extensions={erc20Extensions}
               setSelectedExtensions={setSelectedExtensions}
               selectedExtensions={selectedExtensions}
+              controlTypes={accessControl}
+              setManagementType={setManagementType}
+              managementType={managementType}
             />
           </Accordion.Body>
         </Accordion.Item>
@@ -108,6 +112,7 @@ const Erc20 = () => {
                 initialSupply: tokenSupply,
               }}
               extensions={selectedExtensions}
+              managementType={managementType}
               setDeployedToken={setDeployedToken}
               deployedToken={deployedToken}
             />
