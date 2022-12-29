@@ -1,7 +1,7 @@
 interface ContractGenerationProps {
   name: string;
   symbol: string;
-  decimals: number;
+  decimals: string;
   initialSupply: number;
   extensions: string[];
   managementType: string;
@@ -44,17 +44,18 @@ export const generateSolFile = ({
   // remove duplicates
   const extensionsSet = new Set(extensionsArray.flat());
 
+  const isAccessControl = managementType === "accesscontrol";
+
+  if (isAccessControl && extensionsSet.has("Ownable")) {
+    extensionsSet.delete("Ownable");
+    extensionsSet.add("AccessControl");
+  }
+
   const extensionsString = Array.from(extensionsSet).join(", ");
 
-  const accessTypeName =
-    managementType === "AccessControl" ? "AccessControl" : "Ownable";
-
-  const isAccessControl = managementType === "AccessControl";
-
-  const accessTypeImport =
-    managementType === "AccessControl"
-      ? "@openzeppelin/contracts/access/AccessControl.sol"
-      : "@openzeppelin/contracts/access/Ownable.sol";
+  const accessTypeImport = isAccessControl
+    ? "@openzeppelin/contracts/access/AccessControl.sol"
+    : "@openzeppelin/contracts/access/Ownable.sol";
 
   const newErc20Contract = `
     // SPDX-License-Identifier: MIT
@@ -108,36 +109,38 @@ export const generateSolFile = ({
         : ""
     }
     
-      constructor() ERC20("${name.toUpperCase()}", "${symbol.toUpperCase()}") {
+      constructor() ERC20("${name.toUpperCase()}", "${symbol.toUpperCase()}") ${
+    permit || votes ? `ERC20Permit("${name.toUpperCase()}} ` : ""
+  }{
+   
+        ${isAccessControl ? `_grantRole(DEFAULT_ADMIN_ROLE, msg.sender);` : ""}
+        ${
+          mintable && isAccessControl
+            ? `_grantRole(MINTER_ROLE, msg.sender);`
+            : ""
+        }
+        ${
+          pausable && isAccessControl
+            ? `_grantRole(PAUSER_ROLE, msg.sender);`
+            : ""
+        }
+        ${
+          snapshots && isAccessControl
+            ? `_grantRole(SNAPSHOT_ROLE, msg.sender);`
+            : ""
+        }
         ${
           initialSupply > 0
             ? `_mint(msg.sender, ${initialSupply} * 10 ** ${decimals});`
             : ""
         }
-        ${isAccessControl ? `_setupRole(DEFAULT_ADMIN_ROLE, msg.sender);` : ""}
-        ${
-          mintable && isAccessControl
-            ? `_setupRole(MINTER_ROLE, msg.sender);`
-            : ""
-        }
-        ${
-          pausable && isAccessControl
-            ? `_setupRole(PAUSER_ROLE, msg.sender);`
-            : ""
-        }
-        ${
-          snapshots && isAccessControl
-            ? `_setupRole(SNAPSHOT_ROLE, msg.sender);`
-            : ""
-        }
     }
 
         ${
-          decimals !== 18
+          decimals !== "18"
             ? `function decimals() public view virtual override returns (uint8) {return ${decimals};}`
             : ""
         }
-  
       ${
         mintable
           ? `function mint(address to, uint256 amount) public ${
@@ -145,15 +148,13 @@ export const generateSolFile = ({
             } {_mint(to, amount);}`
           : ""
       } 
-
       ${
         snapshots
           ? `function snapshot() public ${
               isAccessControl ? "onlyRole(SNAPSHOT_ROLE)" : "onlyOwner"
-            } returns (uint256) {return _snapshot();}`
+            } {_snapshot();}`
           : ""
       }
-
       ${
         pausable
           ? `function pause() public ${
@@ -168,13 +169,11 @@ export const generateSolFile = ({
             } { _unpause();}`
           : ""
       }
-     
       ${
         snapshots || votes
           ? "// The following functions are overrides required by Solidity."
           : ""
       }
-
       ${
         pausable || snapshots
           ? `function _beforeTokenTransfer(address from, address to, uint256 amount) internal ${
@@ -184,7 +183,6 @@ export const generateSolFile = ({
             } {super._beforeTokenTransfer(from, to, amount);}`
           : ""
       }
-
       ${
         votes
           ? "function _afterTokenTransfer(address from, address to, uint256 amount) internal override(ERC20, ERC20Votes) {super._afterTokenTransfer(from, to, amount);}"
@@ -200,7 +198,6 @@ export const generateSolFile = ({
             ? "function _burn(address account, uint256 amount) internal override(ERC20, ERC20Votes) {super._burn(account, amount);}"
             : ""
         }
-
   }
   `;
 

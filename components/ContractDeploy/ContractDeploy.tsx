@@ -31,19 +31,23 @@ const ContractDeploy = ({
   const deployNewErc20 = async () => {
     setDeploying(true);
     if (!signer) return;
-    const { contractId, abi, bytecode } = await generateContract({
-      tokenData,
-      extensions,
-      managementType,
-    });
-    const contract = new ethers.ContractFactory(abi, bytecode, signer);
-    const deployedContract = await contract.deploy();
-    await deployedContract.deployTransaction.wait();
-    setDeployedToken({
-      address: deployedContract.address,
-      id: contractId,
-    });
-    setDeploying(false);
+    try {
+      const { contractId, abi, bytecode } = await generateContract({
+        tokenData,
+        extensions,
+        managementType,
+      });
+      const contract = new ethers.ContractFactory(abi, bytecode, signer);
+      const deployedContract = await contract.deploy();
+      await deployedContract.deployTransaction.wait();
+      setDeployedToken({
+        address: deployedContract.address,
+        id: contractId,
+      });
+      setDeploying(false);
+    } catch (e) {
+      setDeploying(false);
+    }
   };
 
   const { name, symbol, decimals, initialSupply } = tokenData;
@@ -62,8 +66,10 @@ const ContractDeploy = ({
 
       {deploying ? (
         <p>Please wait, you token deployment is pending...</p>
-      ) : (
+      ) : deployedToken.address ? (
         <p> Success! Deployed token address: {deployedToken.address}</p>
+      ) : (
+        <p>Something went wrong. Try again.</p>
       )}
     </div>
   );
