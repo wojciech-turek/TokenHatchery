@@ -60,7 +60,7 @@ const ExtensionSelect = ({
             <p className={styles.description}>{controlType.description}</p>
             <input
               type="radio"
-              checked={managementType === controlType.name}
+              checked={managementType === controlType.type}
               onChange={(e) => setManagementType(controlType.type)}
             />
           </div>
