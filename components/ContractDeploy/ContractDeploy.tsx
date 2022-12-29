@@ -13,6 +13,7 @@ interface ContractDeployProps {
     address: string;
     id: string;
   };
+  managementType: string;
 }
 
 const ContractDeploy = ({
@@ -21,16 +22,19 @@ const ContractDeploy = ({
   tokenData,
   setDeployedToken,
   deployedToken,
+  managementType,
 }: ContractDeployProps) => {
   const { data: signer } = useSigner();
   const { generateContract } = useApi();
   const [deploying, setDeploying] = useState(false);
 
   const deployNewErc20 = async () => {
+    setDeploying(true);
     if (!signer) return;
     const { contractId, abi, bytecode } = await generateContract({
       tokenData,
       extensions,
+      managementType,
     });
     const contract = new ethers.ContractFactory(abi, bytecode, signer);
     const deployedContract = await contract.deploy();
@@ -39,6 +43,7 @@ const ContractDeploy = ({
       address: deployedContract.address,
       id: contractId,
     });
+    setDeploying(false);
   };
 
   const { name, symbol, decimals, initialSupply } = tokenData;
