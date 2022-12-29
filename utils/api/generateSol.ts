@@ -61,7 +61,7 @@ export const generateSolFile = ({
   pragma solidity 0.8.17;
   
   import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-  ${mintable || pausable || snapshots ? `import ${accessTypeImport};` : ""}
+  ${mintable || pausable || snapshots ? `import "${accessTypeImport}";` : ""}
     ${
       burnable
         ? `import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";`
