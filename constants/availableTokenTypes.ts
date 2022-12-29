@@ -131,6 +131,7 @@ export const tokenTypes = [
     accessControl: ["Ownable", "Roles"],
     link: "/create/erc20",
     license: "MIT",
+    enabled: true,
   },
   {
     name: "ERC721",
@@ -140,6 +141,7 @@ export const tokenTypes = [
     accessControl: ["Ownable", "Roles"],
     link: "/create/erc721",
     license: "MIT",
+    enabled: false,
   },
   {
     name: "ERC1155",
@@ -149,5 +151,6 @@ export const tokenTypes = [
     accessControl: ["Ownable", "Roles"],
     link: "/create/erc1155",
     license: "MIT",
+    enabled: false,
   },
 ];

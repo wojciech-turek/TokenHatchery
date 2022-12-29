@@ -46,6 +46,7 @@ const ContractDeploy = ({
       });
       setDeploying(false);
     } catch (e) {
+      console.log(e);
       setDeploying(false);
     }
   };

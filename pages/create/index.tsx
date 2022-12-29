@@ -1,13 +1,18 @@
 import FlexibleContainer from "components/FlexibleContainer/FlexibleContainer";
 import styles from "./Create.module.scss";
 import React from "react";
-import Link from "next/link";
+import { useRouter } from "next/router";
 import Heading from "components/Typography/Heading/Heading";
 import BodyText from "components/Typography/BodyText/BodyText";
 import Container from "components/Container/Container";
 import { tokenTypes } from "constants/availableTokenTypes";
 
 const Create = () => {
+  const router = useRouter();
+  const navigateTo = (path: string) => {
+    router.push(path);
+  };
+
   return (
     <FlexibleContainer>
       <Container direction="column">
@@ -35,9 +40,12 @@ const Create = () => {
               </div>
               <p>License: {tokenType.license}</p>
               <div>
-                <Link href={tokenType.link}>
-                  <button>Create</button>
-                </Link>
+                <button
+                  disabled={!tokenType.enabled}
+                  onClick={() => navigateTo(tokenType.link)}
+                >
+                  Create
+                </button>
               </div>
             </div>
           ))}

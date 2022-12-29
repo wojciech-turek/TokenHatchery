@@ -110,10 +110,18 @@ export const generateSolFile = ({
     }
     
       constructor() ERC20("${name.toUpperCase()}", "${symbol.toUpperCase()}") ${
-    permit || votes ? `ERC20Permit("${name.toUpperCase()}} ` : ""
+    permit || votes ? `ERC20Permit("${name.toUpperCase()}")` : ""
   }{
-   
-        ${isAccessControl ? `_grantRole(DEFAULT_ADMIN_ROLE, msg.sender);` : ""}
+    ${
+      initialSupply > 0
+        ? `_mint(msg.sender, ${initialSupply} * 10 ** ${decimals});`
+        : ""
+    }
+        ${
+          (isAccessControl && mintable) || snapshots || pausable
+            ? `_grantRole(DEFAULT_ADMIN_ROLE, msg.sender);`
+            : ""
+        }
         ${
           mintable && isAccessControl
             ? `_grantRole(MINTER_ROLE, msg.sender);`
@@ -129,11 +137,7 @@ export const generateSolFile = ({
             ? `_grantRole(SNAPSHOT_ROLE, msg.sender);`
             : ""
         }
-        ${
-          initialSupply > 0
-            ? `_mint(msg.sender, ${initialSupply} * 10 ** ${decimals});`
-            : ""
-        }
+       
     }
 
         ${

@@ -23,8 +23,11 @@ export default async function handler(
   });
 
   fs.writeFileSync(`./contracts/${contractId}.sol`, newContract);
-
-  const result = await compileContract(contractId);
-
-  res.status(200).json({ result, contractId });
+  try {
+    const result = await compileContract(contractId);
+    res.status(200).json({ result, contractId });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error });
+  }
 }
