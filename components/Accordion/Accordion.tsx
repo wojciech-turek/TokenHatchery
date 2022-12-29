@@ -50,11 +50,16 @@ const Header = ({
   onClick?: () => void;
   completed?: boolean;
 }) => {
+  const handleClick = () => {
+    if (!completed) return;
+    onClick && onClick();
+  };
   return (
     <div
-      onClick={onClick}
+      onClick={handleClick}
       className={classNames(styles.header, {
         [styles.active]: active,
+        [styles.completed]: completed,
       })}
     >
       {children} {completed && " - Completed"}
