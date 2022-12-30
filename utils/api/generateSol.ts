@@ -117,11 +117,7 @@ export const generateSolFile = ({
         ? `_mint(msg.sender, ${initialSupply} * 10 ** ${decimals});`
         : ""
     }
-        ${
-          (isAccessControl && mintable) || snapshots || pausable
-            ? `_grantRole(DEFAULT_ADMIN_ROLE, msg.sender);`
-            : ""
-        }
+        ${isAccessControl ? `_grantRole(DEFAULT_ADMIN_ROLE, msg.sender);` : ""}
         ${
           mintable && isAccessControl
             ? `_grantRole(MINTER_ROLE, msg.sender);`
