@@ -140,10 +140,7 @@ const EIP712Contract = fs.readFileSync(
 
 export const compileContract = async (uuid: string) => {
   const contractname = `${uuid}.sol`;
-  const generatedContract = fs.readFileSync(
-    `./tmp/contracts/${uuid}.sol`,
-    "utf8"
-  );
+  const generatedContract = fs.readFileSync(`./${uuid}.sol`, "utf8");
 
   const input = {
     language: "Solidity",
