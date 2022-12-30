@@ -1,6 +1,6 @@
 ## Info
 
-This project is written to allow non-technical people or non-devs like artists, project manager, project owners etc. to easily create, customize deploy and verify tokens with standards like ERC20, ERC721, ERC1155. In the future I plan on adding more types like gas optimized ERC721A, 1155D or others based on community suggestions.
+This project is written to allow non-technical people or non-devs like artists, project manager, project owners etc. to easily create, customize, deploy and verify tokens with standards like ERC20, ERC721, ERC1155. Contracts can be created with multiple extensions like mintable, burnable, votes, snapshots and more. Contracts will support having the control type to either be Single Owner or have Role Base Access. In the future I plan on adding more types like gas optimized ERC721A, 1155D or others based on community suggestions.
 
 This project will always be **opensource** and **free of cost** for people who want to deploy their tokens, the only fee will be the gas which depends on chosen network.
 
