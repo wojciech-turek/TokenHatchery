@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import fs from "fs";
 import { compileContract } from "../../utils/api/compile";
 import { generateSolFile } from "utils/api/generateSol";
+import path from "path";
 
 export default async function handler(
   req: NextApiRequest,
@@ -22,6 +23,9 @@ export default async function handler(
     managementType,
   });
 
+  if (!fs.existsSync("./tmp/contracts")) {
+    fs.mkdirSync("./tmp/contracts");
+  }
   fs.writeFileSync(`./tmp/contracts/${contractId}.sol`, newContract);
   try {
     const result = await compileContract(contractId);
