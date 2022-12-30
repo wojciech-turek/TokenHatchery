@@ -1,8 +1,8 @@
 import classNames from "classnames";
 import React from "react";
-import styles from "./BodyText.module.scss";
+import styles from "./Text.module.scss";
 
-const BodyText = ({
+const Text = ({
   children,
   bold = false,
 }: {
@@ -20,4 +20,4 @@ const BodyText = ({
   );
 };
 
-export default BodyText;
+export default Text;
