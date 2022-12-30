@@ -27,7 +27,7 @@ export default async function handler(
   //   fs.mkdirSync(path.join(process.cwd(), "./tmp/contracts"));
   // }
   // fs.writeFileSync(`./tmp/contracts/${contractId}.sol`, newContract);
-  fs.writeFileSync(`./${contractId}.sol`, newContract);
+  fs.writeFileSync(`./tmp/${contractId}.sol`, newContract);
   try {
     const result = await compileContract(contractId);
     res.status(200).json({ result, contractId });
