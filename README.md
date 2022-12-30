@@ -4,7 +4,7 @@ This project is written to allow non-technical people or non-devs like artists, 
 
 This project will always be **opensource** and **free of cost** for people who want to deploy their tokens, the only fee will be the gas which depends on chosen network.
 
-Smart contracts used for token deployment are created with use of [https://github.com/OpenZeppelin/openzeppelin-contracts][openzeppelin contracts] which I find to be very high quality, they are also audited so we can assume relatively safe to use. I have not added any custom code which could break their security.
+Smart contracts used for token deployment are created with use of [https://github.com/OpenZeppelin/openzeppelin-contracts](openzeppelin contracts) which I find to be very high quality, they are also audited so we can assume relatively safe to use. I have not added any custom code which could break their security.
 
 This project has a live deployment which is currently under development (unstable) available at: [tokenhatchery.com](tokenhatchery.com)
 
