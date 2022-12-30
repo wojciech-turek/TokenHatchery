@@ -3,11 +3,10 @@ import solc from "solc";
 import fs from "fs";
 import path from "path";
 
-const dirRelativeToPublicFolder = "contracts";
-const dir = path.resolve("./public", dirRelativeToPublicFolder);
+const dir = path.join(process.cwd(), "contracts");
 
 const ERC20Contract = fs.readFileSync(
-  path.join(dir, "token/ERC20/ERC20.sol"),
+  path.join(dir, "token", "ERC20", "ERC20.sol"),
   "utf8"
 );
 const IERC20Contract = fs.readFileSync(
