@@ -4,7 +4,7 @@ import fs from "fs";
 import path from "path";
 
 const ERC20Contract = fs.readFileSync(
-  path.join(__dirname, "contracts/base/token/ERC20/ERC20.sol"),
+  path.join(__dirname, "../../contracts/base/token/ERC20/ERC20.sol"),
   "utf8"
 );
 const IERC20Contract = fs.readFileSync(

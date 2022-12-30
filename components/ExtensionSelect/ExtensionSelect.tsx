@@ -18,18 +18,13 @@ const ExtensionSelect = ({
   managementType: string;
   setManagementType: Dispatch<SetStateAction<string>>;
 }) => {
-  const handleSelect = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    extension: string
-  ) => {
-    if (e.target.checked) {
-      setSelectedExtensions([...selectedExtensions, extension]);
-    } else {
+  const handleSelect = (extension: string) => {
+    if (selectedExtensions.includes(extension)) {
       setSelectedExtensions(
-        selectedExtensions.filter(
-          (selectedExtension) => selectedExtension !== extension
-        )
+        selectedExtensions.filter((ext) => ext !== extension)
       );
+    } else {
+      setSelectedExtensions([...selectedExtensions, extension]);
     }
   };
 
@@ -38,7 +33,11 @@ const ExtensionSelect = ({
       <BodyText>Select extensions you want to add to your token</BodyText>
       <div className={styles.extensions}>
         {extensions.map((extension) => (
-          <div key={extension.name} className={styles.extension}>
+          <div
+            key={extension.name}
+            className={styles.extension}
+            onClick={(e) => handleSelect(extension.name)}
+          >
             <p className={styles.name}>{extension.name}</p>
             <p className={styles.description}>{extension.description}</p>
             {extension.advanced && (
@@ -47,7 +46,7 @@ const ExtensionSelect = ({
             <input
               type="checkbox"
               checked={selectedExtensions.includes(extension.name)}
-              onChange={(e) => handleSelect(e, extension.name)}
+              onChange={(e) => handleSelect(extension.name)}
             />
           </div>
         ))}
