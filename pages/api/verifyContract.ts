@@ -1,17 +1,21 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import FormData from "form-data";
 import fs from "fs";
+import clientPromise from "lib/mongodb";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { contractId } = req.body;
+  const { contractId, type } = req.body;
 
-  const generatedContract = fs.readFileSync(
-    `./contracts/${contractId}.sol`,
-    "utf8"
-  );
+  const client = await clientPromise;
+  const db = client.db("Deployments");
+  const collection = db.collection(`${type}`);
+
+  const contract = await collection.findOne({ contractId });
+
+  const generatedContract = fs.readFileSync(`/tmp/${contractId}.sol`, "utf8");
   const ERC20Contract = fs.readFileSync(
     "./node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol",
     "utf8"
@@ -52,13 +56,6 @@ export default async function handler(
       "@openzeppelin/contracts/utils/Context.sol": {
         content: ContextContract,
       },
-      ...(mintable
-        ? {
-            "@openzeppelin/contracts/access/Ownable.sol": {
-              content: OwnableContract,
-            },
-          }
-        : {}),
     },
     settings: { optimizer: { enabled: true, runs: 200 } },
   };
@@ -70,9 +67,9 @@ export default async function handler(
   formData.append("action", "verifysourcecode");
   formData.append("codeformat", "solidity-standard-json-input");
   formData.append("apikey", process.env.ETHERSCAN_API_KEY || "");
-  formData.append("contractaddress", address);
+  formData.append("contractaddress", contract?.address);
   formData.append("sourceCode", JSON.stringify(sourceCode));
-  formData.append("contractname", `${contractId}.sol:${contractName}`);
+  formData.append("contractname", `${contractId}.sol:${contract?.name}`);
   formData.append("compilerVersion", copilerVersion);
 
   const response = await fetch("http://api-goerli.etherscan.io/api", {
