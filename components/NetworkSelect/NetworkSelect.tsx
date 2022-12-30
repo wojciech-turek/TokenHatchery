@@ -1,129 +1,37 @@
+import {
+  allSupportedNetworks,
+  Network,
+  supportedNetworks,
+} from "constants/supportedNetworks";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import { Chain, useNetwork, useSwitchNetwork } from "wagmi";
+import React, { Dispatch, SetStateAction, useEffect } from "react";
+import { useNetwork, useSwitchNetwork } from "wagmi";
 import styles from "./NetworkSelect.module.scss";
 
-type Network = {
-  chainId: number;
-  name: string;
-  image: string;
-};
-
-const supportedNetworks: {
-  mainnets: Network[];
-  testnets: Network[];
-} = {
-  mainnets: [
-    {
-      chainId: 1,
-      name: "Ethereum Mainnet",
-      image: "/eth.png",
-    },
-    {
-      chainId: 56,
-      name: "BNB Chain Mainnet",
-      image: "/bsc.png",
-    },
-    {
-      chainId: 137,
-      name: "Polygon Mainnet",
-      image: "/matic.png",
-    },
-    {
-      chainId: 250,
-      name: "Fantom Opera Mainnet",
-      image: "/fantom.png",
-    },
-    {
-      chainId: 42161,
-      name: "Arbitrum Mainnet",
-      image: "/arb.png",
-    },
-    {
-      chainId: 43114,
-      name: "Avalanche Mainnet",
-      image: "/avax.png",
-    },
-    {
-      name: "EVMOS Mainnet",
-      chainId: 32659,
-      image: "/evmos.png",
-    },
-    {
-      name: "Optimism Mainnet",
-      chainId: 10,
-      image: "/optimism.png",
-    },
-    {
-      name: "Gnosis Mainnet",
-      chainId: 100,
-      image: "/gno.png",
-    },
-  ],
-  testnets: [
-    {
-      chainId: 5,
-      name: "Goerli Testnet",
-      image: "/eth.png",
-    },
-    {
-      chainId: 97,
-      name: "BNB Chain Testnet",
-      image: "/bsc.png",
-    },
-    {
-      chainId: 80001,
-      name: "Polygon Mumbai Testnet",
-      image: "/matic.png",
-    },
-    {
-      chainId: 4002,
-      name: "Fantom Opera Testnet",
-      image: "/fantom.png",
-    },
-    {
-      chainId: 421611,
-      name: "Arbitrum Testnet",
-      image: "/arb.png",
-    },
-    {
-      chainId: 43113,
-      name: "Avalanche Fuji Testnet",
-      image: "/avax.png",
-    },
-    {
-      name: "EVMOS Testnet",
-      chainId: 1313161554,
-      image: "/evmos.png",
-    },
-    {
-      name: "Optimism Testnet",
-      chainId: 69,
-      image: "/optimism.png",
-    },
-  ],
-};
-
 const NetworkSelect = ({
-  setConnected,
+  setNetwork,
 }: {
-  setConnected: (val: boolean) => void;
+  setNetwork: Dispatch<SetStateAction<{ name: string; chainId: number }>>;
 }) => {
-  const { isLoading, switchNetwork } = useSwitchNetwork();
-  const { chain, chains } = useNetwork();
-
-  const handleSelectNetwork = (chainId: number) => {
-    if (isLoading) return;
-    switchNetwork?.(chainId);
-  };
+  const { isLoading, switchNetworkAsync } = useSwitchNetwork();
+  const { chain } = useNetwork();
 
   useEffect(() => {
-    const connectedToValidChain = chains.some(
-      (availableChain) => availableChain.id === chain?.id
-    );
+    if (chain) {
+      const network = allSupportedNetworks.find(
+        (network) => network.chainId === chain.id
+      );
+      if (network) {
+        setNetwork({ name: network.name, chainId: network.chainId });
+      }
+    }
+  }, [chain, setNetwork]);
 
-    setConnected(connectedToValidChain);
-  }, [setConnected, chain, chains]);
+  const handleSelectNetwork = async (name: string, chainId: number) => {
+    if (isLoading) return;
+    await switchNetworkAsync?.(chainId);
+    setNetwork({ name, chainId });
+  };
 
   const renderNetworks = (networks: Network[]) => (
     <div className={styles.networks}>
@@ -132,7 +40,7 @@ const NetworkSelect = ({
           <div
             key={network.name}
             className={styles.network}
-            onClick={() => handleSelectNetwork(network.chainId)}
+            onClick={() => handleSelectNetwork(network.name, network.chainId)}
           >
             <div className={styles.name}>
               <Image

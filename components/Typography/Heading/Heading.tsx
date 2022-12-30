@@ -5,18 +5,20 @@ import styles from "./Heading.module.scss";
 const Heading = ({
   children,
   centered,
+  type = "h4",
 }: {
   children: React.ReactNode;
   centered?: boolean;
+  type?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 }) => {
   return (
-    <h2
+    <div
       className={classNames(styles.heading, {
         [styles.centered]: centered,
       })}
     >
-      {children}
-    </h2>
+      {React.createElement(type, {}, children)}
+    </div>
   );
 };
 

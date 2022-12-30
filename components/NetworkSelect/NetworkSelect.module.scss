@@ -8,6 +8,7 @@
   display: flex;
   cursor: pointer;
   flex-direction: column;
+  flex-wrap: wrap;
   gap: var(--spacing-sm);
   width: 200px;
   border: 1px solid var(--color-primary-dark);
@@ -26,5 +27,8 @@
   }
   .radio {
     cursor: pointer;
+  }
+  @media screen and (max-width: 768px) {
+    width: 100%;
   }
 }

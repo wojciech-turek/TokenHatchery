@@ -4,32 +4,32 @@ import Container from "components/Container/Container";
 import ExtensionSelect from "components/ExtensionSelect/ExtensionSelect";
 import FlexibleContainer from "components/FlexibleContainer/FlexibleContainer";
 import NetworkSelect from "components/NetworkSelect/NetworkSelect";
-import BodyText from "components/Typography/BodyText/BodyText";
+import BodyText from "components/Typography/Text/Text";
 import Heading from "components/Typography/Heading/Heading";
 import WalletConnect from "components/WalletConnect/WalletConnect";
 import { erc20Extensions, accessControl } from "constants/availableTokenTypes";
 import Form from "components/Form/Form";
 import Input from "components/Input/Input";
 import ContractDeploy from "components/ContractDeploy/ContractDeploy";
+import ContractVerify from "components/ContractVerify/ContractVerify";
+import { TokenType } from "types/tokens";
 
 const Erc20 = () => {
   const [tokenName, setTokenName] = useState<string>("");
   const [tokenSymbol, setTokenSymbol] = useState<string>("");
   const [tokenSupply, setTokenSupply] = useState<string>("");
+  const [network, setNetwork] = useState({
+    name: "",
+    chainId: 0,
+  });
   const [tokenDecimals, setTokenDecimals] = useState<string>("18");
   const [deployedToken, setDeployedToken] = useState({
     address: "",
     id: "",
   });
-  const [connectionEstablished, setConnectionEstablished] =
-    useState<boolean>(false);
 
   const [selectedExtensions, setSelectedExtensions] = useState<string[]>([]);
   const [managementType, setManagementType] = useState<string>("Ownable");
-
-  const handleConnected = (val: boolean) => {
-    setConnectionEstablished(val);
-  };
 
   return (
     <FlexibleContainer>
@@ -39,10 +39,9 @@ const Erc20 = () => {
           <Accordion.Header>
             Connect your wallet and select network
           </Accordion.Header>
-          <Accordion.Body canMoveNext={connectionEstablished}>
-            <p>Chose one of the methods below to connect your wallet</p>
+          <Accordion.Body canMoveNext={network.name !== ""}>
             <WalletConnect />
-            <NetworkSelect setConnected={handleConnected} />
+            <NetworkSelect setNetwork={setNetwork} />
           </Accordion.Body>
         </Accordion.Item>
         <Accordion.Item>
@@ -102,15 +101,16 @@ const Erc20 = () => {
         </Accordion.Item>
         <Accordion.Item>
           <Accordion.Header>Deploy to network</Accordion.Header>
-          <Accordion.Body>
+          <Accordion.Body canMoveNext={deployedToken.address !== ""}>
             <ContractDeploy
-              type="erc20"
+              type={TokenType.ERC20}
               tokenData={{
                 name: tokenName,
                 symbol: tokenSymbol,
                 decimals: tokenDecimals,
                 initialSupply: tokenSupply,
               }}
+              network={network}
               extensions={selectedExtensions}
               managementType={managementType}
               setDeployedToken={setDeployedToken}
@@ -120,7 +120,9 @@ const Erc20 = () => {
         </Accordion.Item>
         <Accordion.Item>
           <Accordion.Header>Verify your contract (optional)</Accordion.Header>
-          <Accordion.Body>Body1</Accordion.Body>
+          <Accordion.Body>
+            <ContractVerify contractId={deployedToken.id} />
+          </Accordion.Body>
         </Accordion.Item>
       </Accordion>
       <Container>

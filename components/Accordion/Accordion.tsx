@@ -98,7 +98,7 @@ const Body = ({
       {!lastChild && (
         <div>
           <button onClick={handleContinue} disabled={!canMoveNext}>
-            Next
+            Continue
           </button>
         </div>
       )}

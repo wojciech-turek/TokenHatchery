@@ -22,6 +22,7 @@ const Input = ({
         name={name}
         value={value}
         id={name}
+        onWheel={(e) => e.currentTarget.blur()}
         onChange={onChange}
       />
     </div>

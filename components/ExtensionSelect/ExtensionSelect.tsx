@@ -1,4 +1,4 @@
-import BodyText from "components/Typography/BodyText/BodyText";
+import Text from "components/Typography/Text/Text";
 import { AccessControl, Extension } from "constants/availableTokenTypes";
 import React, { Dispatch, SetStateAction } from "react";
 import styles from "./ExtensionSelect.module.scss";
@@ -30,7 +30,7 @@ const ExtensionSelect = ({
 
   return (
     <div>
-      <BodyText>Select extensions you want to add to your token</BodyText>
+      <Text>Select extensions you want to add to your token</Text>
       <div className={styles.extensions}>
         {extensions.map((extension) => (
           <div
@@ -51,7 +51,7 @@ const ExtensionSelect = ({
           </div>
         ))}
       </div>
-      <BodyText>Select management type</BodyText>
+      <Text>Select management type</Text>
       <div className={styles.extensions}>
         {controlTypes.map((controlType) => (
           <div

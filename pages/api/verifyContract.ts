@@ -6,8 +6,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { address, contractId, contractName, types } = req.body;
-  const { mintable } = types;
+  const { contractId } = req.body;
+
   const generatedContract = fs.readFileSync(
     `./contracts/${contractId}.sol`,
     "utf8"

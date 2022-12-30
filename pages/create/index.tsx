@@ -3,7 +3,7 @@ import styles from "./Create.module.scss";
 import React from "react";
 import { useRouter } from "next/router";
 import Heading from "components/Typography/Heading/Heading";
-import BodyText from "components/Typography/BodyText/BodyText";
+import BodyText from "components/Typography/Text/Text";
 import Container from "components/Container/Container";
 import { tokenTypes } from "constants/availableTokenTypes";
 
