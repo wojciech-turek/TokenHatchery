@@ -21,7 +21,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    text-align: left;
+    font-size: var(--font-size-sm);
     gap: var(--spacing-sm);
   }
   .radio {

@@ -54,13 +54,17 @@ const ExtensionSelect = ({
       <BodyText>Select management type</BodyText>
       <div className={styles.extensions}>
         {controlTypes.map((controlType) => (
-          <div key={controlType.name} className={styles.extension}>
+          <div
+            key={controlType.name}
+            className={styles.extension}
+            onClick={() => setManagementType(controlType.type)}
+          >
             <p className={styles.name}>{controlType.name}</p>
             <p className={styles.description}>{controlType.description}</p>
             <input
               type="radio"
               checked={managementType === controlType.type}
-              onChange={(e) => setManagementType(controlType.type)}
+              onChange={() => setManagementType(controlType.type)}
             />
           </div>
         ))}

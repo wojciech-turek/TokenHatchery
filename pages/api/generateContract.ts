@@ -23,10 +23,6 @@ export default async function handler(
     managementType,
   });
 
-  // if (!fs.existsSync(path.join(process.cwd(), "./tmp/contracts"))) {
-  //   fs.mkdirSync(path.join(process.cwd(), "./tmp/contracts"));
-  // }
-  // fs.writeFileSync(`./tmp/contracts/${contractId}.sol`, newContract);
   fs.writeFileSync(`/tmp/${contractId}.sol`, newContract);
   try {
     const result = await compileContract(contractId);
