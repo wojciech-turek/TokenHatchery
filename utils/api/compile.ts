@@ -1,138 +1,137 @@
-import { AccessControl } from "./../../constants/availableTokenTypes";
 //@ts-ignore
 import solc from "solc";
 import fs from "fs";
 
 const ERC20Contract = fs.readFileSync(
-  "./node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol",
+  "contracts/base/token/ERC20/ERC20.sol",
   "utf8"
 );
 const IERC20Contract = fs.readFileSync(
-  "./node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol",
+  "contracts/base/token/ERC20/IERC20.sol",
   "utf8"
 );
 const IERC20MetadataContract = fs.readFileSync(
-  "./node_modules/@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol",
+  "contracts/base/token/ERC20/extensions/IERC20Metadata.sol",
   "utf8"
 );
 
 const ContextContract = fs.readFileSync(
-  "./node_modules/@openzeppelin/contracts/utils/Context.sol",
+  "contracts/base/utils/Context.sol",
   "utf8"
 );
 
 const OwnableContract = fs.readFileSync(
-  "./node_modules/@openzeppelin/contracts/access/Ownable.sol",
+  "contracts/base/access/Ownable.sol",
   "utf8"
 );
 
 const AccessControlContract = fs.readFileSync(
-  "./node_modules/@openzeppelin/contracts/access/AccessControl.sol",
+  "contracts/base/access/AccessControl.sol",
   "utf8"
 );
 
 const ERC20BurnableContract = fs.readFileSync(
-  "./node_modules/@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol",
+  "contracts/base/token/ERC20/extensions/ERC20Burnable.sol",
   "utf8"
 );
 
 const ERC20PausableContract = fs.readFileSync(
-  "./node_modules/@openzeppelin/contracts/security/Pausable.sol",
+  "contracts/base/security/Pausable.sol",
   "utf8"
 );
 
 const ERC20SnapshotContract = fs.readFileSync(
-  "./node_modules/@openzeppelin/contracts/token/ERC20/extensions/ERC20Snapshot.sol",
+  "contracts/base/token/ERC20/extensions/ERC20Snapshot.sol",
   "utf8"
 );
 
 const ERC20VotesContract = fs.readFileSync(
-  "./node_modules/@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol",
+  "contracts/base/token/ERC20/extensions/ERC20Votes.sol",
   "utf8"
 );
 
 const ERC20PermitContract = fs.readFileSync(
-  "./node_modules/@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol",
+  "contracts/base/token/ERC20/extensions/draft-ERC20Permit.sol",
   "utf8"
 );
 
 const ERC20FlashMintContract = fs.readFileSync(
-  "./node_modules/@openzeppelin/contracts/token/ERC20/extensions/ERC20FlashMint.sol",
+  "contracts/base/token/ERC20/extensions/ERC20FlashMint.sol",
   "utf8"
 );
 
 const IAccessControlContract = fs.readFileSync(
-  "./node_modules/@openzeppelin/contracts/access/IAccessControl.sol",
+  "contracts/base/access/IAccessControl.sol",
   "utf8"
 );
 
 const StringsContract = fs.readFileSync(
-  "./node_modules/@openzeppelin/contracts/utils/Strings.sol",
+  "contracts/base/utils/Strings.sol",
   "utf8"
 );
 
 const ERC165Contract = fs.readFileSync(
-  "./node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol",
+  "contracts/base/utils/introspection/ERC165.sol",
   "utf8"
 );
 
 const IERC165Contract = fs.readFileSync(
-  "./node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol",
+  "contracts/base/utils/introspection/IERC165.sol",
   "utf8"
 );
 
 const StorageSlotContract = fs.readFileSync(
-  "./node_modules/@openzeppelin/contracts/utils/StorageSlot.sol",
+  "contracts/base/utils/StorageSlot.sol",
   "utf8"
 );
 
 const IERC3156FlashBorrowerContract = fs.readFileSync(
-  "./node_modules/@openzeppelin/contracts/interfaces/IERC3156FlashBorrower.sol",
+  "contracts/base/interfaces/IERC3156FlashBorrower.sol",
   "utf8"
 );
 
 const IERC3156FlashLenderContract = fs.readFileSync(
-  "./node_modules/@openzeppelin/contracts/interfaces/IERC3156FlashLender.sol",
+  "contracts/base/interfaces/IERC3156FlashLender.sol",
   "utf8"
 );
 
 const ArraysContract = fs.readFileSync(
-  "./node_modules/@openzeppelin/contracts/utils/Arrays.sol",
+  "contracts/base/utils/Arrays.sol",
   "utf8"
 );
 
 const CountersContract = fs.readFileSync(
-  "./node_modules/@openzeppelin/contracts/utils/Counters.sol",
+  "contracts/base/utils/Counters.sol",
   "utf8"
 );
 
 const MathContract = fs.readFileSync(
-  "./node_modules/@openzeppelin/contracts/utils/math/Math.sol",
+  "contracts/base/utils/math/Math.sol",
   "utf8"
 );
 
 const IVotesContract = fs.readFileSync(
-  "./node_modules/@openzeppelin/contracts/governance/utils/IVotes.sol",
+  "contracts/base/governance/utils/IVotes.sol",
   "utf8"
 );
 
 const SafeCastContract = fs.readFileSync(
-  "./node_modules/@openzeppelin/contracts/utils/math/SafeCast.sol",
+  "contracts/base/utils/math/SafeCast.sol",
   "utf8"
 );
 
 const ECDSAContract = fs.readFileSync(
-  "./node_modules/@openzeppelin/contracts/utils/cryptography/ECDSA.sol",
+  "contracts/base/utils/cryptography/ECDSA.sol",
   "utf8"
 );
 
 const draftIERC20PermitContract = fs.readFileSync(
-  "./node_modules/@openzeppelin/contracts/token/ERC20/extensions/draft-IERC20Permit.sol",
+  "contracts/base/token/ERC20/extensions/draft-IERC20Permit.sol",
   "utf8"
 );
 
 const EIP712Contract = fs.readFileSync(
-  "./node_modules/@openzeppelin/contracts/utils/cryptography/EIP712.sol",
+  "contracts/base/utils/cryptography/EIP712.sol",
   "utf8"
 );
 
