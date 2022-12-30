@@ -3,7 +3,7 @@ import solc from "solc";
 import fs from "fs";
 
 const ERC20Contract = fs.readFileSync(
-  "contracts/base/token/ERC20/ERC20.sol",
+  "../../contracts/base/token/ERC20/ERC20.sol",
   "utf8"
 );
 const IERC20Contract = fs.readFileSync(
