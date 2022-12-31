@@ -13,11 +13,13 @@ import Input from "components/Input/Input";
 import ContractDeploy from "components/ContractDeploy/ContractDeploy";
 import ContractVerify from "components/ContractVerify/ContractVerify";
 import { TokenType } from "types/tokens";
+import { useAccount } from "wagmi";
 
 const Erc20 = () => {
   const [tokenName, setTokenName] = useState<string>("");
   const [tokenSymbol, setTokenSymbol] = useState<string>("");
   const [tokenSupply, setTokenSupply] = useState<string>("");
+  const { address } = useAccount();
   const [network, setNetwork] = useState({
     name: "",
     chainId: 0,
@@ -29,7 +31,7 @@ const Erc20 = () => {
   });
 
   const [selectedExtensions, setSelectedExtensions] = useState<string[]>([]);
-  const [managementType, setManagementType] = useState<string>("Ownable");
+  const [managementType, setManagementType] = useState<string>("");
 
   return (
     <FlexibleContainer>
@@ -39,7 +41,7 @@ const Erc20 = () => {
           <Accordion.Header>
             Connect your wallet and select network
           </Accordion.Header>
-          <Accordion.Body canMoveNext={network.name !== ""}>
+          <Accordion.Body canMoveNext={address && network.name !== ""}>
             <WalletConnect />
             <NetworkSelect setNetwork={setNetwork} />
           </Accordion.Body>
@@ -121,7 +123,10 @@ const Erc20 = () => {
         <Accordion.Item>
           <Accordion.Header>Verify your contract (optional)</Accordion.Header>
           <Accordion.Body>
-            <ContractVerify contractId={deployedToken.id} />
+            <ContractVerify
+              contractId={deployedToken.id}
+              type={TokenType.ERC20}
+            />
           </Accordion.Body>
         </Accordion.Item>
       </Accordion>

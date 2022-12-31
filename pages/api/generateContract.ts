@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { v4 as uuidv4 } from "uuid";
+import prettier from "prettier";
 import fs from "fs";
 import { compileContract } from "../../utils/api/compile";
 import { generateSolFile } from "utils/api/generateSol";
@@ -31,7 +32,18 @@ export default async function handler(
     managementType,
   });
 
-  fs.writeFileSync(`/tmp/${contractId}.sol`, newContract);
+  const formattedContract = prettier.format(newContract, {
+    filepath: `/tmp/${contractId}.sol`,
+    parser: "solidity-parse",
+    plugins: ["prettier-plugin-solidity"],
+  });
+
+  fs.writeFileSync(`/tmp/${contractId}.sol`, formattedContract);
+
+  prettier.format(newContract, {
+    filepath: `/tmp/${contractId}.sol`,
+  });
+
   try {
     const result = await compileContract(contractId);
     const client = await clientPromise;

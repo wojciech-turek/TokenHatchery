@@ -44,6 +44,7 @@ export const generateSolFile = ({
   // remove duplicates
   const extensionsSet = new Set(extensionsArray.flat());
 
+  const hasAccessControl = managementType !== "";
   const isAccessControl = managementType === "accesscontrol";
 
   if (isAccessControl && extensionsSet.has("Ownable")) {
@@ -62,7 +63,11 @@ export const generateSolFile = ({
   pragma solidity 0.8.17;
   
   import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-  ${mintable || pausable || snapshots ? `import "${accessTypeImport}";` : ""}
+  ${
+    mintable || pausable || snapshots || hasAccessControl
+      ? `import "${accessTypeImport}";`
+      : ""
+  }
     ${
       burnable
         ? `import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";`
@@ -109,7 +114,7 @@ export const generateSolFile = ({
         : ""
     }
     
-      constructor() ERC20("${name.toUpperCase()}", "${symbol.toUpperCase()}") ${
+    constructor() ERC20("${name.toUpperCase()}", "${symbol.toUpperCase()}") ${
     permit || votes ? `ERC20Permit("${name.toUpperCase()}")` : ""
   }{
     ${
@@ -133,7 +138,6 @@ export const generateSolFile = ({
             ? `_grantRole(SNAPSHOT_ROLE, msg.sender);`
             : ""
         }
-       
     }
 
         ${

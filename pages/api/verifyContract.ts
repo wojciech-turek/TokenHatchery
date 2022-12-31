@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import FormData from "form-data";
 import fs from "fs";
 import clientPromise from "lib/mongodb";
+import { generateSource } from "utils/api/generateSource";
 
 export default async function handler(
   req: NextApiRequest,
@@ -12,53 +13,16 @@ export default async function handler(
   const client = await clientPromise;
   const db = client.db("Deployments");
   const collection = db.collection(`${type}`);
-
   const contract = await collection.findOne({ contractId });
-
-  const generatedContract = fs.readFileSync(`/tmp/${contractId}.sol`, "utf8");
-  const ERC20Contract = fs.readFileSync(
-    "./node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol",
-    "utf8"
+  if (!contract) {
+    res.status(404).json({ message: "Contract not found" });
+    return;
+  }
+  const sourceCode = generateSource(
+    contractId,
+    contract.extensions,
+    contract.managementType
   );
-  const IERC20Contract = fs.readFileSync(
-    "./node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol",
-    "utf8"
-  );
-  const IERC20MetadataContract = fs.readFileSync(
-    "./node_modules/@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol",
-    "utf8"
-  );
-
-  const OwnableContract = fs.readFileSync(
-    "./node_modules/@openzeppelin/contracts/access/Ownable.sol",
-    "utf8"
-  );
-
-  const ContextContract = fs.readFileSync(
-    "./node_modules/@openzeppelin/contracts/utils/Context.sol",
-    "utf8"
-  );
-  const sourceCode = {
-    language: "Solidity",
-    sources: {
-      [`${contractId}.sol`]: {
-        content: generatedContract,
-      },
-      "@openzeppelin/contracts/token/ERC20/ERC20.sol": {
-        content: ERC20Contract,
-      },
-      "@openzeppelin/contracts/token/ERC20/IERC20.sol": {
-        content: IERC20Contract,
-      },
-      "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol": {
-        content: IERC20MetadataContract,
-      },
-      "@openzeppelin/contracts/utils/Context.sol": {
-        content: ContextContract,
-      },
-    },
-    settings: { optimizer: { enabled: true, runs: 200 } },
-  };
 
   const copilerVersion = "v0.8.17+commit.8df45f5f";
 
@@ -85,6 +49,6 @@ export default async function handler(
       .status(200)
       .json({ message: "Verification request sent", guid: result });
   } else {
-    res.status(500).json({ error: "Verification failed" });
+    res.status(500).json({ error: result });
   }
 }

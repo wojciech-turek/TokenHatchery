@@ -37,6 +37,10 @@ const ContractDeploy = ({
 
   const deployNewErc20 = async () => {
     setDeploying(true);
+    setDeployedToken({
+      address: "",
+      id: "",
+    });
     if (!signer) return;
     try {
       const { contractId, abi, bytecode } = await generateContract({

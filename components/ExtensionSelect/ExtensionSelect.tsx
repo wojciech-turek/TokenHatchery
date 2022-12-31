@@ -26,6 +26,10 @@ const ExtensionSelect = ({
     } else {
       setSelectedExtensions([...selectedExtensions, extension]);
     }
+    const extesionsWithControl = ["Mintable", "Pausable", "Snapshots"];
+    if (extesionsWithControl.includes(extension) && managementType === "") {
+      setManagementType("Ownable");
+    }
   };
 
   return (

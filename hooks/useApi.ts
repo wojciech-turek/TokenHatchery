@@ -46,7 +46,14 @@ const useApi = () => {
     };
   };
 
-  const handleVerify = async ({ contractId }: { contractId: string }) => {
+  const handleVerify = async ({
+    contractId,
+    type,
+  }: {
+    contractId: string;
+    type: TokenType;
+  }) => {
+    console.log(type);
     try {
       const response = await fetch("/api/verifyContract", {
         method: "POST",
@@ -55,17 +62,18 @@ const useApi = () => {
         },
         body: JSON.stringify({
           contractId,
+          type,
         }),
       });
       const data = await response.json();
-      const { verificationGuid } = data;
-      return verificationGuid;
+      return data;
     } catch (e: any) {
-      console.error(e);
+      return e;
     }
   };
 
   const checkVerifyStatus = async (verificationGuid: string) => {
+    console.log(verificationGuid);
     const response = await fetch("/api/verificationStatus", {
       method: "POST",
       headers: {
