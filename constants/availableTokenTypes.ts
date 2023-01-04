@@ -125,8 +125,9 @@ const erc1155Extensions: Extension[] = [
 export const tokenTypes = [
   {
     name: "ERC20",
+    type: "Standard Utility Token",
     description:
-      "Token type used by most fungible tokens, can be used for any purpose. Includes a lot of extensions and access control. You can premint tokens and add them to the initial supply.",
+      "ERC20 tokens can be used for a wide range of applications, including digital currency, fundraising, access control, and supply chain management. They can represent a variety of assets, including currencies, commodities, and utility tokens.",
     extensions: erc20Extensions,
     accessControl: ["Ownable", "Roles"],
     link: "/create/erc20",
@@ -135,8 +136,9 @@ export const tokenTypes = [
   },
   {
     name: "ERC721",
+    type: "Non-Fungible Token",
     description:
-      "ERC-721 is a free, open standard that describes how to build non-fungible or unique tokens on the Ethereum blockchain. While most tokens are fungible (every token is the same as every other token), ERC-721 tokens are all unique. ",
+      "ERC721 tokens are non-fungible tokens that can represent unique assets, such as digital collectibles, in-game items, and real estate. They are often used for applications that require the tracking and verification of ownership of unique assets.",
     extensions: erc721Extensions,
     accessControl: ["Ownable", "Roles"],
     link: "/create/erc721",
@@ -145,8 +147,9 @@ export const tokenTypes = [
   },
   {
     name: "ERC1155",
+    type: "Multi-Fungible Token",
     description:
-      "ERC-1155 token is an upgraded version of the older Ethereum token standards, such as the fungible ERC-20 or the non-fungible ERC-721.",
+      "ERC1155 tokens are multi-token standards that allow users to manage multiple types of tokens in a single smart contract. Often used for applications that require the efficient management and transfer of multiple types of assets, such as in-game items and digital collectibles.",
     extensions: erc1155Extensions,
     accessControl: ["Ownable", "Roles"],
     link: "/create/erc1155",

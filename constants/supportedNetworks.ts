@@ -2,6 +2,7 @@ export type Network = {
   chainId: number;
   name: string;
   image: string;
+  blockExplorer?: string;
 };
 
 export const supportedNetworks: {
@@ -41,7 +42,7 @@ export const supportedNetworks: {
     },
     {
       name: "EVMOS Mainnet",
-      chainId: 32659,
+      chainId: 9001,
       image: "/evmos.png",
     },
     {
@@ -58,8 +59,9 @@ export const supportedNetworks: {
   testnets: [
     {
       chainId: 5,
-      name: "Goerli Testnet",
+      name: "Ethereum Goerli Testnet",
       image: "/eth.png",
+      blockExplorer: "https://goerli.etherscan.io",
     },
     {
       chainId: 97,
@@ -77,8 +79,8 @@ export const supportedNetworks: {
       image: "/fantom.png",
     },
     {
-      chainId: 421611,
-      name: "Arbitrum Testnet",
+      chainId: 421613,
+      name: "Arbitrum Goerli Testnet",
       image: "/arb.png",
     },
     {
@@ -88,12 +90,12 @@ export const supportedNetworks: {
     },
     {
       name: "EVMOS Testnet",
-      chainId: 1313161554,
+      chainId: 9000,
       image: "/evmos.png",
     },
     {
       name: "Optimism Testnet",
-      chainId: 69,
+      chainId: 420,
       image: "/optimism.png",
     },
   ],

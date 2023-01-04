@@ -1,13 +1,12 @@
 import Footer from "components/Footer/Footer";
 import Header from "components/Header/Header";
 import React from "react";
-import styles from "./Layout.module.scss";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className={styles.wrapper}>
+    <div className="flex flex-col min-h-screen">
       <Header />
-      <main className={styles.container}>{children}</main>
+      <main className="grow relative">{children}</main>
       <Footer />
     </div>
   );

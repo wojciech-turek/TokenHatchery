@@ -1,36 +1,8 @@
 import React from "react";
-// import styles from "./Container.module.scss";
 
-const Container = ({
-  children,
-  direction,
-  alignItems,
-  justifyContent,
-  gap,
-}: {
-  children: React.ReactNode;
-  direction?: "row" | "column";
-  alignItems?: "flex-start" | "flex-end" | "center" | "baseline" | "stretch";
-  justifyContent?:
-    | "flex-start"
-    | "flex-end"
-    | "center"
-    | "space-between"
-    | "space-around"
-    | "space-evenly";
-  gap?: number;
-}) => {
+const Container = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div
-      //   className={styles.container}
-      style={{
-        display: "flex",
-        flexDirection: direction || "row",
-        alignItems: alignItems || "center",
-        justifyContent: justifyContent || "center",
-        gap: gap || 0,
-      }}
-    >
+    <div className="mx-auto max-w-7xl py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
       {children}
     </div>
   );

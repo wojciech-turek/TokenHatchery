@@ -1,20 +1,18 @@
+import { Network } from "constants/supportedNetworks";
 import { BaseTokenData, TokenType } from "./../types/tokens";
 const useApi = () => {
   const generateContract = async ({
     tokenData,
     extensions,
     managementType,
-    type,
+    tokenType,
     network,
   }: {
     tokenData: BaseTokenData;
     extensions: string[];
     managementType: string;
-    type: TokenType;
-    network: {
-      name: string;
-      chainId: number;
-    };
+    tokenType: TokenType;
+    network: Network;
   }) => {
     const response = await fetch("/api/generateContract", {
       method: "POST",
@@ -28,7 +26,7 @@ const useApi = () => {
         initialSupply: tokenData.initialSupply,
         extensions: extensions.map((extension) => extension.toLowerCase()),
         managementType: managementType.toLowerCase(),
-        type: type,
+        type: tokenType,
         network: network,
       }),
     });
@@ -48,12 +46,11 @@ const useApi = () => {
 
   const handleVerify = async ({
     contractId,
-    type,
+    tokenType,
   }: {
     contractId: string;
-    type: TokenType;
+    tokenType: TokenType;
   }) => {
-    console.log(type);
     try {
       const response = await fetch("/api/verifyContract", {
         method: "POST",
@@ -62,7 +59,7 @@ const useApi = () => {
         },
         body: JSON.stringify({
           contractId,
-          type,
+          tokenType,
         }),
       });
       const data = await response.json();
@@ -73,7 +70,6 @@ const useApi = () => {
   };
 
   const checkVerifyStatus = async (verificationGuid: string) => {
-    console.log(verificationGuid);
     const response = await fetch("/api/verificationStatus", {
       method: "POST",
       headers: {

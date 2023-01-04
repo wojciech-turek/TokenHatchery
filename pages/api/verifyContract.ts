@@ -8,11 +8,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { contractId, type } = req.body;
+  const { contractId, tokenType } = req.body;
 
   const client = await clientPromise;
   const db = client.db("Deployments");
-  const collection = db.collection(`${type}`);
+  const collection = db.collection(`${tokenType}`);
   const contract = await collection.findOne({ contractId });
   if (!contract) {
     res.status(404).json({ message: "Contract not found" });

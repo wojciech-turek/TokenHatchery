@@ -50,7 +50,7 @@ export default async function handler(
     const db = client.db("Deployments");
     const collection = db.collection(`${type}`);
     const contract = {
-      name,
+      name: nameCapitalized,
       symbol,
       decimals,
       initialSupply,
