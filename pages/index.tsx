@@ -1,16 +1,11 @@
 import SecuredBy from "components/LandingPage/SecuredBy";
 import Head from "next/head";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 export default function Home() {
   return (
     <>
-      <Head>
-        <title>TokenHatchery</title>
-        <meta name="description" content="Hatch your own tokens!" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <div>
         <div className="relative px-6 lg:px-8">
           <div className="mx-auto max-w-3xl pt-20 pb-32 sm:pt-48 sm:pb-40">

@@ -21,6 +21,7 @@
     "eslint-config-next": "13.1.1",
     "ethers": "^5.7.2",
     "form-data": "^4.0.0",
+    "framer-motion": "^8.1.7",
     "mongodb": "^4.13.0",
     "mongoose": "^6.8.2",
     "next": "13.1.1",

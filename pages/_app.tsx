@@ -27,6 +27,7 @@ import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 
 import { publicProvider } from "wagmi/providers/public";
 import Layout from "components/Layout/Layout";
+import Head from "next/head";
 
 export default function App({ Component, pageProps }: AppProps) {
   const { chains, provider } = configureChains(
@@ -66,10 +67,18 @@ export default function App({ Component, pageProps }: AppProps) {
     provider,
   });
   return (
-    <WagmiConfig client={client}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </WagmiConfig>
+    <>
+      <Head>
+        <title>TokenHatchery</title>
+        <meta name="description" content="Hatch your own tokens!" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <WagmiConfig client={client}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </WagmiConfig>
+    </>
   );
 }

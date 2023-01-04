@@ -53,6 +53,7 @@ const NetworkSelect = ({ nextStep }: { nextStep: () => void }) => {
               <Image
                 src={availableNetwork.image}
                 alt={availableNetwork.name}
+                priority
                 width={32}
                 height={32}
               />
