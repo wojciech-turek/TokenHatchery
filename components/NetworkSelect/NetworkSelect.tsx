@@ -6,6 +6,7 @@ import { Network, supportedNetworks } from "constants/supportedNetworks";
 import { classNames } from "utils/client/classNames";
 import Button from "components/shared/Button";
 import SubHeading from "components/SubHeading/SubHeading";
+import Head from "next/head";
 
 const NetworkSelect = ({ nextStep }: { nextStep: () => void }) => {
   const { isLoading, switchNetworkAsync } = useSwitchNetwork();
@@ -53,7 +54,6 @@ const NetworkSelect = ({ nextStep }: { nextStep: () => void }) => {
               <Image
                 src={availableNetwork.image}
                 alt={availableNetwork.name}
-                priority
                 width={32}
                 height={32}
               />
@@ -67,6 +67,17 @@ const NetworkSelect = ({ nextStep }: { nextStep: () => void }) => {
 
   return (
     <>
+      <Head>
+        <link rel="preload" href="/eth.png" as="image" />
+        <link rel="preload" href="/bsc.png" as="image" />
+        <link rel="preload" href="/matic.png" as="image" />
+        <link rel="preload" href="/arb.png" as="image" />
+        <link rel="preload" href="/avax.png" as="image" />
+        <link rel="preload" href="/evmos.png" as="image" />
+        <link rel="preload" href="/fantom.png" as="image" />
+        <link rel="preload" href="/gno.png" as="image" />
+        <link rel="preload" href="/optmimism.png" as="image" />
+      </Head>
       <div>
         <SubHeading>Select network</SubHeading>
         <p className="text-sm font-medium text-gray-700 mb-12">

@@ -1,6 +1,7 @@
 import Button from "components/shared/Button";
 import ExternalLink from "components/shared/ExternalLink";
 import SubHeading from "components/SubHeading/SubHeading";
+import Head from "next/head";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { classNames } from "utils/client/classNames";
@@ -41,6 +42,13 @@ const WalletConnect = ({ nextStep }: { nextStep: () => void }) => {
 
   return (
     <div>
+      <Head>
+        <link rel="preload" href="/coinbase.png" as="image" />
+        <link rel="preload" href="/ledger.png" as="image" />
+        <link rel="preload" href="/metamask.png" as="image" />
+        <link rel="preload" href="/tally.png" as="image" />
+        <link rel="preload" href="/walletconnect.png" as="image" />
+      </Head>
       <SubHeading>Select your wallet</SubHeading>
       <p className="text-sm font-medium text-gray-700 mb-12">
         Select the wallet connection type you would like to use. If you do not
@@ -61,19 +69,13 @@ const WalletConnect = ({ nextStep }: { nextStep: () => void }) => {
             <li
               key={connector.name}
               onClick={() => connectWallet(connectorId)}
-              className={classNames(
-                connector.name === "Tally"
-                  ? "bg-[url('https://github.com/tallyhowallet/extension/blob/main/ui/public/images/dark_forest_bg@2x.png?raw=true')] bg-contain text-white font-bold tracking-wider"
-                  : "",
-                "col-span-1 flex flex-row items-center justify-center text-left bg-white rounded-lg shadow p-8 gap-2 cursor-pointer hover:bg-indigo-50"
-              )}
+              className="col-span-1 flex flex-row items-center justify-center text-left bg-white rounded-lg shadow p-8 gap-2 cursor-pointer hover:bg-indigo-50"
             >
               {logos[connector.name] ? (
                 <Image
                   className="block"
                   src={logos[connector.name]}
                   alt={connector.name}
-                  priority
                   width={32}
                   height={32}
                 />
