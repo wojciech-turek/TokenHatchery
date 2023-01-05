@@ -1,7 +1,5 @@
 import SecuredBy from "components/LandingPage/SecuredBy";
-import Head from "next/head";
 import Link from "next/link";
-import { motion } from "framer-motion";
 
 export default function Home() {
   return (
@@ -34,7 +32,7 @@ export default function Home() {
                       &rarr;
                     </span>
                   </Link>
-                  <a
+                  <Link
                     href="/manage"
                     className="inline-block rounded-lg px-4 py-1.5 text-base font-semibold leading-7 text-gray-900 ring-1 ring-gray-900/10 hover:ring-gray-900/20"
                   >
@@ -42,7 +40,7 @@ export default function Home() {
                     <span className="text-gray-400" aria-hidden="true">
                       &rarr;
                     </span>
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

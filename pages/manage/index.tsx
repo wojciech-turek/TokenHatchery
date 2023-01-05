@@ -6,6 +6,7 @@ import { useAccount } from "wagmi";
 import Button from "components/shared/Button";
 import TokenTable from "components/TokenTable/TokenTable";
 import Modal from "components/Modal/Modal";
+import ConnectWalletModal from "components/ConnectWalletModal/ConnectWalletModal";
 
 const Manage = () => {
   const { address, isConnected } = useAccount();
@@ -41,7 +42,10 @@ const Manage = () => {
           </div>
         </div>
       )}
-      <Modal onClose={() => setShowWalletModal(false)} show={showWalletModal} />
+      <ConnectWalletModal
+        show={showWalletModal}
+        onClose={() => setShowWalletModal(false)}
+      />
     </Container>
   );
 };
