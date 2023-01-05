@@ -4,7 +4,6 @@ import SubHeading from "components/SubHeading/SubHeading";
 import { logos } from "constants/connectorLogos";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 
 import { truncateAddress } from "utils/client/truncateAddress";
 import {

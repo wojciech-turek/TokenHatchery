@@ -59,7 +59,7 @@ const Header = () => {
                       item.active
                         ? "border-b-2 border-indigo-500"
                         : "border-transparent",
-                      "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 "
+                      "inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 "
                     )}
                     key={item.name}
                     href={item.link}
@@ -76,9 +76,9 @@ const Header = () => {
                 <Link
                   className={classNames(
                     item.active
-                      ? "border-b-2 border-indigo-500"
-                      : "border-transparent",
-                    "block border-l-4  py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
+                      ? "bg-gray-50 border-indigo-500 "
+                      : "border-transparent hover:border-gray-300",
+                    "block border-l-4 py-2 pl-3 pr-4 text-base font-medium text-gray-500  hover:bg-gray-50 hover:text-gray-700"
                   )}
                   key={item.name}
                   href={item.link}

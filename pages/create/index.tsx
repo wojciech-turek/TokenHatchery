@@ -13,6 +13,8 @@ const Create = () => {
     router.push(path);
   };
 
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+
   return (
     <Container>
       <PageHeading>Choose token type</PageHeading>
@@ -29,14 +31,14 @@ const Create = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: isMobile ? 1 : 1.05 }}
             variants={{
               visible: { opacity: 1, y: 0 },
               hidden: { opacity: 0, y: 50 },
             }}
             transition={{
               y: { duration: (index + 1) * 0.2 },
-              duration: 0.2,
+              duration: isMobile ? 0 : 0.1,
             }}
           >
             <div className="flex flex-col h-full">
