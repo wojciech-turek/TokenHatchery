@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 const Fader = ({ children }: { children: React.ReactNode }) => {
   return (
     <motion.div
-      className="container text-center"
+      className="container"
       initial={{ opacity: 0, x: 50 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 20 }}

@@ -65,10 +65,8 @@ const WalletConnect = ({ nextStep }: { nextStep: () => void }) => {
                 >
                   {logos[connector.name] ? (
                     <Image
-                      className="block"
                       src={logos[connector.name]}
                       alt={connector.name}
-                      placeholder="blur"
                       priority
                       width={32}
                       height={32}

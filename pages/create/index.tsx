@@ -2,7 +2,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import Container from "components/Container/Container";
 import { tokenTypes } from "constants/availableTokenTypes";
-import PageHeading from "components/PageHeading/PageHeading";
+import PageHeading from "components/shared/PageHeading/PageHeading";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import Button from "components/shared/Button";
 import { motion } from "framer-motion";
@@ -26,10 +26,14 @@ const Create = () => {
           <motion.div
             key={tokenType.name}
             className="relative flex flex-col rounded-2xl border border-gray-200 bg-white p-8 shadow-sm"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
             whileHover={{ scale: 1.05 }}
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
+            variants={{
+              visible: { opacity: 1, y: 0 },
+              hidden: { opacity: 0, y: 50 },
+            }}
             transition={{
               y: { duration: (index + 1) * 0.2 },
               duration: 0.2,
@@ -81,13 +85,15 @@ const Create = () => {
                 ))}
               </ul>
               <div className="mt-auto">
-                <Button
-                  disabled={!tokenType.enabled}
-                  fullWidth
-                  onClick={() => navigateTo(tokenType.link)}
-                >
-                  Create
-                </Button>
+                <div className="mt-6">
+                  <Button
+                    disabled={!tokenType.enabled}
+                    fullWidth
+                    onClick={() => navigateTo(tokenType.link)}
+                  >
+                    Create
+                  </Button>
+                </div>
               </div>
             </div>
           </motion.div>

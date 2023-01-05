@@ -30,7 +30,7 @@ import Layout from "components/Layout/Layout";
 import Head from "next/head";
 
 export default function App({ Component, pageProps }: AppProps) {
-  const { chains, provider } = configureChains(
+  const { chains, provider, webSocketProvider } = configureChains(
     [
       mainnet,
       goerli,
@@ -64,7 +64,9 @@ export default function App({ Component, pageProps }: AppProps) {
       new WalletConnectConnector({ chains, options: { qrcode: true } }),
       new LedgerConnector({ chains }),
     ],
+    autoConnect: true,
     provider,
+    webSocketProvider,
   });
   return (
     <>

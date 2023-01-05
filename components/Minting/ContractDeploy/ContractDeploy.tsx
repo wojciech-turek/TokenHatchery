@@ -81,6 +81,7 @@ const ContractDeploy = ({
       setDeploying(false);
     } catch (e) {
       console.log(e);
+      setStage(0);
       setDeploying(false);
     }
   };
@@ -218,9 +219,14 @@ const ContractDeploy = ({
           </div>
         </div>
       </div>
-      <Button disabled={deploying || contractAddress === ""} onClick={nextStep}>
-        Continue
-      </Button>
+      <div className="mt-12">
+        <Button
+          disabled={deploying || contractAddress === ""}
+          onClick={nextStep}
+        >
+          Continue
+        </Button>
+      </div>
     </Fader>
   );
 };
