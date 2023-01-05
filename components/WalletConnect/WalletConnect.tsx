@@ -1,10 +1,8 @@
 import Button from "components/shared/Button";
 import ExternalLink from "components/shared/ExternalLink";
 import SubHeading from "components/SubHeading/SubHeading";
-import Head from "next/head";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { classNames } from "utils/client/classNames";
 import { truncateAddress } from "utils/client/truncateAddress";
 import {
   useAccount,
@@ -42,13 +40,6 @@ const WalletConnect = ({ nextStep }: { nextStep: () => void }) => {
 
   return (
     <div>
-      <Head>
-        <link rel="preload" href="/coinbase.png" as="image" />
-        <link rel="preload" href="/ledger.png" as="image" />
-        <link rel="preload" href="/metamask.png" as="image" />
-        <link rel="preload" href="/tally.png" as="image" />
-        <link rel="preload" href="/walletconnect.png" as="image" />
-      </Head>
       <SubHeading>Select your wallet</SubHeading>
       <p className="text-sm font-medium text-gray-700 mb-12">
         Select the wallet connection type you would like to use. If you do not

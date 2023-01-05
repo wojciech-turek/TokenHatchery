@@ -11,6 +11,7 @@ import Personalization from "components/Personalization/Personalization";
 import Steps from "components/Steps/Steps";
 import { mintingSteps } from "constants/mintingSteps";
 import { Step } from "types/minting";
+import Head from "next/head";
 
 const Erc20 = () => {
   const [steps, setSteps] = useState<Step[]>(mintingSteps);
@@ -91,15 +92,33 @@ const Erc20 = () => {
   ];
 
   return (
-    <Container>
-      <PageHeading>ERC20 Creator</PageHeading>
-      <div className="overflow-hidden rounded-lg bg-gray-50 shadow p-4 mt-6">
-        <Steps steps={steps} handleStepChange={handleStepChange} />
-        <div className="mt-12 px-0 lg:px-4">
-          {stepComponents[currentStep].body}
+    <>
+      <Head>
+        <link rel="preload" href="/eth.png" as="image" />
+        <link rel="preload" href="/bsc.png" as="image" />
+        <link rel="preload" href="/matic.png" as="image" />
+        <link rel="preload" href="/arb.png" as="image" />
+        <link rel="preload" href="/avax.png" as="image" />
+        <link rel="preload" href="/evmos.png" as="image" />
+        <link rel="preload" href="/fantom.png" as="image" />
+        <link rel="preload" href="/gno.png" as="image" />
+        <link rel="preload" href="/optmimism.png" as="image" />
+        <link rel="preload" href="/coinbase.png" as="image" />
+        <link rel="preload" href="/ledger.png" as="image" />
+        <link rel="preload" href="/metamask.png" as="image" />
+        <link rel="preload" href="/tally.png" as="image" />
+        <link rel="preload" href="/walletconnect.png" as="image" />
+      </Head>
+      <Container>
+        <PageHeading>ERC20 Creator</PageHeading>
+        <div className="overflow-hidden rounded-lg bg-gray-50 shadow p-4 mt-6">
+          <Steps steps={steps} handleStepChange={handleStepChange} />
+          <div className="mt-12 px-0 lg:px-4">
+            {stepComponents[currentStep].body}
+          </div>
         </div>
-      </div>
-    </Container>
+      </Container>
+    </>
   );
 };
 
