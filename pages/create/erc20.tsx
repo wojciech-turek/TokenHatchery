@@ -93,22 +93,6 @@ const Erc20 = () => {
 
   return (
     <>
-      <Head>
-        <link rel="preload" href="/eth.png" as="image" />
-        <link rel="preload" href="/bsc.png" as="image" />
-        <link rel="preload" href="/matic.png" as="image" />
-        <link rel="preload" href="/arb.png" as="image" />
-        <link rel="preload" href="/avax.png" as="image" />
-        <link rel="preload" href="/evmos.png" as="image" />
-        <link rel="preload" href="/fantom.png" as="image" />
-        <link rel="preload" href="/gno.png" as="image" />
-        <link rel="preload" href="/optmimism.png" as="image" />
-        <link rel="preload" href="/coinbase.png" as="image" />
-        <link rel="preload" href="/ledger.png" as="image" />
-        <link rel="preload" href="/metamask.png" as="image" />
-        <link rel="preload" href="/tally.png" as="image" />
-        <link rel="preload" href="/walletconnect.png" as="image" />
-      </Head>
       <Container>
         <PageHeading>ERC20 Creator</PageHeading>
         <div className="overflow-hidden rounded-lg bg-gray-50 shadow p-4 mt-6">

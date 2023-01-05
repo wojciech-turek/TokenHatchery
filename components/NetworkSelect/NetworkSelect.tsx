@@ -1,11 +1,12 @@
 import Image from "next/image";
 import React, { useState } from "react";
-import { useNetwork, useSwitchNetwork } from "wagmi";
+import { useSwitchNetwork } from "wagmi";
 import { Switch } from "@headlessui/react";
 import { Network, supportedNetworks } from "constants/supportedNetworks";
 import { classNames } from "utils/client/classNames";
 import Button from "components/shared/Button";
 import SubHeading from "components/SubHeading/SubHeading";
+import Fader from "components/Fader/Fader";
 
 const NetworkSelect = ({ nextStep }: { nextStep: () => void }) => {
   const { isLoading, switchNetworkAsync } = useSwitchNetwork();
@@ -66,50 +67,52 @@ const NetworkSelect = ({ nextStep }: { nextStep: () => void }) => {
 
   return (
     <>
-      <div>
-        <SubHeading>Select network</SubHeading>
-        <p className="text-sm font-medium text-gray-700 mb-12">
-          Select the network you wish to deploy your token on, make sure to
-          confirm the network change in your wallet.{" "}
-          <span className="font-bold">
-            Your wallet may not support all of the networks below.
-          </span>{" "}
-          <br />
-          To deploy your token on a testnet flip the switch below and select
-          desired network.
-        </p>
-        <div className="flex pb-4">
-          <span className="text-gray-700 pr-4">Testnet deployment</span>
-          <Switch
-            checked={testnet}
-            onChange={setTestnet}
-            className={classNames(
-              testnet ? "bg-indigo-600" : "bg-gray-200",
-              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-            )}
-          >
-            <span className="sr-only">Use setting</span>
-            <span
-              aria-hidden="true"
+      <Fader>
+        <div>
+          <SubHeading>Select network</SubHeading>
+          <p className="text-sm font-medium text-gray-700 mb-12">
+            Select the network you wish to deploy your token on, make sure to
+            confirm the network change in your wallet.{" "}
+            <span className="font-bold">
+              Your wallet may not support all of the networks below.
+            </span>{" "}
+            <br />
+            To deploy your token on a testnet flip the switch below and select
+            desired network.
+          </p>
+          <div className="flex pb-4">
+            <span className="text-gray-700 pr-4">Testnet deployment</span>
+            <Switch
+              checked={testnet}
+              onChange={setTestnet}
               className={classNames(
-                testnet ? "translate-x-5" : "translate-x-0",
-                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                testnet ? "bg-indigo-600" : "bg-gray-200",
+                "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               )}
-            />
-          </Switch>
+            >
+              <span className="sr-only">Use setting</span>
+              <span
+                aria-hidden="true"
+                className={classNames(
+                  testnet ? "translate-x-5" : "translate-x-0",
+                  "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                )}
+              />
+            </Switch>
+          </div>
         </div>
-      </div>
 
-      <div>
-        {renderNetworks(
-          testnet ? supportedNetworks.testnets : supportedNetworks.mainnets
-        )}
-        <div className="mt-12">
-          <Button disabled={network.name === ""} onClick={() => nextStep()}>
-            Continue
-          </Button>
+        <div>
+          {renderNetworks(
+            testnet ? supportedNetworks.testnets : supportedNetworks.mainnets
+          )}
+          <div className="mt-12">
+            <Button disabled={network.name === ""} onClick={() => nextStep()}>
+              Continue
+            </Button>
+          </div>
         </div>
-      </div>
+      </Fader>
     </>
   );
 };

@@ -5,11 +5,11 @@ import { BaseTokenData, TokenType } from "types/tokens";
 import { useNetwork, useSigner } from "wagmi";
 import { allSupportedNetworks } from "constants/supportedNetworks";
 import SubHeading from "components/SubHeading/SubHeading";
-import { CheckIcon, ExclamationCircleIcon } from "@heroicons/react/24/outline";
+import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import Button from "components/shared/Button";
-import { Transition } from "@headlessui/react";
 import { classNames } from "utils/client/classNames";
 import Link from "next/link";
+import Fader from "components/Fader/Fader";
 
 interface ContractDeployProps {
   nextStep: () => void;
@@ -127,7 +127,7 @@ const ContractDeploy = ({
   ];
 
   return (
-    <div>
+    <Fader>
       <SubHeading>Deploy your contract</SubHeading>
       <p className="text-sm font-medium text-gray-700">
         You are about to deploy your token with the settings below. Please make
@@ -221,7 +221,7 @@ const ContractDeploy = ({
       <Button disabled={deploying || contractAddress === ""} onClick={nextStep}>
         Continue
       </Button>
-    </div>
+    </Fader>
   );
 };
 

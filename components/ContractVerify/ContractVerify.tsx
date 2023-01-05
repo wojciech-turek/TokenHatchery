@@ -8,6 +8,7 @@ import { TokenType } from "types/tokens";
 import { allSupportedNetworks } from "constants/supportedNetworks";
 import { useNetwork } from "wagmi";
 import ExternalLink from "components/shared/ExternalLink";
+import Fader from "components/Fader/Fader";
 
 const ContractVerify = ({
   contractId,
@@ -73,7 +74,7 @@ const ContractVerify = ({
   }, [verifySubmitted, handleVerifyStatus]);
 
   return (
-    <div>
+    <Fader>
       <SubHeading>Verify your contract</SubHeading>
       <p className="text-sm font-medium text-gray-700">
         In order to interact with your contract through blockchain explorers you
@@ -126,7 +127,7 @@ const ContractVerify = ({
           Go to manage page
         </Button>
       </div>
-    </div>
+    </Fader>
   );
 };
 

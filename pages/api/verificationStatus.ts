@@ -17,5 +17,6 @@ export default async function handler(
     body: verificationData,
   });
   const parsedVerificationStatus = await verificationStatus.json();
+
   res.status(200).json(parsedVerificationStatus.result);
 }

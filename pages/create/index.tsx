@@ -5,6 +5,7 @@ import { tokenTypes } from "constants/availableTokenTypes";
 import PageHeading from "components/PageHeading/PageHeading";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import Button from "components/shared/Button";
+import { motion } from "framer-motion";
 
 const Create = () => {
   const router = useRouter();
@@ -21,10 +22,18 @@ const Create = () => {
         asset!
       </p>
       <div className="mt-12 space-y-12 lg:grid lg:grid-cols-3 lg:gap-x-8 lg:space-y-0">
-        {tokenTypes.map((tokenType) => (
-          <div
+        {tokenTypes.map((tokenType, index) => (
+          <motion.div
             key={tokenType.name}
             className="relative flex flex-col rounded-2xl border border-gray-200 bg-white p-8 shadow-sm"
+            whileHover={{ scale: 1.05 }}
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{
+              y: { duration: (index + 1) * 0.2 },
+              duration: 0.2,
+            }}
           >
             <div className="flex flex-col h-full">
               <h3 className="text-xl font-semibold text-gray-900">
@@ -81,7 +90,7 @@ const Create = () => {
                 </Button>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
       <Container>
