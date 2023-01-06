@@ -129,6 +129,13 @@ const ContractDeploy = ({
     },
   ];
 
+  const stages = [
+    "Generating contract...",
+    "Preparing transaction...",
+    "Sending transaction...",
+    "Waiting for confirmation...",
+  ];
+
   return (
     <Fader>
       <SubHeading>Deploy your contract</SubHeading>
@@ -165,7 +172,7 @@ const ContractDeploy = ({
                   <span className="ml-2">{error}</span>
                 </div>
               ) : deploying ? (
-                "Deploying..."
+                stages[stage]
               ) : contractAddress !== "" ? (
                 "Success!"
               ) : (

@@ -11,7 +11,6 @@ import Personalization from "components/Minting/Personalization/Personalization"
 import Steps from "components/Steps/Steps";
 import { mintingSteps } from "constants/mintingSteps";
 import { Step } from "types/minting";
-import Head from "next/head";
 
 const Erc20 = () => {
   const [steps, setSteps] = useState<Step[]>(mintingSteps);
@@ -32,6 +31,14 @@ const Erc20 = () => {
   const handleStepChange = (step: number) => {
     if (steps[step].status === "upcoming") return;
     setCurrentStep(step);
+  };
+
+  const finalStepComplete = () => {
+    setSteps((prev) => {
+      const newSteps = [...prev];
+      newSteps[currentStep].status = "complete";
+      return newSteps;
+    });
   };
 
   const nextStep = () => {
@@ -86,6 +93,7 @@ const Erc20 = () => {
           contractId={deployedToken.id}
           contractAddress={deployedToken.address}
           tokenType={TokenType.ERC20}
+          finalStepComplete={finalStepComplete}
         />
       ),
     },
