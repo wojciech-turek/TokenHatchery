@@ -9,6 +9,8 @@ import {
   getNetworkName,
 } from "constants/supportedNetworks";
 import Image from "next/image";
+import Button from "components/shared/Button";
+import Link from "next/link";
 
 const TokenTable = ({ address }: { address: string }) => {
   const [contracts, setContracts] = useState<Deployments[]>();
@@ -40,31 +42,27 @@ const TokenTable = ({ address }: { address: string }) => {
                     </th>
                     <th
                       scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
                     >
                       Symbol
                     </th>
                     <th
                       scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
                     >
                       Network
                     </th>
                     <th
                       scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
                     >
                       Address
                     </th>
                     <th
                       scope="col"
-                      className="relative py-3.5 pl-3 pr-4 sm:pr-6"
-                    >
-                      <span className="sr-only">View details</span>
-                    </th>
-                    <th scope="col" className="relative">
-                      <span className="sr-only">View details</span>
-                    </th>
+                      className="hidden relative py-3.5 pl-3 pr-4 sm:pr-6 sm:table-cell"
+                    ></th>
+                    <th scope="col" className="relative"></th>
                   </tr>
                 </thead>
                 <tbody className="bg-white">
@@ -88,51 +86,70 @@ const TokenTable = ({ address }: { address: string }) => {
                                 deploymentIdx === 0
                                   ? "border-gray-300"
                                   : "border-gray-200",
-                                "border-t"
+                                "border-t "
                               )}
                             >
                               <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                                {deployment.name}
+                                {deployment.name}{" "}
+                                <span className="inline-block sm:hidden">
+                                  - {deployment.symbol}
+                                </span>
+                                <dl className="font-normal lg:hidden">
+                                  <dt className="sr-only">Title</dt>
+                                  <dd className="mt-1 text-gray-700">
+                                    <div className="flex gap-2 items-center">
+                                      <Image
+                                        src={getNetworkImage(
+                                          deployment.networkChainId
+                                        )}
+                                        width={20}
+                                        height={20}
+                                        alt={deployment.name}
+                                      />
+
+                                      {getNetworkName(
+                                        deployment.networkChainId
+                                      )}
+                                    </div>
+                                  </dd>
+                                  <dd className="mt-1 truncate text-gray-500 sm:hidden">
+                                    {deployment.address}
+                                  </dd>
+                                  <Link
+                                    href={`/manage/${deployment.address}`}
+                                    className="text-indigo-700 font-bold hover:text-indigo-900 cursor-pointer inline-block sm:hidden"
+                                  >
+                                    View
+                                  </Link>
+                                </dl>
                               </td>
-                              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                              <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell">
                                 {deployment.symbol}
                               </td>
-                              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 flex gap-2">
-                                <Image
-                                  src={getNetworkImage(
-                                    deployment.networkChainId
-                                  )}
-                                  width={20}
-                                  height={20}
-                                  alt={deployment.name}
-                                />
-                                {getNetworkName(deployment.networkChainId)}
+                              <td className="hidden whitespace-nowrap px-4 py-4 text-sm text-gray-500 lg:table-cell">
+                                <div className="flex gap-2 items-center">
+                                  <Image
+                                    src={getNetworkImage(
+                                      deployment.networkChainId
+                                    )}
+                                    width={20}
+                                    height={20}
+                                    alt={deployment.name}
+                                  />
+
+                                  {getNetworkName(deployment.networkChainId)}
+                                </div>
                               </td>
-                              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                              <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:table-cell">
                                 {deployment.address}
                               </td>
                               <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                <a
-                                  href="#"
-                                  className="text-indigo-600 hover:text-indigo-900"
+                                <Link
+                                  href={`/manage/${deployment.address}`}
+                                  className="text-indigo-700 font-bold hover:text-indigo-900 cursor-pointer hidden sm:inline-block"
                                 >
-                                  View details
-                                  <span className="sr-only">
-                                    , {deployment.name}
-                                  </span>
-                                </a>
-                              </td>
-                              <td className="relative whitespace-nowrap text-sm font-medium ">
-                                <a
-                                  href="#"
-                                  className="text-red-600 hover:red-indigo-900"
-                                >
-                                  <TrashIcon
-                                    width={20}
-                                    height={20}
-                                    className="text-right"
-                                  />
-                                </a>
+                                  View
+                                </Link>
                               </td>
                             </tr>
                           )
