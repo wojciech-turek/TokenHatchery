@@ -6,6 +6,7 @@ import path from "path";
 import { compileContract } from "../../utils/api/compile";
 import { generateSolFile } from "utils/api/generateSol";
 import clientPromise from "lib/mongodb";
+import "prettier-plugin-solidity";
 
 export default async function handler(
   req: NextApiRequest,
