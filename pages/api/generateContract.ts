@@ -40,7 +40,7 @@ export default async function handler(
 
   const formattedContract = prettier.format(newContract, {
     parser: "solidity-parse",
-    pluginSearchDirs: ["/utils/code-formatting"],
+    pluginSearchDirs: ["node_modules/"],
     plugins: ["prettier-plugin-solidity"],
   });
 
