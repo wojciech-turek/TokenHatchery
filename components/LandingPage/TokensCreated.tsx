@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { animate } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 
@@ -10,8 +10,9 @@ export const TokensCreated = ({
   };
 }) => {
   const nodeRef = useRef<HTMLElement>(null);
-  const { ref, inView, entry } = useInView({
+  const { ref, inView } = useInView({
     threshold: 0,
+    triggerOnce: true,
   });
 
   useEffect(() => {
@@ -23,6 +24,7 @@ export const TokensCreated = ({
         node.textContent = value.toFixed();
       },
     });
+    console.log("here");
 
     return () => controls.stop();
   }, [inView, tokenCount.erc20]);

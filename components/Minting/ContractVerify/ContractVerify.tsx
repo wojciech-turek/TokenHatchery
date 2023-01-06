@@ -76,7 +76,7 @@ const ContractVerify = ({
   return (
     <Fader>
       <SubHeading>Verify your contract</SubHeading>
-      <p className="text-sm font-medium text-gray-700">
+      <p className="text-sm font-medium text-gray-700 mb-8">
         In order to interact with your contract through blockchain explorers you
         can verify it, this is also a great way to show your contract is secure
         and open source. <br />
@@ -84,7 +84,6 @@ const ContractVerify = ({
           Please note verification may not be available on all networks.
         </span>
       </p>
-
       <Button
         color="green"
         disabled={verifySubmitted}
