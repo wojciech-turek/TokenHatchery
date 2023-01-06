@@ -69,6 +69,10 @@ const Erc20ContractSchema = new Schema({
     type: Number,
     required: true,
   },
+  showInSearch: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 Erc20ContractSchema.index({ contractId: 1 }, { unique: true });
