@@ -38,9 +38,13 @@ export default async function handler(
   const files = fs.readdirSync(path.resolve("./"));
   console.log(files);
 
+  // go to node_modules and list whats in there
+  const nodeModules = fs.readdirSync(path.resolve("./node_modules"));
+  console.log(nodeModules);
+
   const formattedContract = prettier.format(newContract, {
     parser: "solidity-parse",
-    pluginSearchDirs: ["node_modules/"],
+    pluginSearchDirs: ["./node_modules/"],
     plugins: ["prettier-plugin-solidity"],
   });
 
