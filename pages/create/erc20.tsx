@@ -28,8 +28,15 @@ const Erc20 = () => {
     id: "",
   });
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+    });
+  };
+
   const handleStepChange = (step: number) => {
     if (steps[step].status === "upcoming") return;
+    scrollToTop();
     setCurrentStep(step);
   };
 
@@ -42,12 +49,14 @@ const Erc20 = () => {
   };
 
   const nextStep = () => {
+    scrollToTop();
     setSteps((prev) => {
       const newSteps = [...prev];
       newSteps[currentStep].status = "complete";
       newSteps[currentStep + 1].status = "current";
       return newSteps;
     });
+
     setCurrentStep(currentStep + 1);
   };
 

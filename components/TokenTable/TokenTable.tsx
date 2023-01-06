@@ -1,72 +1,28 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { classNames } from "utils/client/classNames";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import useApi from "hooks/useApi";
-
-const locations = [
-  {
-    name: "ERC20",
-    people: [
-      {
-        name: "Lindsay Walton",
-        title: "Front-end Developer",
-        email: "lindsay.walton@example.com",
-        role: "Member",
-      },
-      {
-        name: "Courtney Henry",
-        title: "Designer",
-        email: "courtney.henry@example.com",
-        role: "Admin",
-      },
-    ],
-  },
-  {
-    name: "ERC721",
-    people: [
-      {
-        name: "Lindsay Walton",
-        title: "Front-end Developer",
-        email: "lindsay.walton@example.com",
-        role: "Member",
-      },
-      {
-        name: "Courtney Henry",
-        title: "Designer",
-        email: "courtney.henry@example.com",
-        role: "Admin",
-      },
-    ],
-  },
-  {
-    name: "ERC1155",
-    people: [
-      {
-        name: "Lindsay Walton",
-        title: "Front-end Developer",
-        email: "lindsay.walton@example.com",
-        role: "Member",
-      },
-      {
-        name: "Courtney Henry",
-        title: "Designer",
-        email: "courtney.henry@example.com",
-        role: "Admin",
-      },
-    ],
-  },
-];
+import { Deployments } from "types/tokens";
+import {
+  allSupportedNetworks,
+  getNetworkImage,
+  getNetworkName,
+} from "constants/supportedNetworks";
+import Image from "next/image";
 
 const TokenTable = ({ address }: { address: string }) => {
+  const [contracts, setContracts] = useState<Deployments[]>();
   const { getContractsByAddress } = useApi();
 
   useEffect(() => {
     const getContracts = async () => {
+      if (!address) return;
       const contracts = await getContractsByAddress(address);
-      console.log(contracts);
+      setContracts(contracts);
     };
     getContracts();
   }, [getContractsByAddress, address]);
+
   return (
     <div>
       <div className="mt-8 flex flex-col">
@@ -112,64 +68,77 @@ const TokenTable = ({ address }: { address: string }) => {
                   </tr>
                 </thead>
                 <tbody className="bg-white">
-                  {locations.map((location) => (
-                    <Fragment key={location.name}>
-                      <tr className="border-t border-gray-200">
-                        <th
-                          colSpan={6}
-                          scope="colgroup"
-                          className="bg-gray-50 px-4 py-2 text-left text-sm font-semibold text-gray-900 sm:px-6"
-                        >
-                          {location.name}
-                        </th>
-                      </tr>
-                      {location.people.map((person, personIdx) => (
-                        <tr
-                          key={person.email}
-                          className={classNames(
-                            personIdx === 0
-                              ? "border-gray-300"
-                              : "border-gray-200",
-                            "border-t"
-                          )}
-                        >
-                          <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                            {person.name}
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            {person.title}
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            {person.email}
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            {person.role}
-                          </td>
-                          <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                            <a
-                              href="#"
-                              className="text-indigo-600 hover:text-indigo-900"
-                            >
-                              View details
-                              <span className="sr-only">, {person.name}</span>
-                            </a>
-                          </td>
-                          <td className="relative whitespace-nowrap text-sm font-medium ">
-                            <a
-                              href="#"
-                              className="text-red-600 hover:red-indigo-900"
-                            >
-                              <TrashIcon
-                                width={20}
-                                height={20}
-                                className="text-right"
-                              />
-                            </a>
-                          </td>
+                  {contracts &&
+                    contracts.map((contract) => (
+                      <Fragment key={contract.type}>
+                        <tr className="border-t border-gray-200">
+                          <th
+                            colSpan={6}
+                            scope="colgroup"
+                            className="bg-gray-50 px-4 py-2 text-left text-sm font-semibold text-gray-900 sm:px-6"
+                          >
+                            {contract.type}
+                          </th>
                         </tr>
-                      ))}
-                    </Fragment>
-                  ))}
+                        {contract.deployments.map(
+                          (deployment, deploymentIdx) => (
+                            <tr
+                              key={deployment.address}
+                              className={classNames(
+                                deploymentIdx === 0
+                                  ? "border-gray-300"
+                                  : "border-gray-200",
+                                "border-t"
+                              )}
+                            >
+                              <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                                {deployment.name}
+                              </td>
+                              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                {deployment.symbol}
+                              </td>
+                              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 flex gap-2">
+                                <Image
+                                  src={getNetworkImage(
+                                    deployment.networkChainId
+                                  )}
+                                  width={20}
+                                  height={20}
+                                  alt={deployment.name}
+                                />
+                                {getNetworkName(deployment.networkChainId)}
+                              </td>
+                              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                {deployment.address}
+                              </td>
+                              <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                                <a
+                                  href="#"
+                                  className="text-indigo-600 hover:text-indigo-900"
+                                >
+                                  View details
+                                  <span className="sr-only">
+                                    , {deployment.name}
+                                  </span>
+                                </a>
+                              </td>
+                              <td className="relative whitespace-nowrap text-sm font-medium ">
+                                <a
+                                  href="#"
+                                  className="text-red-600 hover:red-indigo-900"
+                                >
+                                  <TrashIcon
+                                    width={20}
+                                    height={20}
+                                    className="text-right"
+                                  />
+                                </a>
+                              </td>
+                            </tr>
+                          )
+                        )}
+                      </Fragment>
+                    ))}
                 </tbody>
               </table>
             </div>

@@ -1,5 +1,6 @@
 import { Network } from "constants/supportedNetworks";
-import { BaseTokenData, TokenType } from "./../types/tokens";
+import { useMemo } from "react";
+import { BaseTokenData, Deployments, TokenType } from "types/tokens";
 const useApi = () => {
   const generateContract = async ({
     tokenData,
@@ -114,23 +115,26 @@ const useApi = () => {
     }
   };
 
-  const getContractsByAddress = async (address: string) => {
-    try {
-      const response = await fetch("/api/getContracts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          address,
-        }),
-      });
-      const data = await response.json();
-      return data;
-    } catch (e: any) {
-      console.error(e);
-    }
-  };
+  const getContractsByAddress = useMemo(
+    () => async (address: string) => {
+      try {
+        const response = await fetch("/api/getContracts", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            address,
+          }),
+        });
+        const data = await response.json();
+        return data as Deployments[];
+      } catch (e: any) {
+        console.error(e);
+      }
+    },
+    []
+  );
 
   return {
     generateContract,

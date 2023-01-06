@@ -28,6 +28,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { publicProvider } from "wagmi/providers/public";
 import Layout from "components/Layout/Layout";
 import Head from "next/head";
+import { sagaChainlet } from "constants/supportedNetworks";
 
 export default function App({ Component, pageProps }: AppProps) {
   const { chains, provider, webSocketProvider } = configureChains(
@@ -49,6 +50,7 @@ export default function App({ Component, pageProps }: AppProps) {
       polygonMumbai,
       optimism,
       optimismGoerli,
+      sagaChainlet,
     ],
     [publicProvider()]
   );

@@ -1,6 +1,6 @@
 import Container from "components/Container/Container";
 import PageHeading from "components/shared/PageHeading/PageHeading";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { useAccount, useDisconnect } from "wagmi";
 import Button from "components/shared/Button";
@@ -12,6 +12,7 @@ const Manage = () => {
   const { address, isConnected } = useAccount();
   const [walletConnected, setWalletConnected] = useState(false);
   const [showWalletModal, setShowWalletModal] = useState(false);
+
   const { disconnect } = useDisconnect();
 
   useEffect(() => {

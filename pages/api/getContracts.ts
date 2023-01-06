@@ -6,14 +6,13 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const { address } = req.body;
-  console.log(address);
   const client = await clientPromise;
   const db = client.db("Deployments");
   const tokenTypes = ["ERC20", "ERC721", "ERC1155"];
   const tokens = await Promise.all(
     tokenTypes.map(async (tokenType) => {
       const collection = db.collection(`${tokenType}`);
-      const tokens = await collection
+      const contracts = await collection
         .find(
           { creator: address },
           {
@@ -28,9 +27,11 @@ export default async function handler(
           }
         )
         .toArray();
-      return tokens;
+      return {
+        type: tokenType,
+        deployments: contracts,
+      };
     })
   );
-  console.log(tokens);
   res.status(200).json(tokens);
 }

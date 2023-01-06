@@ -13,7 +13,7 @@ const SecuredBy = () => {
             <div className="-mt-4 -ml-8 flex flex-wrap justify-between lg:-ml-4">
               <div className="mt-4 ml-8 flex flex-shrink-0 flex-grow justify-center lg:ml-4 lg:flex-grow-0">
                 <Image
-                  src={"/openzeppelin.png"}
+                  src={"/imgs/openzeppelin.png"}
                   alt="OpenZeppelin logo"
                   width={250}
                   height={40}
