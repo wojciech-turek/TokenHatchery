@@ -1,4 +1,6 @@
 import Modal from "components/Modal/Modal";
+import { logos } from "constants/connectorLogos";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { Connector, useAccount, useConnect, useDisconnect } from "wagmi";
 
@@ -10,7 +12,6 @@ const ConnectWalletModal = ({
   onClose: () => void;
 }) => {
   const { connectAsync, connectors } = useConnect();
-  const { address, isConnected } = useAccount();
   const [availableConnectors, setAvailableConnectors] = useState<Connector[]>(
     []
   );
@@ -33,17 +34,29 @@ const ConnectWalletModal = ({
       onClose={onClose}
       title="Select provider and connect wallet"
     >
-      <div className="mt-6">
+      <div className="mt-12">
         <ul role="list" className="">
           {availableConnectors.map(
             (connector: Connector, connectorId: number) => (
-              <li key={connectorId} className="font-medium text-lg text-center">
-                <button
+              <li
+                key={connectorId}
+                className="font-medium text-lg text-center cursor-pointer"
+              >
+                <div
                   onClick={() => connectWallet(connectorId)}
-                  className="mt-4 w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm text-gray-700 hover:bg-gray-50"
+                  className="mt-4 flex items-center justify-center p-4 w-full border border-gray-300 rounded-md shadow-sm text-gray-700 hover:bg-gray-50"
                 >
-                  {connector.name}
-                </button>
+                  {logos[connector.name] ? (
+                    <Image
+                      src={logos[connector.name]}
+                      alt={connector.name}
+                      priority
+                      width={40}
+                      height={32}
+                    />
+                  ) : null}{" "}
+                  <div>{connector.name}</div>
+                </div>
               </li>
             )
           )}

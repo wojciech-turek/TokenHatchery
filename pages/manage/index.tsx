@@ -2,16 +2,18 @@ import Container from "components/Container/Container";
 import PageHeading from "components/shared/PageHeading/PageHeading";
 import React, { useEffect, useState } from "react";
 
-import { useAccount } from "wagmi";
+import { useAccount, useDisconnect } from "wagmi";
 import Button from "components/shared/Button";
 import TokenTable from "components/TokenTable/TokenTable";
 import Modal from "components/Modal/Modal";
 import ConnectWalletModal from "components/ConnectWalletModal/ConnectWalletModal";
+import { truncateAddress } from "utils/client/truncateAddress";
 
 const Manage = () => {
   const { address, isConnected } = useAccount();
   const [walletConnected, setWalletConnected] = useState(false);
   const [showWalletModal, setShowWalletModal] = useState(false);
+  const { disconnect } = useDisconnect();
 
   useEffect(() => {
     if (isConnected) {
@@ -29,7 +31,18 @@ const Manage = () => {
         detailed information and perform actions.
       </p>
       {walletConnected ? (
-        <TokenTable />
+        <>
+          <div className="text-xl mt-4 text-gray-700">
+            Connected with wallet: {truncateAddress(address)}{" "}
+            <span
+              onClick={() => disconnect()}
+              className="text-red-700 cursor-pointer"
+            >
+              Disconnect
+            </span>
+          </div>
+          <TokenTable />
+        </>
       ) : (
         <div className="mt-8 flex flex-col gap-4">
           <p className="text-xl text-red-700">

@@ -3,10 +3,7 @@ import Link from "next/link";
 import { Disclosure } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
-
-const classNames = (...classes: any) => {
-  return classes.filter(Boolean).join(" ");
-};
+import { classNames } from "utils/client/classNames";
 
 const Header = () => {
   const router = useRouter();

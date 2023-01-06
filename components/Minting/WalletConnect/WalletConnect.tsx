@@ -67,7 +67,7 @@ const WalletConnect = ({ nextStep }: { nextStep: () => void }) => {
                       src={logos[connector.name]}
                       alt={connector.name}
                       priority
-                      width={32}
+                      width={40}
                       height={32}
                     />
                   ) : null}
@@ -89,7 +89,6 @@ const WalletConnect = ({ nextStep }: { nextStep: () => void }) => {
                   {data?.formatted} {data?.symbol}
                 </div>
               </div>
-              {/* red text disconnect */}
               <div className="mt-2">
                 <button
                   type="button"

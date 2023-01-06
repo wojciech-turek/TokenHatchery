@@ -1,17 +1,27 @@
+import Features from "components/LandingPage/Features";
+import NFTCollections from "components/LandingPage/NFTCollections";
 import SecuredBy from "components/LandingPage/SecuredBy";
+import { TokensCreated } from "components/LandingPage/TokensCreated";
+import clientPromise from "lib/mongodb";
 import Link from "next/link";
 
-export default function Home() {
+export default function Home({
+  tokenCount,
+}: {
+  tokenCount: {
+    erc20: number;
+  };
+}) {
   return (
     <>
       <div>
         <div className="relative px-6 lg:px-8">
-          <div className="mx-auto max-w-3xl pt-20 pb-32 sm:pt-48 sm:pb-40">
+          <div className="mx-auto max-w-4xl pt-20 pb-32 sm:pt-48 sm:pb-40">
             <div>
               <div className="hidden sm:mb-8 sm:flex sm:justify-center"></div>
               <div>
-                <h1 className="text-4xl font-bold tracking-tight sm:text-center sm:text-6xl">
-                  Deploy your tokens fast, safe and free.
+                <h1 className="text-6xl font-bold tracking-tight sm:text-center sm:text-7xl">
+                  Deploy, verify and manage your tokens
                 </h1>
                 <p className="mt-6 text-lg leading-8 text-gray-600 sm:text-center">
                   TokenHatchery is a free and open source tool to deploy your
@@ -46,8 +56,28 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <SecuredBy />
+        <div className="mt-20 sm:mt-32">
+          <SecuredBy />
+        </div>
+        <Features />
+        <TokensCreated tokenCount={tokenCount} />
+        <NFTCollections />
       </div>
     </>
   );
 }
+
+export const getStaticProps = async () => {
+  const client = await clientPromise;
+  const db = client.db("Deployments");
+  const collection = db.collection(`ERC20`);
+  const count = await collection.countDocuments();
+  return {
+    props: {
+      tokenCount: {
+        erc20: count,
+      },
+      revalidate: 3600,
+    },
+  };
+};

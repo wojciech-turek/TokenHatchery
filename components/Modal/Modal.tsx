@@ -42,7 +42,7 @@ const Modal = ({
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
                 <Dialog.Title
                   as="h3"
-                  className="text-xl font-medium leading-6 text-gray-900"
+                  className="text-xl font-medium text-center leading-6 text-gray-900"
                 >
                   {title}
                 </Dialog.Title>

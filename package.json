@@ -30,6 +30,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.7.1",
+    "react-intersection-observer": "^9.4.1",
     "solc": "^0.8.17",
     "solc-typed-ast": "^11.0.2",
     "typescript": "4.9.4",
