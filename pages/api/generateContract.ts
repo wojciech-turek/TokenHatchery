@@ -35,14 +35,6 @@ export default async function handler(
     managementType,
   });
 
-  // list whats in current directory
-  const files = fs.readdirSync(path.resolve("./"));
-  console.log(files);
-
-  // go to node_modules and list whats in there
-  const nodeModules = fs.readdirSync(path.resolve("./node_modules"));
-  console.log(nodeModules);
-
   const formattedContract = prettier.format(newContract, {
     parser: "solidity-parse",
     pluginSearchDirs: ["node_modules"],
