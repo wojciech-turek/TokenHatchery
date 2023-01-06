@@ -24,7 +24,6 @@ export const TokensCreated = ({
         node.textContent = value.toFixed();
       },
     });
-    console.log("here");
 
     return () => controls.stop();
   }, [inView, tokenCount.erc20]);

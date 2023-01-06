@@ -34,16 +34,11 @@ export default async function handler(
   });
 
   const formattedContract = prettier.format(newContract, {
-    filepath: `/tmp/${contractId}.sol`,
     parser: "solidity-parse",
     plugins: ["prettier-plugin-solidity"],
   });
 
   fs.writeFileSync(`/tmp/${contractId}.sol`, formattedContract);
-
-  prettier.format(newContract, {
-    filepath: `/tmp/${contractId}.sol`,
-  });
 
   try {
     const result = await compileContract(contractId);
