@@ -34,9 +34,13 @@ export default async function handler(
     managementType,
   });
 
+  // list whats in current directory
+  const files = fs.readdirSync(path.resolve("./"));
+  console.log(files);
+
   const formattedContract = prettier.format(newContract, {
     parser: "solidity-parse",
-    pluginSearchDirs: ["utils/code-formatting"],
+    pluginSearchDirs: ["/utils/code-formatting"],
     plugins: ["prettier-plugin-solidity"],
   });
 
