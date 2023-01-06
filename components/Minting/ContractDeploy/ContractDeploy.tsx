@@ -53,12 +53,14 @@ const ContractDeploy = ({
     });
     if (!signer) return;
     try {
+      const address = await signer.getAddress();
       const { contractId, abi, bytecode } = await generateContract({
         tokenData,
         extensions,
         managementType,
         tokenType,
         network: currentNetwork,
+        creator: address,
       });
       setStage(1);
       const contract = new ethers.ContractFactory(abi, bytecode, signer);

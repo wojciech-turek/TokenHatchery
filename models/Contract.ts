@@ -13,6 +13,10 @@ const Erc20ContractSchema = new Schema({
     type: String,
     required: true,
   },
+  creator: {
+    type: String,
+    required: true,
+  },
   address: {
     type: String,
     required: false,
@@ -68,5 +72,6 @@ const Erc20ContractSchema = new Schema({
 });
 
 Erc20ContractSchema.index({ contractId: 1 }, { unique: true });
+Erc20ContractSchema.index({ address: 1 }, { unique: true });
 
 export default model("ERC20", Erc20ContractSchema);

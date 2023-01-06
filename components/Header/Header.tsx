@@ -47,6 +47,9 @@ const Header = () => {
                   className="flex flex-shrink-0 items-center text-gray-700 font-bold text-xl tracking-tight"
                 >
                   TokenHatchery
+                  <span className="inline-flex items-center relative -top-2 left-2 rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">
+                    Alpha
+                  </span>
                 </Link>
               </div>
               <div className="hidden sm:ml-6 sm:flex sm:space-x-8">

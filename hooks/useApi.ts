@@ -7,12 +7,14 @@ const useApi = () => {
     managementType,
     tokenType,
     network,
+    creator,
   }: {
     tokenData: BaseTokenData;
     extensions: string[];
     managementType: string;
     tokenType: TokenType;
     network: Network;
+    creator: string;
   }) => {
     const response = await fetch("/api/generateContract", {
       method: "POST",
@@ -28,6 +30,7 @@ const useApi = () => {
         managementType: managementType.toLowerCase(),
         type: tokenType,
         network: network,
+        creator: creator,
       }),
     });
     const data = await response.json();

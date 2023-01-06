@@ -19,6 +19,7 @@ export default async function handler(
     managementType,
     type,
     network,
+    creator,
   } = req.body;
 
   const contractId = uuidv4();
@@ -56,6 +57,7 @@ export default async function handler(
       initialSupply,
       extensions,
       managementType,
+      creator,
       address: "",
       abi: result.contracts[`${contractId}.sol`][nameCapitalized].abi,
       bytecode:
