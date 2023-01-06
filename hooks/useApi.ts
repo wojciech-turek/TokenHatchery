@@ -114,8 +114,27 @@ const useApi = () => {
     }
   };
 
+  const getContractsByAddress = async (address: string) => {
+    try {
+      const response = await fetch("/api/getContracts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          address,
+        }),
+      });
+      const data = await response.json();
+      return data;
+    } catch (e: any) {
+      console.error(e);
+    }
+  };
+
   return {
     generateContract,
+    getContractsByAddress,
     handleVerify,
     checkVerifyStatus,
     saveDeployedAddress,

@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { v4 as uuidv4 } from "uuid";
 import prettier from "prettier";
 import fs from "fs";
+import path from "path";
 import { compileContract } from "../../utils/api/compile";
 import { generateSolFile } from "utils/api/generateSol";
 import clientPromise from "lib/mongodb";
@@ -35,7 +36,7 @@ export default async function handler(
 
   const formattedContract = prettier.format(newContract, {
     parser: "solidity-parse",
-    pluginSearchDirs: ["node_modules"],
+    pluginSearchDirs: ["utils/code-formatting"],
     plugins: ["prettier-plugin-solidity"],
   });
 
@@ -54,7 +55,6 @@ export default async function handler(
       extensions,
       managementType,
       creator,
-      address: "",
       abi: result.contracts[`${contractId}.sol`][nameCapitalized].abi,
       bytecode:
         result.contracts[`${contractId}.sol`][nameCapitalized].evm.bytecode

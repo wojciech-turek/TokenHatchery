@@ -5,7 +5,6 @@ import React, { useEffect, useState } from "react";
 import { useAccount, useDisconnect } from "wagmi";
 import Button from "components/shared/Button";
 import TokenTable from "components/TokenTable/TokenTable";
-import Modal from "components/Modal/Modal";
 import ConnectWalletModal from "components/ConnectWalletModal/ConnectWalletModal";
 import { truncateAddress } from "utils/client/truncateAddress";
 
@@ -41,7 +40,7 @@ const Manage = () => {
               Disconnect
             </span>
           </div>
-          <TokenTable />
+          {address && <TokenTable address={address} />}
         </>
       ) : (
         <div className="mt-8 flex flex-col gap-4">

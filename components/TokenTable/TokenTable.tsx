@@ -1,6 +1,7 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { classNames } from "utils/client/classNames";
 import { TrashIcon } from "@heroicons/react/24/outline";
+import useApi from "hooks/useApi";
 
 const locations = [
   {
@@ -56,7 +57,16 @@ const locations = [
   },
 ];
 
-const TokenTable = () => {
+const TokenTable = ({ address }: { address: string }) => {
+  const { getContractsByAddress } = useApi();
+
+  useEffect(() => {
+    const getContracts = async () => {
+      const contracts = await getContractsByAddress(address);
+      console.log(contracts);
+    };
+    getContracts();
+  }, [getContractsByAddress, address]);
   return (
     <div>
       <div className="mt-8 flex flex-col">
