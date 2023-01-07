@@ -44,10 +44,14 @@ export const generateSolFile = ({
   // remove duplicates
   const extensionsSet = new Set(extensionsArray.flat());
 
-  const hasAccessControl = managementType !== "";
+  const hasOwnershipControl = managementType !== "";
   const isAccessControl = managementType === "accesscontrol";
+  const isOwnable = managementType === "ownable";
 
-  if (isAccessControl && extensionsSet.has("Ownable")) {
+  if (isOwnable) {
+    extensionsSet.add("Ownable");
+  }
+  if (isAccessControl) {
     extensionsSet.delete("Ownable");
     extensionsSet.add("AccessControl");
   }
@@ -64,7 +68,7 @@ export const generateSolFile = ({
   
   import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
   ${
-    mintable || pausable || snapshots || hasAccessControl
+    mintable || pausable || snapshots || hasOwnershipControl
       ? `import "${accessTypeImport}";`
       : ""
   }
