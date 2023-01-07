@@ -4,11 +4,14 @@ import { useSwitchNetwork } from "wagmi";
 import { Switch } from "@headlessui/react";
 import { Network, supportedNetworks } from "constants/supportedNetworks";
 import { classNames } from "utils/client/classNames";
-import Button from "components/shared/Button";
 import SubHeading from "components/SubHeading/SubHeading";
 import Fader from "components/Fader/Fader";
 
-const NetworkSelect = ({ nextStep }: { nextStep: () => void }) => {
+const NetworkSelect = ({
+  setStepComplete,
+}: {
+  setStepComplete: (value: boolean) => void;
+}) => {
   const { isLoading, switchNetworkAsync } = useSwitchNetwork();
   const [network, setNetwork] = useState({
     name: "",
@@ -21,6 +24,7 @@ const NetworkSelect = ({ nextStep }: { nextStep: () => void }) => {
     try {
       await switchNetworkAsync?.(chainId);
       setNetwork({ name, chainId });
+      setStepComplete(true);
     } catch (error) {
       console.error(error);
     }
@@ -106,11 +110,6 @@ const NetworkSelect = ({ nextStep }: { nextStep: () => void }) => {
           {renderNetworks(
             testnet ? supportedNetworks.testnets : supportedNetworks.mainnets
           )}
-          <div className="mt-12">
-            <Button disabled={network.name === ""} onClick={() => nextStep()}>
-              Continue
-            </Button>
-          </div>
         </div>
       </Fader>
     </>

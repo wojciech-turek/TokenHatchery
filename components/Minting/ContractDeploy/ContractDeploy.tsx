@@ -10,24 +10,23 @@ import Button from "components/shared/Button";
 import { classNames } from "utils/client/classNames";
 import Link from "next/link";
 import Fader from "components/Fader/Fader";
-import { useRouter } from "next/router";
 
 interface ContractDeployProps {
-  nextStep: () => void;
   tokenType: TokenType;
   extensions: string[];
   tokenData: BaseTokenData;
   setDeployedToken: Dispatch<SetStateAction<{ address: string; id: string }>>;
   managementType: string;
+  setStepComplete: (value: boolean) => void;
 }
 
 const ContractDeploy = ({
-  nextStep,
   tokenType,
   extensions,
   tokenData,
   setDeployedToken,
   managementType,
+  setStepComplete,
 }: ContractDeployProps) => {
   const { data: signer } = useSigner();
   const { generateContract, saveDeployedAddress } = useApi();
@@ -35,7 +34,6 @@ const ContractDeploy = ({
   const [contractAddress, setContractAddress] = useState("");
   const [stage, setStage] = useState(0);
   const [error, setError] = useState("");
-  const router = useRouter();
   const { chain } = useNetwork();
 
   const currentNetwork = allSupportedNetworks.find(
@@ -82,15 +80,12 @@ const ContractDeploy = ({
       });
       setContractAddress(deployedContract.address);
       setDeploying(false);
+      setStepComplete(true);
     } catch (e) {
       console.log(e);
       setStage(0);
       setDeploying(false);
     }
-  };
-
-  const goToManagePage = () => {
-    router.push(`/manage`);
   };
 
   const { name, symbol, decimals, initialSupply } = tokenData;
@@ -238,14 +233,6 @@ const ContractDeploy = ({
             </Button>
           </div>
         </div>
-      </div>
-      <div className="mt-12">
-        <Button
-          disabled={deploying || contractAddress === ""}
-          onClick={currentNetwork?.verifiable ? nextStep : goToManagePage}
-        >
-          {currentNetwork?.verifiable ? "Continue" : "Go to manage page"}
-        </Button>
       </div>
     </Fader>
   );

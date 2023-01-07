@@ -1,18 +1,49 @@
 import Fader from "components/Fader/Fader";
 import Button from "components/shared/Button";
+import Input from "components/shared/Input";
 import SubHeading from "components/SubHeading/SubHeading";
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { BaseTokenData } from "types/tokens";
 
 const Personalization = ({
-  nextStep,
   tokenData,
   setTokenData,
+  setStepComplete,
 }: {
-  nextStep: () => void;
   tokenData: BaseTokenData;
   setTokenData: Dispatch<SetStateAction<BaseTokenData>>;
+  setStepComplete: (value: boolean) => void;
 }) => {
+  useEffect(() => {
+    if (
+      tokenData.name !== "" &&
+      tokenData.symbol !== "" &&
+      tokenData.initialSupply !== "" &&
+      tokenData.decimals !== "" &&
+      validateInput(tokenData.name) &&
+      validateInput(tokenData.symbol) &&
+      validateNumber(tokenData.initialSupply) &&
+      validateNumber(tokenData.decimals)
+    ) {
+      setStepComplete(true);
+    } else {
+      setStepComplete(false);
+    }
+  }, [tokenData, setStepComplete]);
+
+  const validateInput = (val: string) => {
+    if (val === "") return true;
+    const value = val.trim();
+    const regex = /^[a-zA-Z]{2,10}$/;
+    return regex.test(value);
+  };
+
+  const validateNumber = (val: string) => {
+    if (val === "") return true;
+    const value = Number(val);
+    return Number.isInteger(value) && value > 0;
+  };
+
   return (
     <Fader>
       <div>
@@ -25,116 +56,74 @@ const Personalization = ({
         </p>
         <form className="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-8">
           <div>
-            <label
-              htmlFor="name"
-              className="block text-sm font-bold text-gray-700"
-            >
-              Name
-            </label>
-            <div className="mt-1">
-              <input
-                type="text"
-                name="name"
-                id="name"
-                value={tokenData.name}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                onChange={(e) => {
-                  setTokenData({ ...tokenData, name: e.target.value });
-                }}
-              />
-            </div>
+            <Input
+              type="text"
+              name="name"
+              value={tokenData.name}
+              onChange={(e) => {
+                setTokenData({ ...tokenData, name: e.target.value.trim() });
+              }}
+              error={!validateInput(tokenData.name)}
+              errorMessage="Name must be between 2 and 10 characters and contain only letters."
+            />
             <p className="mt-2 text-sm text-gray-500">
               Will be used as the name of your token and the contract name.
             </p>
           </div>
           <div>
-            <label
-              htmlFor="symbol"
-              className="block text-sm font-bold text-gray-700"
-            >
-              Symbol
-            </label>
-            <div className="mt-1">
-              <input
-                type="text"
-                name="symbol"
-                id="symbol"
-                value={tokenData.symbol}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                onChange={(e) => {
-                  setTokenData({ ...tokenData, symbol: e.target.value });
-                }}
-              />
-            </div>
+            <Input
+              type="text"
+              name="symbol"
+              value={tokenData.symbol}
+              onChange={(e) => {
+                setTokenData({ ...tokenData, symbol: e.target.value.trim() });
+              }}
+              error={!validateInput(tokenData.symbol)}
+              errorMessage="Symbol must be between 2 and 10 characters and contain only letters."
+            />
             <p className="mt-2 text-sm text-gray-500" id="symbol">
               Short name of your token, usually 3-4 characters.
             </p>
           </div>
           <div>
-            <label
-              htmlFor="decimals"
-              className="block text-sm font-bold text-gray-700"
-            >
-              Decimals
-            </label>
-            <div className="mt-1">
-              <input
-                type="number"
-                name="decimals"
-                id="decimals"
-                value={tokenData.decimals}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                onChange={(e) => {
-                  setTokenData({
-                    ...tokenData,
-                    decimals: e.currentTarget.value,
-                  });
-                }}
-              />
-            </div>
+            <Input
+              type="number"
+              name="decimals"
+              value={tokenData.decimals}
+              onChange={(e) => {
+                setTokenData({
+                  ...tokenData,
+                  decimals: parseInt(e.currentTarget.value).toString(),
+                });
+              }}
+              error={!validateNumber(tokenData.decimals)}
+              errorMessage="Decimals must be between 1 and 18."
+            />
             <p className="mt-2 text-sm text-gray-500" id="decimals">
               Number of decimals your token will have. The default is 18.
             </p>
           </div>
           <div>
-            <label
-              htmlFor="supply"
-              className="block text-sm font-bold text-gray-700"
-            >
-              Initial supply
-            </label>
-            <div className="mt-1">
-              <input
-                type="number"
-                name="supply"
-                id="supply"
-                value={tokenData.initialSupply}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                onChange={(e) => {
-                  setTokenData({ ...tokenData, initialSupply: e.target.value });
-                }}
-              />
-            </div>
+            <Input
+              type="number"
+              name="supply"
+              value={tokenData.initialSupply}
+              onChange={(e) => {
+                setTokenData({
+                  ...tokenData,
+                  initialSupply: parseInt(e.target.value).toString(),
+                });
+              }}
+              error={!validateNumber(tokenData.initialSupply)}
+              errorMessage="Initial supply must be greater than 0 and a whole number."
+            />
+
             <p className="mt-2 text-sm text-gray-500" id="supply">
               Amount of tokens to be minted at the time of token creation. The
               tokens will be minted to the deployers address.
             </p>
           </div>
         </form>
-
-        <div className="mt-12">
-          <Button
-            disabled={
-              tokenData.name === "" ||
-              tokenData.symbol === "" ||
-              tokenData.initialSupply === "" ||
-              tokenData.decimals === ""
-            }
-            onClick={() => nextStep()}
-          >
-            Continue
-          </Button>
-        </div>
       </div>
     </Fader>
   );

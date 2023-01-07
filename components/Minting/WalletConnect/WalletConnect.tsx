@@ -1,4 +1,3 @@
-import Button from "components/shared/Button";
 import ExternalLink from "components/shared/ExternalLink";
 import SubHeading from "components/SubHeading/SubHeading";
 import { logos } from "constants/connectorLogos";
@@ -15,9 +14,14 @@ import {
 } from "wagmi";
 import Fader from "components/Fader/Fader";
 
-const WalletConnect = ({ nextStep }: { nextStep: () => void }) => {
-  const { connect, connectors } = useConnect();
+const WalletConnect = ({
+  setStepComplete,
+}: {
+  setStepComplete: (value: boolean) => void;
+}) => {
+  const { connectAsync, connectors } = useConnect();
   const { address, isConnected } = useAccount();
+  const [walletConnected, setWalletConnected] = useState(false);
   const { disconnect } = useDisconnect();
   const { data } = useBalance({ address });
 
@@ -25,8 +29,12 @@ const WalletConnect = ({ nextStep }: { nextStep: () => void }) => {
     []
   );
 
-  const connectWallet = (connector: number) => {
-    connect({ connector: connectors[connector] });
+  const connectWallet = async (connector: number) => {
+    try {
+      await connectAsync({ connector: connectors[connector] });
+    } catch {
+      console.log("error connecting wallet");
+    }
   };
 
   useEffect(() => {
@@ -34,7 +42,14 @@ const WalletConnect = ({ nextStep }: { nextStep: () => void }) => {
       connectors.splice(0, 1);
     }
     setAvailableConnectors(connectors);
-  }, [connectors]);
+    if (isConnected) {
+      setWalletConnected(true);
+      setStepComplete(true);
+    } else {
+      setWalletConnected(false);
+      setStepComplete(false);
+    }
+  }, [connectors, isConnected, setStepComplete]);
 
   return (
     <>
@@ -76,7 +91,7 @@ const WalletConnect = ({ nextStep }: { nextStep: () => void }) => {
               )
             )}
           </ul>
-          {isConnected ? (
+          {walletConnected ? (
             <div className="mt-12 flex flex-col text-left">
               <div className="text-2xl font-bold my-4">Wallet connected!</div>
               <div className="flex gap-2">
@@ -100,11 +115,6 @@ const WalletConnect = ({ nextStep }: { nextStep: () => void }) => {
               </div>
             </div>
           ) : null}
-          <div className="mt-12">
-            <Button disabled={!isConnected} onClick={() => nextStep()}>
-              Continue
-            </Button>
-          </div>
         </div>
       </Fader>
     </>

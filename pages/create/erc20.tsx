@@ -10,11 +10,10 @@ import PageHeading from "components/shared/PageHeading/PageHeading";
 import Personalization from "components/Minting/Personalization/Personalization";
 import Steps from "components/Steps/Steps";
 import { mintingSteps } from "constants/mintingSteps";
-import { Step } from "types/minting";
 
 const Erc20 = () => {
-  const [steps, setSteps] = useState<Step[]>(mintingSteps);
   const [currentStep, setCurrentStep] = useState(0);
+  const [stepComplete, setStepComplete] = useState<boolean>(false);
   const [tokenData, setTokenData] = useState<BaseTokenData>({
     name: "",
     symbol: "",
@@ -28,45 +27,22 @@ const Erc20 = () => {
     id: "",
   });
 
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-    });
-  };
-
   const handleStepChange = (step: number) => {
-    if (steps[step].status === "upcoming") return;
-    scrollToTop();
     setCurrentStep(step);
+    if (step === 2) return;
+    setStepComplete(false);
   };
 
-  const finalStepComplete = () => {
-    setSteps((prev) => {
-      const newSteps = [...prev];
-      newSteps[currentStep].status = "complete";
-      return newSteps;
-    });
-  };
-
-  const nextStep = () => {
-    scrollToTop();
-    setSteps((prev) => {
-      const newSteps = [...prev];
-      newSteps[currentStep].status = "complete";
-      newSteps[currentStep + 1].status = "current";
-      return newSteps;
-    });
-
-    setCurrentStep(currentStep + 1);
+  const handleCompleteStep = (value: boolean) => {
+    setStepComplete(value);
   };
 
   const stepComponents = [
-    { body: <WalletConnect nextStep={nextStep} /> },
-    { body: <NetworkSelect nextStep={nextStep} /> },
+    { body: <WalletConnect setStepComplete={handleCompleteStep} /> },
+    { body: <NetworkSelect setStepComplete={handleCompleteStep} /> },
     {
       body: (
         <ExtensionSelect
-          nextStep={nextStep}
           tokenType={TokenType.ERC20}
           managementType={managementType}
           setManagementType={setManagementType}
@@ -78,21 +54,21 @@ const Erc20 = () => {
     {
       body: (
         <Personalization
-          nextStep={nextStep}
           setTokenData={setTokenData}
           tokenData={tokenData}
+          setStepComplete={handleCompleteStep}
         />
       ),
     },
     {
       body: (
         <ContractDeploy
-          nextStep={nextStep}
           tokenData={tokenData}
           tokenType={TokenType.ERC20}
           managementType={managementType}
           extensions={selectedExtensions}
           setDeployedToken={setDeployedToken}
+          setStepComplete={handleCompleteStep}
         />
       ),
     },
@@ -102,7 +78,6 @@ const Erc20 = () => {
           contractId={deployedToken.id}
           contractAddress={deployedToken.address}
           tokenType={TokenType.ERC20}
-          finalStepComplete={finalStepComplete}
         />
       ),
     },
@@ -112,12 +87,14 @@ const Erc20 = () => {
     <>
       <Container>
         <PageHeading>ERC20 Creator</PageHeading>
-        <div className="overflow-hidden rounded-lg bg-gray-50 shadow p-4 mt-6">
-          <Steps steps={steps} handleStepChange={handleStepChange} />
-          <div className="mt-12 px-0 lg:px-4">
-            {stepComponents[currentStep].body}
-          </div>
-        </div>
+        <Steps
+          steps={mintingSteps}
+          currentStep={currentStep}
+          setCurrentStep={handleStepChange}
+          canMoveNext={stepComplete}
+        >
+          {stepComponents[currentStep].body}
+        </Steps>
       </Container>
     </>
   );

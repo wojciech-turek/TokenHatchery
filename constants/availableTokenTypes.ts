@@ -143,7 +143,7 @@ export const tokenTypes = [
     accessControl: ["Ownable", "Roles"],
     link: "/create/erc721",
     license: "MIT",
-    enabled: false,
+    enabled: true,
   },
   {
     name: "ERC1155",

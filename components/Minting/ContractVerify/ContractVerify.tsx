@@ -14,12 +14,10 @@ const ContractVerify = ({
   contractId,
   contractAddress,
   tokenType,
-  finalStepComplete,
 }: {
   contractId: string;
   contractAddress: string;
   tokenType: TokenType;
-  finalStepComplete: () => void;
 }) => {
   const [verifySubmitted, setVerifySubmitted] = useState<boolean>(false);
   const [requestId, setRequestId] = useState<string>("");
@@ -57,7 +55,6 @@ const ContractVerify = ({
     const status = await checkVerifyStatus(requestId);
     if (status === "Pass - Verified") {
       setSuccess(true);
-      finalStepComplete();
     } else if (status === "Pending in queue") {
       setTimeout(() => {
         handleVerifyStatus();
@@ -66,13 +63,13 @@ const ContractVerify = ({
       setError(status);
     }
     setVerifySubmitted(false);
-  }, [requestId, checkVerifyStatus, finalStepComplete]);
+  }, [requestId, checkVerifyStatus]);
 
   useEffect(() => {
     if (verifySubmitted) {
       setTimeout(() => {
         handleVerifyStatus();
-      }, 5000);
+      }, 10000);
     }
   }, [verifySubmitted, handleVerifyStatus]);
 
@@ -124,11 +121,6 @@ const ContractVerify = ({
           ) : null}
         </>
       ) : null}
-      <div className="mt-6">
-        <Button onClick={() => router.push("/manage")}>
-          Go to manage page
-        </Button>
-      </div>
     </Fader>
   );
 };

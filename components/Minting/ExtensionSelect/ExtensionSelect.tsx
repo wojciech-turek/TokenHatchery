@@ -1,20 +1,18 @@
 import Button from "components/shared/Button";
 import SubHeading from "components/SubHeading/SubHeading";
 import { erc20Extensions, accessControl } from "constants/availableTokenTypes";
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useEffect } from "react";
 
 import { TokenType } from "types/tokens";
 import { classNames } from "utils/client/classNames";
 import Fader from "components/Fader/Fader";
 
 const ExtensionSelect = ({
-  nextStep,
   managementType,
   setManagementType,
   selectedExtensions,
   setSelectedExtensions,
 }: {
-  nextStep: () => void;
   tokenType: TokenType;
   managementType: string;
   setManagementType: Dispatch<SetStateAction<string>>;
@@ -114,9 +112,6 @@ const ExtensionSelect = ({
               </div>
             ))}
           </fieldset>
-          <div className="mt-12">
-            <Button onClick={() => nextStep()}>Continue</Button>
-          </div>
         </div>
       </Fader>
     </>
