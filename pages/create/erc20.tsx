@@ -22,7 +22,7 @@ const Erc20 = () => {
     decimals: "18",
   });
   const [selectedExtensions, setSelectedExtensions] = useState<string[]>([]);
-  const [managementType, setManagementType] = useState<string>("");
+  const [managementType, setManagementType] = useState<string>("Ownable");
   const [deployedToken, setDeployedToken] = useState({
     address: "",
     id: "",

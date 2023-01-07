@@ -83,7 +83,7 @@ const ExtensionSelect = ({
               </div>
             ))}
           </div>
-          <SubHeading>Select management type</SubHeading>
+          <SubHeading className="mb-12">Select management type</SubHeading>
           <fieldset className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {accessControl.map((controlType) => (
               <div
