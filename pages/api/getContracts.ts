@@ -14,10 +14,10 @@ export default async function handler(
       const collection = db.collection(`${tokenType}`);
       const contracts = await collection
         .find(
-          { creator: address },
+          { creator: address, address: { $exists: true } },
           {
             projection: {
-              _id: 0,
+              _id: 1,
               name: 1,
               symbol: 1,
               address: 1,

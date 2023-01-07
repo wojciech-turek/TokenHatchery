@@ -10,6 +10,7 @@ import Button from "components/shared/Button";
 import { classNames } from "utils/client/classNames";
 import Link from "next/link";
 import Fader from "components/Fader/Fader";
+import { useRouter } from "next/router";
 
 interface ContractDeployProps {
   nextStep: () => void;
@@ -34,7 +35,7 @@ const ContractDeploy = ({
   const [contractAddress, setContractAddress] = useState("");
   const [stage, setStage] = useState(0);
   const [error, setError] = useState("");
-
+  const router = useRouter();
   const { chain } = useNetwork();
 
   const currentNetwork = allSupportedNetworks.find(
@@ -86,6 +87,10 @@ const ContractDeploy = ({
       setStage(0);
       setDeploying(false);
     }
+  };
+
+  const goToManagePage = () => {
+    router.push(`/manage`);
   };
 
   const { name, symbol, decimals, initialSupply } = tokenData;
@@ -143,6 +148,12 @@ const ContractDeploy = ({
         You are about to deploy your token with the settings below. Please make
         sure you have enough funds to pay for the transaction.
       </p>
+      {!currentNetwork?.verifiable && (
+        <div className="mt-4 text-yellow-600 rounded-md inline-block">
+          This network does not support contract verification yet. You can still
+          deploy your contract, but you will not be able to verify it.
+        </div>
+      )}
       <div className="flex flex-col items-start justify-between mt-12 sm:flex-row gap-4">
         <div className="overflow-hidden bg-white shadow sm:rounded-md w-full  sm:w-1/3">
           <ul role="list" className="divide-y divide-gray-200">
@@ -231,9 +242,9 @@ const ContractDeploy = ({
       <div className="mt-12">
         <Button
           disabled={deploying || contractAddress === ""}
-          onClick={nextStep}
+          onClick={currentNetwork?.verifiable ? nextStep : goToManagePage}
         >
-          Continue
+          {currentNetwork?.verifiable ? "Continue" : "Go to manage page"}
         </Button>
       </div>
     </Fader>

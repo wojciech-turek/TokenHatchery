@@ -21,6 +21,7 @@ export type BaseContractData = {
 };
 
 type Deployment = {
+  _id: string;
   name: string;
   symbol: string;
   networkChainId: number;

@@ -1,6 +1,9 @@
 import React from "react";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import { Step } from "types/minting";
+import { allSupportedNetworks } from "constants/supportedNetworks";
+import { useNetwork } from "wagmi";
+import { classNames } from "utils/client/classNames";
 
 const Steps = ({
   steps,
@@ -9,6 +12,12 @@ const Steps = ({
   steps: Step[];
   handleStepChange: (step: number) => void;
 }) => {
+  const { chain } = useNetwork();
+
+  const verifiable = allSupportedNetworks.find(
+    (network) => network.chainId === chain?.id
+  )?.verifiable;
+
   return (
     <nav aria-label="Progress" className="mt-6">
       <ol
@@ -18,7 +27,12 @@ const Steps = ({
         {steps.map((step, stepIdx) => (
           <li
             key={step.title}
-            className="relative md:flex md:flex-1 cursor-pointer"
+            className={classNames(
+              stepIdx === steps.length - 1 && !verifiable
+                ? "opacity-30 pointer-events-none"
+                : "",
+              "relative md:flex md:flex-1 cursor-pointer"
+            )}
             onClick={() => handleStepChange(stepIdx)}
           >
             {step.status === "complete" ? (

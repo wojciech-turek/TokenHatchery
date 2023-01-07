@@ -81,7 +81,7 @@ const TokenTable = ({ address }: { address: string }) => {
                         {contract.deployments.map(
                           (deployment, deploymentIdx) => (
                             <tr
-                              key={deployment.address}
+                              key={deployment._id}
                               className={classNames(
                                 deploymentIdx === 0
                                   ? "border-gray-300"
