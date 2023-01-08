@@ -63,6 +63,37 @@ export const generateERC721Contract = ({
         : ""
     }
     ${`import "${accessTypeImport}";`}
+    ${
+      autoIncrementIds
+        ? `import "@openzeppelin/contracts/utils/Counters.sol";`
+        : ""
+    }
+    ${
+      votes
+        ? `import "@openzeppelin/contracts/utils/cryptography/EIP712.sol";`
+        : ""
+    }
+    ${
+      votes
+        ? `import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Votes.sol";`
+        : ""
+    }
+    ${
+      burnable
+        ? `import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";`
+        : ""
+    }
+    ${pausable ? `import "@openzeppelin/contracts/security/Pausable.sol";` : ""}
+    ${
+      enumerable
+        ? `import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";`
+        : ""
+    }
+    ${
+      URIStorage
+        ? `import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";`
+        : ""
+    }
 
     contract ${name} is ERC721${
     extensionsString !== "" ? `, ${extensionsString}` : ""

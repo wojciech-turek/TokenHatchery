@@ -1,9 +1,6 @@
 //@ts-ignore
 import solc from "solc";
 import fs from "fs";
-import path from "path";
-
-const dir = path.join(process.cwd(), "contracts");
 
 const ERC20Contract = fs.readFileSync(
   "contracts/base/token/ERC20/ERC20.sol",
@@ -38,7 +35,7 @@ const ERC20BurnableContract = fs.readFileSync(
   "utf8"
 );
 
-const ERC20PausableContract = fs.readFileSync(
+const PausableContract = fs.readFileSync(
   "contracts/base/security/Pausable.sol",
   "utf8"
 );
@@ -139,13 +136,13 @@ const EIP712Contract = fs.readFileSync(
 );
 
 export const compileERC20Contract = async (uuid: string) => {
-  const contractname = `${uuid}.sol`;
+  const contractName = `${uuid}.sol`;
   const generatedContract = fs.readFileSync(`/tmp/${uuid}.sol`, "utf8");
 
   const input = {
     language: "Solidity",
     sources: {
-      [contractname]: {
+      [contractName]: {
         content: generatedContract,
       },
     },
@@ -199,7 +196,7 @@ export const compileERC20Contract = async (uuid: string) => {
       };
     else if (path === "@openzeppelin/contracts/security/Pausable.sol")
       return {
-        contents: ERC20PausableContract,
+        contents: PausableContract,
       };
     else if (
       path ===
@@ -298,7 +295,7 @@ export const compileERC20Contract = async (uuid: string) => {
     else return { error: "File not found" };
   };
 
-  var output = JSON.parse(
+  const output = JSON.parse(
     solc.compile(JSON.stringify(input), { import: findImports })
   );
   return output;

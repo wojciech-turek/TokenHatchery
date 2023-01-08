@@ -38,12 +38,29 @@ const TokenTable = ({ address }: { address: string }) => {
   }, [getContractsByAddress, address]);
 
   return (
-    <div>
+    <div className="relative">
+      <motion.div
+        className="relative top-48 left-0 w-full h-full"
+        initial={{ opacity: 1, x: 0, y: 0 }}
+        animate={{ opacity: loading ? 1 : 0, x: loading ? 0 : -20, y: 0 }}
+        transition={{
+          duration: 0.6,
+        }}
+      >
+        <div className="animate-pulse">
+          <div className="flex justify-center items-center">
+            <div className="text-xl font-medium text-gray-700 text-center">
+              <p>Your tokens are loading...</p>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
       {!loading && (
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0 }}
+          transition={{ duration: 1, delay: 0.5 }}
         >
           <div className="mt-8 flex flex-col">
             <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
