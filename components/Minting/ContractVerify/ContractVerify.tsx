@@ -4,28 +4,19 @@ import useApi from "hooks/useApi";
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
-import { TokenType } from "types/tokens";
+import { TokenData, TokenType } from "types/tokens";
 import { allSupportedNetworks } from "constants/supportedNetworks";
 import { useNetwork } from "wagmi";
 import ExternalLink from "components/shared/ExternalLink";
 import Fader from "components/Fader/Fader";
 
-const ContractVerify = ({
-  contractId,
-  contractAddress,
-  tokenType,
-}: {
-  contractId: string;
-  contractAddress: string;
-  tokenType: TokenType;
-}) => {
+const ContractVerify = ({ tokenData }: { tokenData: TokenData }) => {
   const [verifySubmitted, setVerifySubmitted] = useState<boolean>(false);
   const [requestId, setRequestId] = useState<string>("");
   const { handleVerify, checkVerifyStatus } = useApi();
   const { chain } = useNetwork();
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const router = useRouter();
 
   const currentNetwork = allSupportedNetworks.find(
     (network) => network.chainId === chain?.id
@@ -34,7 +25,8 @@ const ContractVerify = ({
   const handleVerifyRequest = async () => {
     setError("");
     setVerifySubmitted(true);
-    const data = await handleVerify({ contractId, tokenType });
+    const { contractId, type } = tokenData;
+    const data = await handleVerify({ contractId, tokenType: type });
     if (data.guid) {
       setRequestId(data.guid);
     } else if (data.error) {
@@ -109,7 +101,7 @@ const ContractVerify = ({
           </div>
           {currentNetwork?.blockExplorer ? (
             <ExternalLink
-              href={`${currentNetwork?.blockExplorer}/address/${contractAddress}`}
+              href={`${currentNetwork?.blockExplorer}/address/${tokenData.address}`}
             >
               View on blockexplorer{" "}
               <ArrowTopRightOnSquareIcon

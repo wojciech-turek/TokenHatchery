@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import useApi from "hooks/useApi";
 import React, { Dispatch, SetStateAction, useState } from "react";
-import { BaseTokenData, TokenType } from "types/tokens";
+import { TokenData, TokenType } from "types/tokens";
 import { useNetwork, useSigner } from "wagmi";
 import { allSupportedNetworks } from "constants/supportedNetworks";
 import SubHeading from "components/SubHeading/SubHeading";
@@ -12,26 +12,19 @@ import Link from "next/link";
 import Fader from "components/Fader/Fader";
 
 interface ContractDeployProps {
-  tokenType: TokenType;
-  extensions: string[];
-  tokenData: BaseTokenData;
-  setDeployedToken: Dispatch<SetStateAction<{ address: string; id: string }>>;
-  managementType: string;
+  tokenData: TokenData;
+  setTokenData: (value: TokenData) => void;
   setStepComplete: (value: boolean) => void;
 }
 
 const ContractDeploy = ({
-  tokenType,
-  extensions,
   tokenData,
-  setDeployedToken,
-  managementType,
+  setTokenData,
   setStepComplete,
 }: ContractDeployProps) => {
   const { data: signer } = useSigner();
   const { generateContract, saveDeployedAddress } = useApi();
   const [deploying, setDeploying] = useState(false);
-  const [contractAddress, setContractAddress] = useState("");
   const [stage, setStage] = useState(0);
   const [error, setError] = useState("");
   const { chain } = useNetwork();
@@ -40,25 +33,22 @@ const ContractDeploy = ({
     (network) => network.chainId === chain?.id
   );
 
-  const deployNewErc20 = async () => {
+  const deployContract = async () => {
     if (!currentNetwork) {
       setError("Please select a network");
       return;
     }
     setDeploying(true);
-    setDeployedToken({
+    setTokenData({
+      ...tokenData,
+      contractId: "",
       address: "",
-      id: "",
     });
     if (!signer) return;
     try {
       const address = await signer.getAddress();
       const { contractId, abi, bytecode } = await generateContract({
         tokenData,
-        extensions,
-        managementType,
-        tokenType,
-        network: currentNetwork,
         creator: address,
       });
       setStage(1);
@@ -68,17 +58,17 @@ const ContractDeploy = ({
       setStage(3);
       await deployedContract.deployTransaction.wait();
       setStage(4);
-      setDeployedToken({
+      setTokenData({
+        ...tokenData,
+        contractId,
         address: deployedContract.address,
-        id: contractId,
       });
 
       await saveDeployedAddress({
         contractId: contractId,
         address: deployedContract.address,
-        type: tokenType,
+        type: tokenData.type,
       });
-      setContractAddress(deployedContract.address);
       setDeploying(false);
       setStepComplete(true);
     } catch (e) {
@@ -88,15 +78,22 @@ const ContractDeploy = ({
     }
   };
 
-  const { name, symbol, decimals, initialSupply } = tokenData;
+  const {
+    name,
+    symbol,
+    decimals,
+    initialSupply,
+    type,
+    managementType,
+    extensions,
+  } = tokenData;
 
-  const items = [
+  const summaryData = [
     {
       id: 1,
       title: "Token type",
-      description: tokenType.toUpperCase(),
+      description: type,
     },
-
     {
       id: 2,
       title: "Token name",
@@ -120,7 +117,7 @@ const ContractDeploy = ({
     {
       id: 6,
       title: "Management type",
-      description: managementType === "" ? "None" : managementType,
+      description: managementType,
     },
     {
       id: 7,
@@ -152,18 +149,21 @@ const ContractDeploy = ({
       <div className="flex flex-col items-start justify-between mt-12 sm:flex-row gap-4">
         <div className="overflow-hidden bg-white shadow sm:rounded-md w-full  sm:w-1/3">
           <ul role="list" className="divide-y divide-gray-200">
-            {items.map((item) => (
-              <li key={item.id} className="px-4 py-4 sm:px-6">
-                <div className="flex items-center justify-center gap-4">
-                  <p className="text-sm font-medium text-gray-900">
-                    {item.title}
-                  </p>
-                  <div className="flex flex-col grow text-sm text-right text-gray-500">
-                    <p>{item.description}</p>
+            {summaryData.filter(Boolean).map((item) => {
+              if (!Boolean(item.description)) return null;
+              return (
+                <li key={item.id} className="px-4 py-4 sm:px-6">
+                  <div className="flex items-center justify-center gap-4">
+                    <p className="text-sm font-medium text-gray-900">
+                      {item.title}
+                    </p>
+                    <div className="flex flex-col grow text-sm text-right text-gray-500">
+                      <p>{item.description}</p>
+                    </div>
                   </div>
-                </div>
-              </li>
-            ))}
+                </li>
+              );
+            })}
           </ul>
         </div>
         <div className="px-4 grow shadow bg-white w-full  sm:rounded-md">
@@ -179,7 +179,7 @@ const ContractDeploy = ({
                 </div>
               ) : deploying ? (
                 stages[stage]
-              ) : contractAddress !== "" ? (
+              ) : tokenData.address !== "" ? (
                 "Success!"
               ) : (
                 "Ready to deploy"
@@ -203,11 +203,13 @@ const ContractDeploy = ({
               </div>
             </div>
           </div>
-          {contractAddress ? (
+          {tokenData.address ? (
             <>
               <div className="flex flex-col gap-2 mt-6 sm:flex-row">
                 <div className="font-bold">Your contract address:</div>
-                <div className="text-gray-500 break-all">{contractAddress}</div>
+                <div className="text-gray-500 break-all">
+                  {tokenData.address}
+                </div>
               </div>
 
               <p className="text-sm font-medium text-gray-700 mt-4">
@@ -227,9 +229,9 @@ const ContractDeploy = ({
             <Button
               color="green"
               disabled={error !== "" || deploying}
-              onClick={deployNewErc20}
+              onClick={deployContract}
             >
-              {contractAddress ? "Deploy another" : "Deploy"}
+              {tokenData.address ? "Deploy another" : "Deploy"}
             </Button>
           </div>
         </div>

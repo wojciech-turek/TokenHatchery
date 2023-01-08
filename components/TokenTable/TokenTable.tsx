@@ -6,6 +6,7 @@ import { getNetworkImage, getNetworkName } from "constants/supportedNetworks";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { FolderOpenIcon } from "@heroicons/react/24/outline";
 
 const TokenTable = ({ address }: { address: string }) => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -44,7 +45,7 @@ const TokenTable = ({ address }: { address: string }) => {
         initial={{ opacity: 1, x: 0, y: 0 }}
         animate={{ opacity: loading ? 1 : 0, x: loading ? 0 : -20, y: 0 }}
         transition={{
-          duration: 0.6,
+          duration: 0.3,
         }}
       >
         <div className="animate-pulse">
@@ -60,7 +61,7 @@ const TokenTable = ({ address }: { address: string }) => {
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.5 }}
+          transition={{ duration: 0.3, delay: 0.5 }}
         >
           <div className="mt-8 flex flex-col">
             <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -113,6 +114,23 @@ const TokenTable = ({ address }: { address: string }) => {
                                 {contract.type}
                               </th>
                             </tr>
+                            {contract.deployments.length === 0 && (
+                              <tr className="border-t border-gray-200">
+                                <td
+                                  colSpan={6}
+                                  scope="colgroup"
+                                  className="px-4 py-2 text-left text-sm text-center text-gray-900 sm:px-6"
+                                >
+                                  <FolderOpenIcon
+                                    className="inline-block w-5 text-gray-400"
+                                    aria-hidden="true"
+                                  />
+                                  <span className="inline-block pl-2 relative top-0.5">
+                                    No tokens found
+                                  </span>
+                                </td>
+                              </tr>
+                            )}
                             {contract.deployments.map(
                               (deployment, deploymentIdx) => (
                                 <tr
@@ -165,7 +183,7 @@ const TokenTable = ({ address }: { address: string }) => {
                                     <div className="flex gap-2 items-center">
                                       <Image
                                         src={getNetworkImage(
-                                          deployment.networkChainId
+                                          Number(deployment.networkChainId)
                                         )}
                                         width={20}
                                         height={20}
@@ -173,7 +191,7 @@ const TokenTable = ({ address }: { address: string }) => {
                                       />
 
                                       {getNetworkName(
-                                        deployment.networkChainId
+                                        Number(deployment.networkChainId)
                                       )}
                                     </div>
                                   </td>

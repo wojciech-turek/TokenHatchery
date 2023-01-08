@@ -1,34 +1,46 @@
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSwitchNetwork } from "wagmi";
 import { Switch } from "@headlessui/react";
 import { Network, supportedNetworks } from "constants/supportedNetworks";
 import { classNames } from "utils/client/classNames";
 import SubHeading from "components/SubHeading/SubHeading";
 import Fader from "components/Fader/Fader";
+import { TokenData } from "types/tokens";
 
 const NetworkSelect = ({
+  tokenData,
+  setTokenData,
   setStepComplete,
 }: {
+  tokenData: TokenData;
+  setTokenData: (value: TokenData) => void;
   setStepComplete: (value: boolean) => void;
 }) => {
   const { isLoading, switchNetworkAsync } = useSwitchNetwork();
-  const [network, setNetwork] = useState({
-    name: "",
-    chainId: 0,
-  });
   const [testnet, setTestnet] = useState(false);
 
   const handleSelectNetwork = async (name: string, chainId: number) => {
     if (isLoading) return;
     try {
       await switchNetworkAsync?.(chainId);
-      setNetwork({ name, chainId });
+      setTokenData({
+        ...tokenData,
+        networkName: name,
+        networkChainId: String(chainId),
+      });
+
       setStepComplete(true);
     } catch (error) {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    if (tokenData?.networkName) {
+      setStepComplete(true);
+    }
+  }, [setStepComplete, tokenData?.networkName]);
 
   const renderNetworks = (networks: Network[]) => (
     <ul
@@ -49,7 +61,7 @@ const NetworkSelect = ({
           >
             <div
               className={classNames(
-                availableNetwork.name === network.name
+                availableNetwork.name === tokenData?.networkName
                   ? "bg-indigo-50 border-2 rounded border-indigo-500 z-10"
                   : "hover:bg-gray-50 border-transparent",
                 "border-2  flex w-full items-center justify-between space-x-6 p-6 cursor-pointer"

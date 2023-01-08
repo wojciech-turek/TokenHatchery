@@ -5,26 +5,28 @@ import NetworkSelect from "components/Minting/NetworkSelect/NetworkSelect";
 import WalletConnect from "components/Minting/WalletConnect/WalletConnect";
 import ContractDeploy from "components/Minting/ContractDeploy/ContractDeploy";
 import ContractVerify from "components/Minting/ContractVerify/ContractVerify";
-import { BaseTokenData, TokenType } from "types/tokens";
+import { TokenData, TokenType } from "types/tokens";
 import PageHeading from "components/shared/PageHeading/PageHeading";
 import Personalization from "components/Minting/Personalization/Personalization";
 import Steps from "components/Steps/Steps";
 import { mintingSteps } from "constants/mintingSteps";
+import { erc20Extensions } from "constants/availableTokenTypes";
 
 const Erc20 = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [stepComplete, setStepComplete] = useState<boolean>(false);
-  const [tokenData, setTokenData] = useState<BaseTokenData>({
+  const [tokenData, setTokenData] = useState<TokenData>({
     name: "",
     symbol: "",
-    initialSupply: "",
     decimals: "18",
-  });
-  const [selectedExtensions, setSelectedExtensions] = useState<string[]>([]);
-  const [managementType, setManagementType] = useState<string>("Ownable");
-  const [deployedToken, setDeployedToken] = useState({
+    initialSupply: "",
+    type: TokenType.ERC20,
     address: "",
-    id: "",
+    contractId: "",
+    networkChainId: "",
+    networkName: "",
+    extensions: [],
+    managementType: "Ownable",
   });
 
   const handleStepChange = (step: number) => {
@@ -39,15 +41,21 @@ const Erc20 = () => {
 
   const stepComponents = [
     { body: <WalletConnect setStepComplete={handleCompleteStep} /> },
-    { body: <NetworkSelect setStepComplete={handleCompleteStep} /> },
+    {
+      body: (
+        <NetworkSelect
+          setStepComplete={handleCompleteStep}
+          tokenData={tokenData}
+          setTokenData={setTokenData}
+        />
+      ),
+    },
     {
       body: (
         <ExtensionSelect
-          tokenType={TokenType.ERC20}
-          managementType={managementType}
-          setManagementType={setManagementType}
-          selectedExtensions={selectedExtensions}
-          setSelectedExtensions={setSelectedExtensions}
+          extensions={erc20Extensions}
+          tokenData={tokenData}
+          setTokenData={setTokenData}
         />
       ),
     },
@@ -64,22 +72,13 @@ const Erc20 = () => {
       body: (
         <ContractDeploy
           tokenData={tokenData}
-          tokenType={TokenType.ERC20}
-          managementType={managementType}
-          extensions={selectedExtensions}
-          setDeployedToken={setDeployedToken}
+          setTokenData={setTokenData}
           setStepComplete={handleCompleteStep}
         />
       ),
     },
     {
-      body: (
-        <ContractVerify
-          contractId={deployedToken.id}
-          contractAddress={deployedToken.address}
-          tokenType={TokenType.ERC20}
-        />
-      ),
+      body: <ContractVerify tokenData={tokenData} />,
     },
   ];
 

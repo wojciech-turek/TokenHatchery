@@ -1,8 +1,15 @@
-export type BaseTokenData = {
+export type TokenData = {
   name: string;
+  type: TokenType;
   symbol: string;
-  decimals: string;
-  initialSupply: string;
+  decimals?: string;
+  initialSupply?: string;
+  extensions: string[];
+  managementType: string;
+  networkName: string;
+  networkChainId: string;
+  address: string;
+  contractId: string;
 };
 
 // declaren enum with token types
@@ -12,13 +19,6 @@ export enum TokenType {
   ERC721 = "ERC721",
   ERC1155 = "ERC1155",
 }
-
-export type BaseContractData = {
-  name: string;
-  symbol: string;
-  address: string;
-  networkChainId: number;
-};
 
 type Deployment = {
   _id: string;

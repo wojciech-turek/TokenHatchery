@@ -1,29 +1,30 @@
 import Fader from "components/Fader/Fader";
-import Button from "components/shared/Button";
 import Input from "components/shared/Input";
 import SubHeading from "components/SubHeading/SubHeading";
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { BaseTokenData } from "types/tokens";
+import React, { useEffect } from "react";
+import { TokenData, TokenType } from "types/tokens";
 
 const Personalization = ({
   tokenData,
   setTokenData,
   setStepComplete,
 }: {
-  tokenData: BaseTokenData;
-  setTokenData: Dispatch<SetStateAction<BaseTokenData>>;
+  tokenData: TokenData;
+  setTokenData: (value: TokenData) => void;
   setStepComplete: (value: boolean) => void;
 }) => {
   useEffect(() => {
     if (
-      tokenData.name !== "" &&
-      tokenData.symbol !== "" &&
-      tokenData.initialSupply !== "" &&
-      tokenData.decimals !== "" &&
-      validateInput(tokenData.name) &&
-      validateInput(tokenData.symbol) &&
-      validateNumber(tokenData.initialSupply) &&
-      validateNumber(tokenData.decimals)
+      (tokenData.type === TokenType.ERC20 &&
+        tokenData.name !== "" &&
+        tokenData.symbol !== "" &&
+        tokenData.initialSupply !== "" &&
+        tokenData.decimals !== "" &&
+        validateInput(tokenData.name) &&
+        validateInput(tokenData.symbol) &&
+        validateNumber(tokenData.initialSupply) &&
+        validateNumber(tokenData.decimals)) ||
+      tokenData.type === TokenType.ERC721
     ) {
       setStepComplete(true);
     } else {
@@ -38,7 +39,7 @@ const Personalization = ({
     return regex.test(value);
   };
 
-  const validateNumber = (val: string) => {
+  const validateNumber = (val: string | undefined) => {
     if (val === "") return true;
     const value = Number(val);
     return Number.isInteger(value) && value > 0;

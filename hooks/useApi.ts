@@ -1,20 +1,12 @@
-import { Network } from "constants/supportedNetworks";
 import { useMemo } from "react";
-import { BaseTokenData, Deployments, TokenType } from "types/tokens";
+import { TokenData, Deployments, TokenType } from "types/tokens";
 const useApi = () => {
   const generateContract = async ({
     tokenData,
-    extensions,
-    managementType,
-    tokenType,
-    network,
     creator,
   }: {
-    tokenData: BaseTokenData;
-    extensions: string[];
-    managementType: string;
-    tokenType: TokenType;
-    network: Network;
+    tokenData: TokenData;
+
     creator: string;
   }) => {
     const response = await fetch("/api/generateContract", {
@@ -23,14 +15,7 @@ const useApi = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name: tokenData.name,
-        symbol: tokenData.symbol,
-        decimals: tokenData.decimals,
-        initialSupply: tokenData.initialSupply,
-        extensions: extensions.map((extension) => extension.toLowerCase()),
-        managementType: managementType.toLowerCase(),
-        type: tokenType,
-        network: network,
+        ...tokenData,
         creator: creator,
       }),
     });

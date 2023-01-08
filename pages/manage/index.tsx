@@ -1,6 +1,6 @@
 import Container from "components/Container/Container";
 import PageHeading from "components/shared/PageHeading/PageHeading";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useAccount, useDisconnect } from "wagmi";
 import Button from "components/shared/Button";

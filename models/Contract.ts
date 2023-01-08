@@ -22,7 +22,6 @@ const Erc20ContractSchema = new Schema({
   },
   initialSupply: {
     type: String,
-    required: true,
   },
   extensions: {
     type: Array,

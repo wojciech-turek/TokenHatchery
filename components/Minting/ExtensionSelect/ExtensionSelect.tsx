@@ -1,31 +1,30 @@
 import SubHeading from "components/SubHeading/SubHeading";
-import { erc20Extensions, accessControl } from "constants/availableTokenTypes";
-import React, { Dispatch, SetStateAction } from "react";
+import { accessControl } from "constants/availableTokenTypes";
+import React from "react";
 
-import { TokenType } from "types/tokens";
+import { TokenData } from "types/tokens";
 import { classNames } from "utils/client/classNames";
 import Fader from "components/Fader/Fader";
+import { Extension } from "types/extensions";
 
 const ExtensionSelect = ({
-  managementType,
-  setManagementType,
-  selectedExtensions,
-  setSelectedExtensions,
+  extensions,
+  tokenData,
+  setTokenData,
 }: {
-  tokenType: TokenType;
-  managementType: string;
-  setManagementType: Dispatch<SetStateAction<string>>;
-  selectedExtensions: string[];
-  setSelectedExtensions: Dispatch<SetStateAction<string[]>>;
+  extensions: Extension[];
+  tokenData: TokenData;
+  setTokenData: (value: TokenData) => void;
 }) => {
   const handleSelect = (extension: string) => {
-    if (selectedExtensions.includes(extension)) {
-      setSelectedExtensions(
-        selectedExtensions.filter((ext) => ext !== extension)
-      );
+    const selectedExtensions = tokenData?.extensions || [];
+    if (selectedExtensions?.includes(extension)) {
+      const index = selectedExtensions?.indexOf(extension);
+      selectedExtensions?.splice(index, 1);
     } else {
-      setSelectedExtensions([...selectedExtensions, extension]);
+      selectedExtensions?.push(extension);
     }
+    setTokenData({ ...tokenData, extensions: selectedExtensions });
   };
 
   return (
@@ -39,12 +38,12 @@ const ExtensionSelect = ({
             extensions is optional.
           </p>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {erc20Extensions.map((extension) => (
+            {extensions.map((extension) => (
               <div
                 key={extension.name}
                 onClick={(e) => handleSelect(extension.name)}
                 className={classNames(
-                  selectedExtensions.includes(extension.name)
+                  tokenData?.extensions?.includes(extension.name)
                     ? "border-indigo-600"
                     : "border-gray-300 hover:border-gray-400",
                   "relative flex items-center space-x-3 rounded-lg border bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2  cursor-pointer"
@@ -53,7 +52,10 @@ const ExtensionSelect = ({
                 <div className="px-2">
                   <input
                     type="checkbox"
-                    checked={selectedExtensions.includes(extension.name)}
+                    value={extension.name}
+                    checked={
+                      tokenData?.extensions?.includes(extension.name) || false
+                    }
                     onChange={(e) => handleSelect(extension.name)}
                     className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                   />
@@ -81,9 +83,14 @@ const ExtensionSelect = ({
             {accessControl.map((controlType) => (
               <div
                 key={controlType.name}
-                onClick={() => setManagementType(controlType.type)}
+                onClick={() =>
+                  setTokenData({
+                    ...tokenData,
+                    managementType: controlType.type,
+                  })
+                }
                 className={classNames(
-                  managementType === controlType.type
+                  tokenData?.managementType === controlType.type
                     ? "border-indigo-600"
                     : "border-gray-300 hover:border-gray-400",
                   "relative flex items-center space-x-3 rounded-lg border bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2  cursor-pointer"
@@ -92,8 +99,16 @@ const ExtensionSelect = ({
                 <div className="px-2">
                   <input
                     type="radio"
-                    checked={managementType === controlType.type}
-                    onChange={() => setManagementType(controlType.type)}
+                    value={controlType.type}
+                    checked={
+                      tokenData?.managementType === controlType.type || false
+                    }
+                    onChange={() =>
+                      setTokenData({
+                        ...tokenData,
+                        managementType: controlType.type,
+                      })
+                    }
                   />
                 </div>
                 <div className="min-w-0 flex-1">
