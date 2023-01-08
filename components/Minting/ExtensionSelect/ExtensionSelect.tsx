@@ -1,7 +1,6 @@
-import Button from "components/shared/Button";
 import SubHeading from "components/SubHeading/SubHeading";
 import { erc20Extensions, accessControl } from "constants/availableTokenTypes";
-import React, { Dispatch, SetStateAction, useEffect } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 
 import { TokenType } from "types/tokens";
 import { classNames } from "utils/client/classNames";
@@ -26,10 +25,6 @@ const ExtensionSelect = ({
       );
     } else {
       setSelectedExtensions([...selectedExtensions, extension]);
-    }
-    const extesionsWithControl = ["Mintable", "Pausable", "Snapshots"];
-    if (extesionsWithControl.includes(extension) && managementType === "") {
-      setManagementType("Ownable");
     }
   };
 

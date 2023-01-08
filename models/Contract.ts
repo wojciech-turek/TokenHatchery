@@ -11,7 +11,6 @@ const Erc20ContractSchema = new Schema({
   },
   decimals: {
     type: String,
-    required: true,
   },
   creator: {
     type: String,

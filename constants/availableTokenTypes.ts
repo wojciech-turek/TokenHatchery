@@ -1,8 +1,4 @@
-export type Extension = {
-  name: string;
-  description: string;
-  advanced?: boolean;
-};
+import { Extension } from "types/extensions";
 
 export type AccessControl = {
   name: string;

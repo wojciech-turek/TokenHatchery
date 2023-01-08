@@ -138,7 +138,7 @@ const EIP712Contract = fs.readFileSync(
   "utf8"
 );
 
-export const compileContract = async (uuid: string) => {
+export const compileERC20Contract = async (uuid: string) => {
   const contractname = `${uuid}.sol`;
   const generatedContract = fs.readFileSync(`/tmp/${uuid}.sol`, "utf8");
 

@@ -7,7 +7,7 @@ interface ContractGenerationProps {
   managementType: string;
 }
 
-export const generateSolFile = ({
+export const generateERC20Contract = ({
   name,
   symbol,
   decimals,
@@ -23,19 +23,17 @@ export const generateSolFile = ({
   const flashMinting = extensions.includes("flash minting");
   const snapshots = extensions.includes("snapshots");
 
-  const mintableExtension = ["Ownable"];
   const burnableExtension = ["ERC20Burnable"];
-  const pausableExtension = ["Pausable", "Ownable"];
+  const pausableExtension = ["Pausable"];
   const permitExtension = ["ERC20Permit"];
   const votesExtension = ["ERC20Permit", "ERC20Votes"];
   const flashMintingExtension = ["ERC20FlashMint"];
-  const snapshotsExtension = ["ERC20Snapshot", "Ownable"];
+  const snapshotsExtension = ["ERC20Snapshot"];
 
   const extensionsArray = [
     burnable ? burnableExtension : [],
     snapshots ? snapshotsExtension : [],
     pausable ? pausableExtension : [],
-    mintable ? mintableExtension : [],
     permit ? permitExtension : [],
     votes ? votesExtension : [],
     flashMinting ? flashMintingExtension : [],
@@ -44,34 +42,27 @@ export const generateSolFile = ({
   // remove duplicates
   const extensionsSet = new Set(extensionsArray.flat());
 
-  const hasOwnershipControl = managementType !== "";
   const isAccessControl = managementType === "accesscontrol";
   const isOwnable = managementType === "ownable";
 
   if (isOwnable) {
     extensionsSet.add("Ownable");
-  }
-  if (isAccessControl) {
-    extensionsSet.delete("Ownable");
+  } else {
     extensionsSet.add("AccessControl");
   }
 
   const extensionsString = Array.from(extensionsSet).join(", ");
 
-  const accessTypeImport = isAccessControl
-    ? "@openzeppelin/contracts/access/AccessControl.sol"
-    : "@openzeppelin/contracts/access/Ownable.sol";
+  const accessTypeImport = isOwnable
+    ? "@openzeppelin/contracts/access/Ownable.sol"
+    : "@openzeppelin/contracts/access/AccessControl.sol";
 
   const newErc20Contract = `
     // SPDX-License-Identifier: MIT
   pragma solidity 0.8.17;
   
   import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-  ${
-    mintable || pausable || snapshots || hasOwnershipControl
-      ? `import "${accessTypeImport}";`
-      : ""
-  }
+  ${`import "${accessTypeImport}";`}
     ${
       burnable
         ? `import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";`

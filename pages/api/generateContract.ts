@@ -2,9 +2,8 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { v4 as uuidv4 } from "uuid";
 import prettier from "prettier";
 import fs from "fs";
-import path from "path";
-import { compileContract } from "../../utils/api/compile";
-import { generateSolFile } from "utils/api/generateSol";
+import { compileERC20Contract } from "../../utils/api/compileERC20";
+import { generateERC20Contract } from "utils/api/generateERC20";
 import clientPromise from "lib/mongodb";
 import "prettier-plugin-solidity";
 
@@ -26,7 +25,8 @@ export default async function handler(
 
   const contractId = uuidv4();
   const nameCapitalized = name.charAt(0).toUpperCase() + name.slice(1);
-  const newContract = generateSolFile({
+
+  const newContract = generateERC20Contract({
     name: nameCapitalized,
     symbol,
     decimals,
@@ -44,7 +44,7 @@ export default async function handler(
   fs.writeFileSync(`/tmp/${contractId}.sol`, formattedContract);
 
   try {
-    const result = await compileContract(contractId);
+    const result = await compileERC20Contract(contractId);
     const client = await clientPromise;
     const db = client.db("Deployments");
     const collection = db.collection(`${type}`);
