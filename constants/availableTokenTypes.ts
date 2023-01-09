@@ -86,8 +86,7 @@ export const erc721Extensions: Extension[] = [
   },
   {
     name: "URI Storage",
-    description:
-      "Token metadata will be stored on IPFS and the URI will be stored on-chain.",
+    description: "Allows updating token URIs for individual token IDs.",
   },
   {
     name: "Enumerable",
