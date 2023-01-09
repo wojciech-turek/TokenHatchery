@@ -10,6 +10,8 @@ export default function Home({
 }: {
   tokenCount: {
     erc20: number;
+    erc721: number;
+    erc1155: number;
   };
 }) {
   return (
@@ -70,12 +72,18 @@ export default function Home({
 export const getStaticProps = async () => {
   const client = await clientPromise;
   const db = client.db("Deployments");
-  const collection = db.collection(`ERC20`);
-  const count = await collection.countDocuments();
+  const erc20Collection = db.collection(`ERC20`);
+  const erc721Collection = db.collection(`ERC721`);
+  const erc1155Collection = db.collection(`ERC1155`);
+  const erc20Count = await erc20Collection.countDocuments();
+  const erc721Count = await erc721Collection.countDocuments();
+  const erc1155Count = await erc1155Collection.countDocuments();
   return {
     props: {
       tokenCount: {
-        erc20: count,
+        erc20: erc20Count,
+        erc721: erc721Count,
+        erc1155: erc1155Count,
       },
       revalidate: 3600,
     },

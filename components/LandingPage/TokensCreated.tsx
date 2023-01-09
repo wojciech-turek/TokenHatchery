@@ -7,26 +7,53 @@ export const TokensCreated = ({
 }: {
   tokenCount: {
     erc20: number;
+    erc721: number;
+    erc1155: number;
   };
 }) => {
-  const nodeRef = useRef<HTMLElement>(null);
+  const erc20Ref = useRef<HTMLElement>(null);
+  const erc721Ref = useRef<HTMLElement>(null);
+  const erc1155Ref = useRef<HTMLElement>(null);
+
   const { ref, inView } = useInView({
     threshold: 0,
     triggerOnce: true,
   });
 
   useEffect(() => {
-    const node = nodeRef.current;
-    if (!node || !inView) return;
-    const controls = animate(0, tokenCount.erc20, {
+    const erc20node = erc20Ref.current;
+    const erc721node = erc721Ref.current;
+    const erc1155node = erc1155Ref.current;
+
+    if (!erc20node || !inView) return;
+    const erc20controls = animate(0, tokenCount.erc20, {
       duration: 3,
       onUpdate(value) {
-        node.textContent = value.toFixed();
+        erc20node.textContent = value.toFixed();
+      },
+    });
+    if (!erc721node || !inView) return;
+    const erc721controls = animate(0, tokenCount.erc721, {
+      duration: 3,
+      onUpdate(value) {
+        erc721node.textContent = value.toFixed();
       },
     });
 
-    return () => controls.stop();
-  }, [inView, tokenCount.erc20]);
+    if (!erc1155node || !inView) return;
+    const erc1155controls = animate(0, tokenCount.erc1155, {
+      duration: 3,
+      onUpdate(value) {
+        erc1155node.textContent = value.toFixed();
+      },
+    });
+
+    return () => {
+      erc20controls.stop();
+      erc721controls.stop();
+      erc1155controls.stop();
+    };
+  }, [inView, tokenCount.erc20, tokenCount.erc721, tokenCount.erc1155]);
 
   return (
     <div className="bg-indigo-800">
@@ -46,7 +73,7 @@ export const TokensCreated = ({
               ERC20
             </dt>
             <dd
-              ref={nodeRef}
+              ref={erc20Ref}
               className="order-1 text-5xl font-bold tracking-tight text-white"
             >
               0
@@ -56,7 +83,10 @@ export const TokensCreated = ({
             <dt className="order-2 mt-2 text-lg font-medium leading-6 text-indigo-200">
               ERC721
             </dt>
-            <dd className="order-1 text-5xl font-bold tracking-tight text-white">
+            <dd
+              ref={erc721Ref}
+              className="order-1 text-5xl font-bold tracking-tight text-white"
+            >
               0
             </dd>
           </div>
@@ -64,7 +94,10 @@ export const TokensCreated = ({
             <dt className="order-2 mt-2 text-lg font-medium leading-6 text-indigo-200">
               ERC1155
             </dt>
-            <dd className="order-1 text-5xl font-bold tracking-tight text-white">
+            <dd
+              ref={erc1155Ref}
+              className="order-1 text-5xl font-bold tracking-tight text-white"
+            >
               0
             </dd>
           </div>
