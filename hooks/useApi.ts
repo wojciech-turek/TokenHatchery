@@ -20,16 +20,12 @@ const useApi = () => {
       }),
     });
     const data = await response.json();
-    const { contractId, result } = data;
-    const nameCapitalized =
-      tokenData.name.charAt(0).toUpperCase() + tokenData.name.slice(1);
+    const { contractId, abi, bytecode } = data;
 
     return {
-      contractId: contractId,
-      abi: result.contracts[`${contractId}.sol`][nameCapitalized].abi,
-      bytecode:
-        result.contracts[`${contractId}.sol`][nameCapitalized].evm.bytecode
-          .object,
+      contractId,
+      abi,
+      bytecode,
     };
   };
 

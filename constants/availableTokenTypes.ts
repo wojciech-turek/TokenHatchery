@@ -64,7 +64,7 @@ export const erc20Extensions: Extension[] = [
 export const erc721Extensions: Extension[] = [
   {
     name: "Mintable",
-    description: "Privileged accounts will be able to create more supply.",
+    description: "Privileged accounts will be able to emit new tokens.",
   },
   {
     name: "Burnable",
@@ -76,9 +76,13 @@ export const erc721Extensions: Extension[] = [
       "Privileged accounts will be able to pause the functionality marked as whenNotPaused. Useful for emergency response.",
   },
   {
-    name: "Auto Increment Ids",
+    name: "Votes",
     description:
-      "Tokens will be minted with an auto-incrementing id. This is useful for creating a unique token id for each token.",
+      "Keeps track of individual units for voting in on-chain governance, with a way to delegate one's voting power to a trusted account.",
+  },
+  {
+    name: "Auto Increment Ids",
+    description: "New tokens will be automatically assigned an incremental id.",
   },
   {
     name: "URI Storage",

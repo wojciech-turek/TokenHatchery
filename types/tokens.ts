@@ -8,6 +8,7 @@ export type TokenData = {
   managementType: string;
   networkName: string;
   networkChainId: string;
+  baseURI?: string;
   address: string;
   contractId: string;
 };

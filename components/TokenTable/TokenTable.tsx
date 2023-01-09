@@ -41,7 +41,7 @@ const TokenTable = ({ address }: { address: string }) => {
   return (
     <div className="relative">
       <motion.div
-        className="relative top-48 left-0 w-full h-full"
+        className="relative top-12 left-0 w-full h-full lg:top-48"
         initial={{ opacity: 1, x: 0, y: 0 }}
         animate={{ opacity: loading ? 1 : 0, x: loading ? 0 : -20, y: 0 }}
         transition={{

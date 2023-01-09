@@ -31,7 +31,10 @@ const Erc721 = () => {
 
   const handleStepChange = (step: number) => {
     setCurrentStep(step);
-    if (step === 2) return;
+    if (step === 2) {
+      setStepComplete(true);
+      return;
+    }
     setStepComplete(false);
   };
 

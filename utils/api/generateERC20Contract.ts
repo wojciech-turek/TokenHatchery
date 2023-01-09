@@ -15,13 +15,13 @@ export const generateERC20Contract = ({
   extensions,
   managementType,
 }: ContractGenerationProps) => {
-  const mintable = extensions.includes("mintable");
-  const burnable = extensions.includes("burnable");
-  const pausable = extensions.includes("pausable");
-  const permit = extensions.includes("permit");
-  const votes = extensions.includes("votes");
-  const flashMinting = extensions.includes("flash minting");
-  const snapshots = extensions.includes("snapshots");
+  const mintable = extensions.includes("Mintable");
+  const burnable = extensions.includes("Burnable");
+  const pausable = extensions.includes("Pausable");
+  const permit = extensions.includes("Permit");
+  const votes = extensions.includes("Votes");
+  const flashMinting = extensions.includes("Flash minting");
+  const snapshots = extensions.includes("Snapshots");
 
   const burnableExtension = ["ERC20Burnable"];
   const pausableExtension = ["Pausable"];
@@ -42,8 +42,8 @@ export const generateERC20Contract = ({
   // remove duplicates
   const extensionsSet = new Set(extensionsArray.flat());
 
-  const isAccessControl = managementType === "accesscontrol";
-  const isOwnable = managementType === "ownable";
+  const isAccessControl = managementType === "AccessControl";
+  const isOwnable = managementType === "Ownable";
 
   if (isOwnable) {
     extensionsSet.add("Ownable");

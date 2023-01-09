@@ -27,6 +27,16 @@ const ContextContract = fs.readFileSync(
   "utf8"
 );
 
+const ERC721BurnableContract = fs.readFileSync(
+  "contracts/base/token/ERC721/extensions/ERC721Burnable.sol",
+  "utf8"
+);
+
+const IERC721ReceiverContract = fs.readFileSync(
+  "contracts/base/token/ERC721/IERC721Receiver.sol",
+  "utf8"
+);
+
 const StringsContract = fs.readFileSync(
   "contracts/base/utils/Strings.sol",
   "utf8"
@@ -147,6 +157,7 @@ export const compileERC721Contract = async (uuid: string) => {
   };
 
   const findImports = (path: string) => {
+    console.log("path", path);
     if (path === "@openzeppelin/contracts/token/ERC721/ERC721.sol")
       return { contents: ERC721Contract };
     else if (path === "@openzeppelin/contracts/token/ERC721/IERC721.sol")
@@ -176,6 +187,15 @@ export const compileERC721Contract = async (uuid: string) => {
       return { contents: IAccessControlContract };
     else if (path === "@openzeppelin/contracts/utils/cryptography/ECDSA.sol")
       return { contents: ECDSAContract };
+    else if (
+      path ===
+      "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol"
+    )
+      return { contents: ERC721BurnableContract };
+    else if (
+      path === "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol"
+    )
+      return { contents: IERC721ReceiverContract };
     else if (path === "@openzeppelin/contracts/utils/Counters.sol")
       return { contents: CountersContract };
     else if (path === "@openzeppelin/contracts/security/Pausable.sol")

@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import FormData from "form-data";
-import fs from "fs";
 import clientPromise from "lib/mongodb";
-import { generateSource } from "utils/api/generateSource";
+import { generateERC20Source } from "utils/api/generateERC20Source";
+import { generateERC721Source } from "utils/api/generateERC721Source";
 
 export default async function handler(
   req: NextApiRequest,
@@ -18,11 +18,28 @@ export default async function handler(
     res.status(404).json({ message: "Contract not found" });
     return;
   }
-  const sourceCode = generateSource(
-    contractId,
-    contract.extensions,
-    contract.managementType
-  );
+
+  let sourceCode;
+
+  switch (tokenType) {
+    case "ERC20":
+      sourceCode = generateERC20Source(
+        contractId,
+        contract.extensions,
+        contract.managementType
+      );
+      break;
+    case "ERC721":
+      sourceCode = generateERC721Source(
+        contractId,
+        contract.extensions,
+        contract.managementType
+      );
+      break;
+    default:
+      res.status(400).json({ message: "Invalid token type" });
+      return;
+  }
 
   const copilerVersion = "v0.8.17+commit.8df45f5f";
 

@@ -11,15 +11,14 @@ export const generateERC721Contract = ({
   extensions: string[];
   managementType: string;
 }) => {
-  const mintable = extensions.includes("mintable");
-  const burnable = extensions.includes("burnable");
-  const pausable = extensions.includes("pausable");
-  const votes = extensions.includes("votes");
-  const enumerable = extensions.includes("enumerable");
-  const autoIncrementIds = extensions.includes("auto increment ids");
-  const URIStorage = extensions.includes("uri storage");
+  const mintable = extensions.includes("Mintable");
+  const burnable = extensions.includes("Burnable");
+  const pausable = extensions.includes("Pausable");
+  const votes = extensions.includes("Votes");
+  const enumerable = extensions.includes("Enumerable");
+  const autoIncrementIds = extensions.includes("Auto Increment Ids");
+  const URIStorage = extensions.includes("URI Storage");
 
-  const autoIncrementExtension = ["Counters"];
   const burnableExtension = ["ERC721Burnable"];
   const pausableExtension = ["Pausable"];
   const votesExtension = ["EIP712, ERC721Votes"];
@@ -31,14 +30,13 @@ export const generateERC721Contract = ({
     pausable ? pausableExtension : [],
     votes ? votesExtension : [],
     enumerable ? enumerableExtension : [],
-    autoIncrementIds ? autoIncrementExtension : [],
     URIStorage ? URIStorageExtension : [],
   ];
 
   const extensionsSet = new Set(extensionsArray.flat());
 
-  const isOwnable = managementType === "ownable";
-  const isAccessControl = managementType === "accesscontrol";
+  const isOwnable = managementType === "Ownable";
+  const isAccessControl = managementType === "AccessControl";
 
   const accessTypeImport = isOwnable
     ? "@openzeppelin/contracts/access/Ownable.sol"
@@ -57,17 +55,9 @@ export const generateERC721Contract = ({
     pragma solidity 0.8.17;
 
     import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-    ${
-      autoIncrementIds
-        ? `import "@openzeppelin/contracts/utils/Counters.sol";`
-        : ""
-    }
+
     ${`import "${accessTypeImport}";`}
-    ${
-      autoIncrementIds
-        ? `import "@openzeppelin/contracts/utils/Counters.sol";`
-        : ""
-    }
+
     ${
       votes
         ? `import "@openzeppelin/contracts/utils/cryptography/EIP712.sol";`
@@ -92,6 +82,11 @@ export const generateERC721Contract = ({
     ${
       URIStorage
         ? `import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";`
+        : ""
+    }
+    ${
+      autoIncrementIds
+        ? `import "@openzeppelin/contracts/utils/Counters.sol";`
         : ""
     }
 
@@ -132,16 +127,19 @@ export const generateERC721Contract = ({
         ${
           mintable
             ? `
-        function safeMint(address to, uint256 tokenId) public ${
-          isAccessControl ? "onlyRole(MINTER_ROLE)" : "onlyOwner"
-        } {
+        function safeMint(address to${
+          autoIncrementIds ? "" : ", uint256 tokenId"
+        }${URIStorage ? ",string memory uri" : ""}) public ${
+                isAccessControl ? "onlyRole(MINTER_ROLE)" : "onlyOwner"
+              } {
           ${
             autoIncrementIds
-              ? `uint256 tokenId = _tokenIdCounter.current();
+              ? `uint256 tokenId = _tokenIdCounter.current() + 1;
           _tokenIdCounter.increment();`
               : ""
           }
           _safeMint(to, tokenId);
+          ${URIStorage ? `_setTokenURI(tokenId, uri);` : ""}
       }`
             : ""
         }
@@ -194,7 +192,7 @@ export const generateERC721Contract = ({
         view
         override(ERC721 ${enumerable ? ", ERC721Enumerable" : ""} ${
                 isAccessControl ? ", AccessControl" : ""
-              }})
+              })
         returns (bool)
     {
         return super.supportsInterface(interfaceId);

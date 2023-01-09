@@ -1,6 +1,6 @@
 import fs from "fs";
 
-export const generateSource = (
+export const generateERC20Source = (
   contractId: string,
   extensions: string[],
   managementType: string
@@ -140,16 +140,15 @@ export const generateSource = (
     "utf8"
   );
 
-  const mintable = extensions.includes("mintable");
-  const burnable = extensions.includes("burnable");
-  const pausable = extensions.includes("pausable");
-  const permit = extensions.includes("permit");
-  const votes = extensions.includes("votes");
-  const flashMint = extensions.includes("flash minting");
-  const snapshots = extensions.includes("snapshots");
+  const burnable = extensions.includes("Burnable");
+  const pausable = extensions.includes("Pausable");
+  const permit = extensions.includes("Permit");
+  const votes = extensions.includes("Votes");
+  const flashMint = extensions.includes("Flash Minting");
+  const snapshots = extensions.includes("Snapshots");
 
-  const isOwnable = managementType === "ownable";
-  const isAccessControl = managementType === "accesscontrol";
+  const isOwnable = managementType === "Ownable";
+  const isAccessControl = managementType === "AccessControl";
 
   const burnableExtension = {
     "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol": {

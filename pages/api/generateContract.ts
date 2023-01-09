@@ -1,13 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { v4 as uuidv4 } from "uuid";
-import prettier from "prettier";
+
 import fs from "fs";
 import { compileERC20Contract } from "../../utils/api/compileERC20";
-import { generateERC20Contract } from "utils/api/generateERC20";
+import { generateERC20Contract } from "utils/api/generateERC20Contract";
 import clientPromise from "lib/mongodb";
 import "prettier-plugin-solidity";
-import { generateERC721Contract } from "utils/api/generateERC721";
+import { generateERC721Contract } from "utils/api/generateERC721Contract";
 import { compileERC721Contract } from "utils/api/compileERC721";
+import { formatSol } from "utils/api/formatSol";
 
 export default async function handler(
   req: NextApiRequest,
@@ -50,22 +51,23 @@ export default async function handler(
       managementType,
     });
   }
-
-  const formattedContract = prettier.format(newContract, {
-    parser: "solidity-parse",
-    pluginSearchDirs: ["node_modules"],
-    plugins: ["prettier-plugin-solidity"],
-  });
-
-  fs.writeFileSync(`/tmp/${contractId}.sol`, formattedContract);
+  fs.writeFileSync(`/tmp/${contractId}.sol`, formatSol(newContract));
 
   try {
-    let result;
+    let compilationResult;
     if (type === "ERC20") {
-      result = await compileERC20Contract(contractId);
+      compilationResult = await compileERC20Contract(contractId);
     } else if (type === "ERC721") {
-      result = await compileERC721Contract(contractId);
+      compilationResult = await compileERC721Contract(contractId);
     }
+
+    const abi =
+      compilationResult.contracts[`${contractId}.sol`][nameCapitalized].abi;
+
+    const bytecode =
+      compilationResult.contracts[`${contractId}.sol`][nameCapitalized].evm
+        .bytecode.object;
+
     const client = await clientPromise;
     const db = client.db("Deployments");
     const collection = db.collection(`${type}`);
@@ -77,10 +79,8 @@ export default async function handler(
       extensions,
       managementType,
       creator,
-      abi: result.contracts[`${contractId}.sol`][nameCapitalized].abi,
-      bytecode:
-        result.contracts[`${contractId}.sol`][nameCapitalized].evm.bytecode
-          .object,
+      abi,
+      bytecode,
       contractId,
       verified: false,
       verificationGuid: "",
@@ -90,7 +90,11 @@ export default async function handler(
       networkChainId,
     };
     await collection.insertOne(contract);
-    res.status(200).json({ result, contractId });
+    res.status(200).json({
+      abi,
+      bytecode,
+      contractId,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error });

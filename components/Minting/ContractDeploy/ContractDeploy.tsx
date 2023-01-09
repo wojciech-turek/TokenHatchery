@@ -39,11 +39,6 @@ const ContractDeploy = ({
       return;
     }
     setDeploying(true);
-    setTokenData({
-      ...tokenData,
-      contractId: "",
-      address: "",
-    });
     if (!signer) return;
     try {
       const address = await signer.getAddress();
