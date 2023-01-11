@@ -46,8 +46,9 @@
     "@types/uuid": "^9.0.0",
     "autoprefixer": "^10.4.13",
     "eslint-plugin-css-modules": "^2.11.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.1.0",
     "postcss": "^8.4.20",
-    "tailwindcss": "^3.2.4",
-    "husky": "^8.0.0"
+    "tailwindcss": "^3.2.4"
   }
 }
