@@ -11,35 +11,38 @@ import ContractDeploy from "components/Minting/ContractDeploy/ContractDeploy";
 import ContractVerify from "components/Minting/ContractVerify/ContractVerify";
 import { TokenData, TokenType } from "types/tokens";
 import Personalization from "components/Minting/Personalization/Personalization";
+import Button from "components/shared/Button";
+import { useRouter } from "next/router";
+import { scrollToTop } from "utils/client/scrollTop";
 
 const Erc721 = () => {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
   const [stepComplete, setStepComplete] = useState<boolean>(false);
   const [tokenData, setTokenData] = useState<TokenData>({
     name: "",
     symbol: "",
-    decimals: "18",
-    initialSupply: "",
-    type: TokenType.ERC721,
     address: "",
     contractId: "",
     networkChainId: "",
+    baseURI: "",
     networkName: "",
     extensions: [],
     managementType: "Ownable",
+    type: TokenType.ERC721,
   });
-
-  const handleStepChange = (step: number) => {
-    setCurrentStep(step);
-    if (step === 2) {
-      setStepComplete(true);
-      return;
-    }
-    setStepComplete(false);
-  };
 
   const handleCompleteStep = (value: boolean) => {
     setStepComplete(value);
+  };
+
+  const goToManagePage = () => {
+    router.push("/manage");
+  };
+
+  const nextStep = () => {
+    scrollToTop();
+    setCurrentStep(currentStep + 1);
   };
 
   const stepComponents = [
@@ -59,6 +62,7 @@ const Erc721 = () => {
           extensions={erc721Extensions}
           tokenData={tokenData}
           setTokenData={setTokenData}
+          setStepComplete={handleCompleteStep}
         />
       ),
     },
@@ -68,6 +72,7 @@ const Erc721 = () => {
           tokenData={tokenData}
           setTokenData={setTokenData}
           setStepComplete={handleCompleteStep}
+          type={TokenType.ERC721}
         />
       ),
     },
@@ -88,14 +93,28 @@ const Erc721 = () => {
   return (
     <Container>
       <PageHeading>ERC721 Creator</PageHeading>
-      <Steps
-        steps={mintingSteps}
-        currentStep={currentStep}
-        setCurrentStep={handleStepChange}
-        canMoveNext={stepComplete}
-      >
+      <div className="bg-gray-50 p-4 rounded-md mt-6">
+        <Steps
+          steps={mintingSteps}
+          currentStep={currentStep}
+          setCurrentStep={setCurrentStep}
+        />
         {stepComponents[currentStep].body}
-      </Steps>
+        <div className="mt-12">
+          <Button
+            disabled={!stepComplete}
+            onClick={
+              mintingSteps.length - 1 === currentStep
+                ? goToManagePage
+                : () => nextStep()
+            }
+          >
+            {mintingSteps.length - 1 === currentStep
+              ? "Go to manage page"
+              : "Continue"}
+          </Button>
+        </div>
+      </div>
     </Container>
   );
 };

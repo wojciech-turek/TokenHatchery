@@ -71,6 +71,11 @@ export const erc721Extensions: Extension[] = [
     description: "Token holders will be able to destroy their tokens.",
   },
   {
+    name: "Auto Increment Ids",
+    description: "New tokens will be automatically assigned an incremental id.",
+    require: ["Mintable"],
+  },
+  {
     name: "Pausable",
     description:
       "Privileged accounts will be able to pause the functionality marked as whenNotPaused. Useful for emergency response.",
@@ -79,10 +84,6 @@ export const erc721Extensions: Extension[] = [
     name: "Votes",
     description:
       "Keeps track of individual units for voting in on-chain governance, with a way to delegate one's voting power to a trusted account.",
-  },
-  {
-    name: "Auto Increment Ids",
-    description: "New tokens will be automatically assigned an incremental id.",
   },
   {
     name: "URI Storage",

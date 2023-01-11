@@ -157,7 +157,6 @@ export const compileERC721Contract = async (uuid: string) => {
   };
 
   const findImports = (path: string) => {
-    console.log("path", path);
     if (path === "@openzeppelin/contracts/token/ERC721/ERC721.sol")
       return { contents: ERC721Contract };
     else if (path === "@openzeppelin/contracts/token/ERC721/IERC721.sol")

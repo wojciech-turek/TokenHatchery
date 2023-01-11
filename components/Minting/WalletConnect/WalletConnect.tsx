@@ -32,7 +32,13 @@ const WalletConnect = ({
   const connectWallet = async (connector: number) => {
     try {
       await connectAsync({ connector: connectors[connector] });
+      setStepComplete(true);
+      setWalletConnected(true);
     } catch {
+      if (isConnected) {
+        setStepComplete(true);
+        setWalletConnected(true);
+      }
       console.log("error connecting wallet");
     }
   };
@@ -42,13 +48,6 @@ const WalletConnect = ({
       connectors.splice(0, 1);
     }
     setAvailableConnectors(connectors);
-    if (isConnected) {
-      setWalletConnected(true);
-      setStepComplete(true);
-    } else {
-      setWalletConnected(false);
-      setStepComplete(false);
-    }
   }, [connectors, isConnected, setStepComplete]);
 
   return (
@@ -107,7 +106,11 @@ const WalletConnect = ({
               <div className="mt-2">
                 <button
                   type="button"
-                  onClick={() => disconnect()}
+                  onClick={() => {
+                    disconnect();
+                    setWalletConnected(false);
+                    setStepComplete(false);
+                  }}
                   className="rounded border border-red-600 text-red-600 px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
                   Disconnect

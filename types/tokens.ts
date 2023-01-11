@@ -1,16 +1,30 @@
-export type TokenData = {
+export type TokenData = ERC20TokenData | ERC721TokenData;
+
+export type ERC20TokenData = {
   name: string;
-  type: TokenType;
   symbol: string;
-  decimals?: string;
-  initialSupply?: string;
+  decimals: string;
+  initialSupply: string;
   extensions: string[];
   managementType: string;
   networkName: string;
   networkChainId: string;
-  baseURI?: string;
   address: string;
   contractId: string;
+  type: TokenType;
+};
+
+export type ERC721TokenData = {
+  name: string;
+  symbol: string;
+  extensions: string[];
+  managementType: string;
+  networkName: string;
+  networkChainId: string;
+  baseURI: string;
+  address: string;
+  contractId: string;
+  type: TokenType;
 };
 
 // declaren enum with token types

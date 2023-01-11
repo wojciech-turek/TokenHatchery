@@ -1,26 +1,29 @@
 import Fader from "components/Fader/Fader";
 import SubHeading from "components/SubHeading/SubHeading";
 import React from "react";
-import { TokenData, TokenType } from "types/tokens";
+import { ERC721TokenData, TokenData, TokenType } from "types/tokens";
 import ERC20Form from "./ERC20Form";
 import ERC721Form from "./ERC721Form";
+import { ERC20TokenData } from "types/tokens";
 
 const Personalization = ({
+  type,
   tokenData,
   setTokenData,
   setStepComplete,
 }: {
+  type: TokenType;
   tokenData: TokenData;
   setTokenData: (value: TokenData) => void;
   setStepComplete: (value: boolean) => void;
 }) => {
   // specify which component to render based on the token type
   const renderComponent = () => {
-    switch (tokenData.type) {
+    switch (type) {
       case TokenType.ERC721:
         return (
           <ERC721Form
-            tokenData={tokenData}
+            tokenData={tokenData as ERC721TokenData}
             setTokenData={setTokenData}
             setStepComplete={setStepComplete}
           />
@@ -30,7 +33,7 @@ const Personalization = ({
       case TokenType.ERC20:
         return (
           <ERC20Form
-            tokenData={tokenData}
+            tokenData={tokenData as ERC20TokenData}
             setTokenData={setTokenData}
             setStepComplete={setStepComplete}
           />

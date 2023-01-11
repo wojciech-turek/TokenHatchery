@@ -120,7 +120,7 @@ export const generateERC721Contract = ({
         ${
           baseURI
             ? `function _baseURI() internal pure override returns (string memory) {
-            return ${baseURI};
+            return "${baseURI}";
         }`
             : ""
         }

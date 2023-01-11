@@ -1,6 +1,6 @@
 import SubHeading from "components/SubHeading/SubHeading";
 import { accessControl } from "constants/availableTokenTypes";
-import React from "react";
+import React, { useEffect } from "react";
 
 import { TokenData } from "types/tokens";
 import { classNames } from "utils/client/classNames";
@@ -11,21 +11,36 @@ const ExtensionSelect = ({
   extensions,
   tokenData,
   setTokenData,
+  setStepComplete,
 }: {
   extensions: Extension[];
   tokenData: TokenData;
   setTokenData: (value: TokenData) => void;
+  setStepComplete: (value: boolean) => void;
 }) => {
-  const handleSelect = (extension: string) => {
-    const selectedExtensions = tokenData?.extensions || [];
-    if (selectedExtensions?.includes(extension)) {
-      const index = selectedExtensions?.indexOf(extension);
-      selectedExtensions?.splice(index, 1);
+  const handleSelect = (ext: Extension) => {
+    let selectedExtensions = tokenData?.extensions || [];
+    if (!selectedExtensions.includes(ext.name)) {
+      selectedExtensions.push(ext.name);
+      if (ext.require) {
+        ext.require.forEach((req) => {
+          if (!selectedExtensions.includes(req)) {
+            selectedExtensions.push(req);
+          }
+        });
+      }
     } else {
-      selectedExtensions?.push(extension);
+      selectedExtensions = selectedExtensions.filter(
+        (name) => name !== ext.name
+      );
     }
+
     setTokenData({ ...tokenData, extensions: selectedExtensions });
   };
+
+  useEffect(() => {
+    setStepComplete(true);
+  }, [setStepComplete]);
 
   return (
     <>
@@ -41,12 +56,12 @@ const ExtensionSelect = ({
             {extensions.map((extension) => (
               <div
                 key={extension.name}
-                onClick={(e) => handleSelect(extension.name)}
+                onClick={(e) => handleSelect(extension)}
                 className={classNames(
                   tokenData?.extensions?.includes(extension.name)
                     ? "border-indigo-600"
                     : "border-gray-300 hover:border-gray-400",
-                  "relative flex items-center space-x-3 rounded-lg border bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2  cursor-pointer"
+                  "relative flex items-center space-x-3 rounded-lg border bg-white px-6 py-5 shadow-sm cursor-pointer"
                 )}
               >
                 <div className="px-2">
@@ -56,8 +71,8 @@ const ExtensionSelect = ({
                     checked={
                       tokenData?.extensions?.includes(extension.name) || false
                     }
-                    onChange={(e) => handleSelect(extension.name)}
-                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    onChange={(e) => handleSelect(extension)}
+                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 "
                   />
                 </div>
                 <div className="min-w-0 flex-1">
