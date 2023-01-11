@@ -5,7 +5,7 @@ import NetworkSelect from "components/Minting/NetworkSelect/NetworkSelect";
 import WalletConnect from "components/Minting/WalletConnect/WalletConnect";
 import ContractDeploy from "components/Minting/ContractDeploy/ContractDeploy";
 import ContractVerify from "components/Minting/ContractVerify/ContractVerify";
-import { ERC20TokenData, TokenData, TokenType } from "types/tokens";
+import { TokenData, TokenType } from "types/tokens";
 import PageHeading from "components/shared/PageHeading/PageHeading";
 import Personalization from "components/Minting/Personalization/Personalization";
 import Steps from "components/Steps/Steps";

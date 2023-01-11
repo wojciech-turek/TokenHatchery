@@ -27,8 +27,6 @@ export type ERC721TokenData = {
   type: TokenType;
 };
 
-// declaren enum with token types
-
 export enum TokenType {
   ERC20 = "ERC20",
   ERC721 = "ERC721",

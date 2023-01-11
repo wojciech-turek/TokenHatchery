@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import useApi from "hooks/useApi";
-import React, { Dispatch, SetStateAction, useState } from "react";
-import { TokenData, TokenType } from "types/tokens";
+import React, { useState } from "react";
+import { TokenData } from "types/tokens";
 import { useNetwork, useSigner } from "wagmi";
 import { allSupportedNetworks } from "constants/supportedNetworks";
 import SubHeading from "components/SubHeading/SubHeading";
@@ -73,51 +73,45 @@ const ContractDeploy = ({
     }
   };
 
-  const {
-    name,
-    symbol,
-    decimals,
-    initialSupply,
-    type,
-    managementType,
-    extensions,
-  } = tokenData;
-
   const summaryData = [
     {
       id: 1,
       title: "Token type",
-      description: type,
+      description: tokenData.type,
     },
     {
       id: 2,
       title: "Token name",
-      description: name,
+      description: tokenData.name,
     },
     {
       id: 3,
       title: "Token symbol",
-      description: symbol,
+      description: tokenData.symbol,
     },
     {
       id: 4,
       title: "Decimals",
-      description: decimals,
+      // @ts-ignore - I am aware the decimals are not present on other token types, and this is on purpose
+      description: tokenData.decimals,
     },
     {
       id: 5,
       title: "Initial supply",
-      description: initialSupply,
+      // @ts-ignore - I am aware the decimals are not present on other token types, and this is on purpose
+      description: tokenData.initialSupply,
     },
     {
       id: 6,
       title: "Management type",
-      description: managementType,
+      description: tokenData.managementType,
     },
     {
       id: 7,
       title: "Extensions",
-      description: extensions.length ? extensions.join(", ") : "None",
+      description: tokenData.extensions.length
+        ? tokenData.extensions.join(", ")
+        : "None",
     },
   ];
 
@@ -144,7 +138,7 @@ const ContractDeploy = ({
       <div className="flex flex-col items-start justify-between mt-12 sm:flex-row gap-4">
         <div className="overflow-hidden bg-white shadow sm:rounded-md w-full  sm:w-1/3">
           <ul role="list" className="divide-y divide-gray-200">
-            {summaryData.filter(Boolean).map((item) => {
+            {summaryData.map((item) => {
               if (!Boolean(item.description)) return null;
               return (
                 <li key={item.id} className="px-4 py-4 sm:px-6">
