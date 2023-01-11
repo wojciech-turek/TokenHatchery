@@ -19,7 +19,7 @@ const ERC721Form = ({
       tokenData.baseURI !== "" &&
       tokenData.extensions?.includes("Public Minting")
         ? validateNumber(tokenData.maxSupply) &&
-          BigInt(tokenData.mintPrice) >= BigInt(0)
+          BigInt(tokenData.mintPrice || 0) >= BigInt(0)
         : true
     ) {
       setStepComplete(true);
@@ -111,7 +111,8 @@ const ERC721Form = ({
                 });
               }}
               error={
-                tokenData.mintPrice !== "" && BigInt(tokenData.mintPrice) < 0n
+                tokenData.mintPrice !== "" &&
+                BigInt(tokenData.mintPrice || 0) < 0n
               }
               errorMessage="Mint price must be 0 or greater and a whole number."
             />

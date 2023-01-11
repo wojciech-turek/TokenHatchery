@@ -25,8 +25,8 @@ export type ERC721TokenData = {
   address: string;
   contractId: string;
   type: TokenType;
-  maxSupply: string;
-  mintPrice: string;
+  maxSupply?: string;
+  mintPrice?: string;
 };
 
 export enum TokenType {
