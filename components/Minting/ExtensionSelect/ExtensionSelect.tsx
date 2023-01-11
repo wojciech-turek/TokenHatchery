@@ -56,7 +56,7 @@ const ExtensionSelect = ({
             {extensions.map((extension) => (
               <div
                 key={extension.name}
-                onClick={(e) => handleSelect(extension)}
+                onClick={() => handleSelect(extension)}
                 className={classNames(
                   tokenData?.extensions?.includes(extension.name)
                     ? "border-indigo-600"
@@ -71,7 +71,7 @@ const ExtensionSelect = ({
                     checked={
                       tokenData?.extensions?.includes(extension.name) || false
                     }
-                    onChange={(e) => handleSelect(extension)}
+                    onChange={() => handleSelect(extension)}
                     className="h-4 w-4 rounded border-gray-300 text-indigo-600 "
                   />
                 </div>

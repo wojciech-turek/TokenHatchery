@@ -1,10 +1,9 @@
 import Button from "components/shared/Button";
 import SubHeading from "components/SubHeading/SubHeading";
 import useApi from "hooks/useApi";
-import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
-import { TokenData, TokenType } from "types/tokens";
+import { TokenData } from "types/tokens";
 import { allSupportedNetworks } from "constants/supportedNetworks";
 import { useNetwork } from "wagmi";
 import ExternalLink from "components/shared/ExternalLink";

@@ -2,7 +2,7 @@ import Modal from "components/Modal/Modal";
 import { logos } from "constants/connectorLogos";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { Connector, useAccount, useConnect, useDisconnect } from "wagmi";
+import { Connector, useConnect } from "wagmi";
 
 const ConnectWalletModal = ({
   show,
