@@ -1,6 +1,6 @@
 import Input from "components/shared/Input";
 import React, { useEffect } from "react";
-import { TokenData } from "types/tokens";
+import { ERC20TokenData, TokenData } from "types/tokens";
 import { validateInput, validateNumber } from "./validation";
 
 const ERC20Form = ({
@@ -8,7 +8,7 @@ const ERC20Form = ({
   setTokenData,
   setStepComplete,
 }: {
-  tokenData: TokenData;
+  tokenData: ERC20TokenData;
   setTokenData: (value: TokenData) => void;
   setStepComplete: (value: boolean) => void;
 }) => {
