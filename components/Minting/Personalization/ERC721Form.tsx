@@ -1,7 +1,7 @@
 import Input from "components/shared/Input";
 import React, { useEffect } from "react";
 import { ERC721TokenData, TokenData } from "types/tokens";
-import { validateInput } from "./validation";
+import { validateInput, validateNumber } from "./validation";
 
 const ERC721Form = ({
   tokenData,
@@ -16,7 +16,11 @@ const ERC721Form = ({
     if (
       validateInput(tokenData.name) &&
       validateInput(tokenData.symbol) &&
-      tokenData.baseURI !== ""
+      tokenData.baseURI !== "" &&
+      tokenData.extensions?.includes("Public Minting")
+        ? validateNumber(tokenData.maxSupply) &&
+          BigInt(tokenData.mintPrice) >= BigInt(0)
+        : true
     ) {
       setStepComplete(true);
     } else {
@@ -66,11 +70,56 @@ const ERC721Form = ({
               setTokenData({ ...tokenData, baseURI: e.target.value.trim() });
             }}
           />
-          <p className="mt-2 text-sm text-gray-500" id="symbol">
+          <p className="mt-2 text-sm text-gray-500" id="baseURI">
             If you already have your images uploaded to IPFS, you can set the
             base URI here.
           </p>
         </div>
+        {tokenData.extensions?.includes("Public Minting") && (
+          <div>
+            <Input
+              type="number"
+              name="Max Supply"
+              value={tokenData.maxSupply}
+              onChange={(e) => {
+                setTokenData({
+                  ...tokenData,
+                  maxSupply: e.target.value.trim(),
+                });
+              }}
+              error={
+                tokenData.maxSupply !== "" &&
+                !validateNumber(tokenData.maxSupply)
+              }
+              errorMessage="Max supply must be greater than 0 and a whole number."
+            />
+            <p className="mt-2 text-sm text-gray-500" id="maxSupply">
+              Select the maximum number of tokens that can be minted.
+            </p>
+          </div>
+        )}
+        {tokenData.extensions?.includes("Public Minting") && (
+          <div>
+            <Input
+              type="number"
+              name="Mint Price"
+              value={tokenData.mintPrice}
+              onChange={(e) => {
+                setTokenData({
+                  ...tokenData,
+                  mintPrice: e.target.value.trim(),
+                });
+              }}
+              error={
+                tokenData.mintPrice !== "" && BigInt(tokenData.mintPrice) < 0n
+              }
+              errorMessage="Mint price must be 0 or greater and a whole number."
+            />
+            <p className="mt-2 text-sm text-gray-500" id="mintPrice">
+              Select the price for minting a token in wei.
+            </p>
+          </div>
+        )}
       </form>
     </>
   );

@@ -113,6 +113,18 @@ const ContractDeploy = ({
         ? tokenData.extensions.join(", ")
         : "None",
     },
+    {
+      id: 8,
+      title: "Max supply",
+      // @ts-ignore
+      description: tokenData.maxSupply,
+    },
+    {
+      id: 9,
+      title: "Mint Price",
+      // @ts-ignore
+      description: tokenData.mintPrice,
+    },
   ];
 
   const stages = [

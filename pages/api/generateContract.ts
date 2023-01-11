@@ -26,6 +26,8 @@ export default async function handler(
     networkName,
     networkChainId,
     creator,
+    maxSupply,
+    mintPrice,
   } = req.body;
 
   const contractId = uuidv4();
@@ -49,6 +51,8 @@ export default async function handler(
       baseURI,
       extensions,
       managementType,
+      maxSupply,
+      mintPrice,
     });
   }
   fs.writeFileSync(`/tmp/${contractId}.sol`, formatSol(newContract));

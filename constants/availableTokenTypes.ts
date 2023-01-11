@@ -64,16 +64,22 @@ export const erc20Extensions: Extension[] = [
 export const erc721Extensions: Extension[] = [
   {
     name: "Mintable",
-    description: "Privileged accounts will be able to emit new tokens.",
+    description: "Adds functionality to mint new tokens.",
   },
   {
-    name: "Burnable",
-    description: "Token holders will be able to destroy their tokens.",
+    name: "Public Minting",
+    description:
+      "Anyone will be able to mint new tokens. You will be able to set a mint limit and a minting fee.",
+    require: ["Mintable", "Auto Increment Ids"],
   },
   {
     name: "Auto Increment Ids",
     description: "New tokens will be automatically assigned an incremental id.",
     require: ["Mintable"],
+  },
+  {
+    name: "Burnable",
+    description: "Token holders will be able to destroy their tokens.",
   },
   {
     name: "Pausable",

@@ -4,14 +4,19 @@ export const generateERC721Contract = ({
   baseURI,
   extensions,
   managementType,
+  maxSupply,
+  mintPrice,
 }: {
   name: string;
   symbol: string;
   baseURI: string;
   extensions: string[];
   managementType: string;
+  maxSupply: string;
+  mintPrice: string;
 }) => {
   const mintable = extensions.includes("Mintable");
+  const publicMint = extensions.includes("Public Minting");
   const burnable = extensions.includes("Burnable");
   const pausable = extensions.includes("Pausable");
   const votes = extensions.includes("Votes");
@@ -105,6 +110,17 @@ export const generateERC721Contract = ({
           ? `bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");`
           : ""
       }
+      ${
+        publicMint && maxSupply
+          ? `uint256 public MAX_SUPPLY = ${maxSupply};`
+          : ""
+      }
+      ${
+        publicMint && mintPrice
+          ? `uint256 public MINT_PRICE = ${mintPrice};`
+          : ""
+      }
+
         constructor() ERC721("${name}", "${symbol}") ${
     votes ? `EIP712("${name}", "1")` : ""
   }{
@@ -130,11 +146,24 @@ export const generateERC721Contract = ({
         function safeMint(address to${
           autoIncrementIds ? "" : ", uint256 tokenId"
         }${URIStorage ? ",string memory uri" : ""}) public ${
-                isAccessControl ? "onlyRole(MINTER_ROLE)" : "onlyOwner"
+                publicMint ? "payable" : ""
+              } ${
+                publicMint
+                  ? ""
+                  : isAccessControl
+                  ? "onlyRole(MINTER_ROLE)"
+                  : "onlyOwner"
               } {
+                ${publicMint ? `require(msg.value >= MINT_PRICE);` : ""}
+                ${
+                  autoIncrementIds
+                    ? `uint256 tokenId = _tokenIdCounter.current() + 1;`
+                    : ""
+                }
+                ${publicMint ? `require(tokenId  <= MAX_SUPPLY);` : ""}
           ${
             autoIncrementIds
-              ? `uint256 tokenId = _tokenIdCounter.current() + 1;
+              ? `
           _tokenIdCounter.increment();`
               : ""
           }
@@ -205,6 +234,17 @@ export const generateERC721Contract = ({
             ? `
           function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
             super._burn(tokenId);
+        }
+          `
+            : ""
+        }
+        ${
+          publicMint
+            ? `
+          function withdraw() public ${
+            isAccessControl ? "onlyRole(DEFAULT_ADMIN_ROLE)" : "onlyOwner"
+          } {
+            payable(msg.sender).transfer(address(this).balance);
         }
           `
             : ""
