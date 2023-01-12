@@ -91,7 +91,12 @@ const Erc20 = () => {
       ),
     },
     {
-      body: <ContractVerify tokenData={tokenData} />,
+      body: (
+        <ContractVerify
+          tokenData={tokenData}
+          setStepComplete={handleCompleteStep}
+        />
+      ),
     },
   ];
 

@@ -3,4 +3,3 @@
 
 
 npx eslint --fix
-npm run build

@@ -1,49 +1,25 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment } from "react";
 import { classNames } from "utils/client/classNames";
 import useApi from "hooks/useApi";
-import { Deployments, TokenType } from "types/tokens";
 import { getNetworkImage, getNetworkName } from "constants/supportedNetworks";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { FolderOpenIcon } from "@heroicons/react/24/outline";
+import { useQuery } from "@tanstack/react-query";
 
 const TokenTable = ({ address }: { address: string }) => {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [contracts, setContracts] = useState<Deployments[]>([
-    {
-      type: TokenType.ERC20,
-      deployments: [],
-    },
-    {
-      type: TokenType.ERC721,
-      deployments: [],
-    },
-    {
-      type: TokenType.ERC1155,
-      deployments: [],
-    },
-  ]);
   const { getContractsByAddress } = useApi();
-
-  useEffect(() => {
-    const getContracts = async () => {
-      if (!address) return;
-      const contracts = await getContractsByAddress(address);
-      if (contracts) {
-        setContracts(contracts);
-        setLoading(false);
-      }
-    };
-    getContracts();
-  }, [getContractsByAddress, address]);
+  const { data, isLoading } = useQuery([address], () =>
+    getContractsByAddress(address)
+  );
 
   return (
     <div className="relative">
       <motion.div
         className="relative top-12 left-0 w-full h-full lg:top-48"
         initial={{ opacity: 1, x: 0, y: 0 }}
-        animate={{ opacity: loading ? 1 : 0, x: loading ? 0 : -20, y: 0 }}
+        animate={{ opacity: isLoading ? 1 : 0, x: isLoading ? 0 : -20, y: 0 }}
         transition={{
           duration: 0.3,
         }}
@@ -57,7 +33,7 @@ const TokenTable = ({ address }: { address: string }) => {
         </div>
       </motion.div>
 
-      {!loading && (
+      {!isLoading && (
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -102,8 +78,8 @@ const TokenTable = ({ address }: { address: string }) => {
                       </tr>
                     </thead>
                     <tbody className="bg-white">
-                      {contracts &&
-                        contracts.map((contract) => (
+                      {data &&
+                        data.map((contract) => (
                           <Fragment key={contract.type}>
                             <tr className="border-t border-gray-200">
                               <th

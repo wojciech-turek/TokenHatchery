@@ -29,6 +29,8 @@ import { publicProvider } from "wagmi/providers/public";
 import Layout from "components/Layout/Layout";
 import Head from "next/head";
 import { sagaChainlet } from "constants/supportedNetworks";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 export default function App({ Component, pageProps }: AppProps) {
   const { chains, provider, webSocketProvider } = configureChains(
@@ -70,6 +72,9 @@ export default function App({ Component, pageProps }: AppProps) {
     provider,
     webSocketProvider,
   });
+
+  const queryClient = new QueryClient();
+
   return (
     <>
       <Head>
@@ -79,11 +84,14 @@ export default function App({ Component, pageProps }: AppProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Analytics />
-      <WagmiConfig client={client}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </WagmiConfig>
+      <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools initialIsOpen={false} />
+        <WagmiConfig client={client}>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </WagmiConfig>
+      </QueryClientProvider>
     </>
   );
 }

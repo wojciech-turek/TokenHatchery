@@ -9,7 +9,13 @@ import { useNetwork } from "wagmi";
 import ExternalLink from "components/shared/ExternalLink";
 import Fader from "components/Fader/Fader";
 
-const ContractVerify = ({ tokenData }: { tokenData: TokenData }) => {
+const ContractVerify = ({
+  tokenData,
+  setStepComplete,
+}: {
+  tokenData: TokenData;
+  setStepComplete: (val: boolean) => void;
+}) => {
   const [verifySubmitted, setVerifySubmitted] = useState<boolean>(false);
   const [requestId, setRequestId] = useState<string>("");
   const { handleVerify, checkVerifyStatus } = useApi();
@@ -20,6 +26,10 @@ const ContractVerify = ({ tokenData }: { tokenData: TokenData }) => {
   const currentNetwork = allSupportedNetworks.find(
     (network) => network.chainId === chain?.id
   );
+
+  useEffect(() => {
+    setStepComplete(true);
+  }, [setStepComplete]);
 
   const handleVerifyRequest = async () => {
     setError("");
