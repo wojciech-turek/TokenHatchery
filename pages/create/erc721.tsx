@@ -86,7 +86,12 @@ const Erc721 = () => {
       ),
     },
     {
-      body: <ContractVerify tokenData={tokenData} />,
+      body: (
+        <ContractVerify
+          tokenData={tokenData}
+          setStepComplete={handleCompleteStep}
+        />
+      ),
     },
   ];
 
