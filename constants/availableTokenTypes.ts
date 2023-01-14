@@ -137,7 +137,6 @@ export const tokenTypes = [
     extensions: erc20Extensions,
     accessControl: ["Ownable", "Roles"],
     link: "/create/erc20",
-    license: "MIT",
     enabled: true,
   },
   {
@@ -148,7 +147,6 @@ export const tokenTypes = [
     extensions: erc721Extensions,
     accessControl: ["Ownable", "Roles"],
     link: "/create/erc721",
-    license: "MIT",
     enabled: true,
   },
   {
@@ -159,7 +157,6 @@ export const tokenTypes = [
     extensions: erc1155Extensions,
     accessControl: ["Ownable", "Roles"],
     link: "/create/erc1155",
-    license: "MIT",
     enabled: true,
   },
 ];
