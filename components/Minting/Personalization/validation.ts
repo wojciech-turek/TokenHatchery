@@ -10,3 +10,10 @@ export const validateNumber = (val: string | undefined) => {
   const value = Number(val);
   return Number.isInteger(value) && value > 0;
 };
+
+export const validateURL = (val: string) => {
+  const urlRegex =
+    /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}[-a-zA-Z0-9()@:%_\+.~#?&//=]*/;
+  const idRegex = /{id}/;
+  return urlRegex.test(val) && idRegex.test(val);
+};
