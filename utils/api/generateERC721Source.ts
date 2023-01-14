@@ -1,140 +1,112 @@
-import fs from "fs";
+import { contractMap, loadContract } from "./contractsMap";
 
-export const generateERC721Source = (
+export const generateERC721Source = async (
   contractId: string,
   extensions: string[],
   managementType: string
 ) => {
-  const generatedContract = fs.readFileSync(`/tmp/${contractId}.sol`, "utf8");
-  const ERC721Contract = fs.readFileSync(
-    "contracts/base/token/ERC721/ERC721.sol",
-    "utf8"
-  );
-
-  const IERC721Contract = fs.readFileSync(
-    "contracts/base/token/ERC721/IERC721.sol",
-    "utf8"
-  );
-
-  const IERC721MetadataContract = fs.readFileSync(
-    "contracts/base/token/ERC721/extensions/IERC721Metadata.sol",
-    "utf8"
-  );
-
-  const AddressContract = fs.readFileSync(
-    "contracts/base/utils/Address.sol",
-    "utf8"
-  );
-
-  const ContextContract = fs.readFileSync(
-    "contracts/base/utils/Context.sol",
-    "utf8"
-  );
-
-  const ERC721BurnableContract = fs.readFileSync(
-    "contracts/base/token/ERC721/extensions/ERC721Burnable.sol",
-    "utf8"
-  );
-
-  const IERC721ReceiverContract = fs.readFileSync(
-    "contracts/base/token/ERC721/IERC721Receiver.sol",
-    "utf8"
-  );
-
-  const StringsContract = fs.readFileSync(
-    "contracts/base/utils/Strings.sol",
-    "utf8"
-  );
-
-  const ERC165Contract = fs.readFileSync(
-    "contracts/base/utils/introspection/ERC165.sol",
-    "utf8"
-  );
-
-  const IERC165Contract = fs.readFileSync(
-    "contracts/base/utils/introspection/IERC165.sol",
-    "utf8"
-  );
-
-  const MathContract = fs.readFileSync(
-    "contracts/base/utils/math/Math.sol",
-    "utf8"
-  );
-
-  const OwnableContract = fs.readFileSync(
-    "contracts/base/access/Ownable.sol",
-    "utf8"
-  );
-
-  const AccessControlContract = fs.readFileSync(
-    "contracts/base/access/AccessControl.sol",
-    "utf8"
-  );
-
-  const IAccessControlContract = fs.readFileSync(
-    "contracts/base/access/IAccessControl.sol",
-    "utf8"
-  );
-
-  const ECDSAContract = fs.readFileSync(
-    "contracts/base/utils/cryptography/ECDSA.sol",
-    "utf8"
-  );
-
-  const CountersContract = fs.readFileSync(
-    "contracts/base/utils/Counters.sol",
-    "utf8"
-  );
-
-  const PausableContract = fs.readFileSync(
-    "contracts/base/security/Pausable.sol",
-    "utf8"
-  );
-
-  const EIP712Contract = fs.readFileSync(
-    "contracts/base/utils/cryptography/EIP712.sol",
-    "utf8"
-  );
-
-  const ERC721VotesContract = fs.readFileSync(
-    "contracts/base/token/ERC721/extensions/ERC721Votes.sol",
-    "utf8"
-  );
-
-  const CheckpointsContract = fs.readFileSync(
-    "contracts/base/utils/Checkpoints.sol",
-    "utf8"
-  );
-
-  const SafeCastContract = fs.readFileSync(
-    "contracts/base/utils/math/SafeCast.sol",
-    "utf8"
-  );
-
-  const VotesContract = fs.readFileSync(
-    "contracts/base/governance/utils/Votes.sol",
-    "utf8"
-  );
-
-  const IVotesContract = fs.readFileSync(
-    "contracts/base/governance/utils/IVotes.sol",
-    "utf8"
-  );
-
-  const ERC721EnumerableContract = fs.readFileSync(
-    "contracts/base/token/ERC721/extensions/ERC721Enumerable.sol",
-    "utf8"
-  );
-
-  const IERC721EnumerableContract = fs.readFileSync(
-    "contracts/base/token/ERC721/extensions/IERC721Enumerable.sol",
-    "utf8"
-  );
-
-  const ERC721URIStorageContract = fs.readFileSync(
-    "contracts/base/token/ERC721/extensions/ERC721URIStorage.sol",
-    "utf8"
-  );
+  const [
+    generatedContract,
+    ERC721Contract,
+    IERC721Contract,
+    IERC721MetadataContract,
+    AddressContract,
+    ContextContract,
+    ERC721BurnableContract,
+    IERC721ReceiverContract,
+    StringsContract,
+    ERC165Contract,
+    IERC165Contract,
+    MathContract,
+    OwnableContract,
+    AccessControlContract,
+    IAccessControlContract,
+    ECDSAContract,
+    CountersContract,
+    PausableContract,
+    EIP712Contract,
+    ERC721VotesContract,
+    CheckpointsContract,
+    SafeCastContract,
+    VotesContract,
+    IVotesContract,
+    ERC721EnumerableContract,
+    IERC721EnumerableContract,
+    ERC721URIStorageContract,
+  ] = await Promise.all([
+    contractMap.get(`/tmp/${contractId}.sol`) ||
+      loadContract(`/tmp/${contractId}.sol`),
+    contractMap.get("contracts/base/token/ERC721/ERC721.sol") ||
+      loadContract("contracts/base/token/ERC721/ERC721.sol"),
+    contractMap.get("contracts/base/token/ERC721/IERC721.sol") ||
+      loadContract("contracts/base/token/ERC721/IERC721.sol"),
+    contractMap.get(
+      "contracts/base/token/ERC721/extensions/IERC721Metadata.sol"
+    ) ||
+      loadContract(
+        "contracts/base/token/ERC721/extensions/IERC721Metadata.sol"
+      ),
+    contractMap.get("contracts/base/utils/Address.sol") ||
+      loadContract("contracts/base/utils/Address.sol"),
+    contractMap.get("contracts/base/utils/Context.sol") ||
+      loadContract("contracts/base/utils/Context.sol"),
+    contractMap.get(
+      "contracts/base/token/ERC721/extensions/ERC721Burnable.sol"
+    ) ||
+      loadContract("contracts/base/token/ERC721/extensions/ERC721Burnable.sol"),
+    contractMap.get("contracts/base/token/ERC721/IERC721Receiver.sol") ||
+      loadContract("contracts/base/token/ERC721/IERC721Receiver.sol"),
+    contractMap.get("contracts/base/utils/Strings.sol") ||
+      loadContract("contracts/base/utils/Strings.sol"),
+    contractMap.get("contracts/base/utils/introspection/ERC165.sol") ||
+      loadContract("contracts/base/utils/introspection/ERC165.sol"),
+    contractMap.get("contracts/base/utils/introspection/IERC165.sol") ||
+      loadContract("contracts/base/utils/introspection/IERC165.sol"),
+    contractMap.get("contracts/base/utils/math/Math.sol") ||
+      loadContract("contracts/base/utils/math/Math.sol"),
+    contractMap.get("contracts/base/access/Ownable.sol") ||
+      loadContract("contracts/base/access/Ownable.sol"),
+    contractMap.get("contracts/base/access/AccessControl.sol") ||
+      loadContract("contracts/base/access/AccessControl.sol"),
+    contractMap.get("contracts/base/access/IAccessControl.sol") ||
+      loadContract("contracts/base/access/IAccessControl.sol"),
+    contractMap.get("contracts/base/utils/cryptography/ECDSA.sol") ||
+      loadContract("contracts/base/utils/cryptography/ECDSA.sol"),
+    contractMap.get("contracts/base/utils/Counters.sol") ||
+      loadContract("contracts/base/utils/Counters.sol"),
+    contractMap.get("contracts/base/security/Pausable.sol") ||
+      loadContract("contracts/base/security/Pausable.sol"),
+    contractMap.get("contracts/base/utils/cryptography/EIP712.sol") ||
+      loadContract("contracts/base/utils/cryptography/EIP712.sol"),
+    contractMap.get("contracts/base/token/ERC721/extensions/ERC721Votes.sol") ||
+      loadContract("contracts/base/token/ERC721/extensions/ERC721Votes.sol"),
+    contractMap.get("contracts/base/utils/Checkpoints.sol") ||
+      loadContract("contracts/base/utils/Checkpoints.sol"),
+    contractMap.get("contracts/base/utils/math/SafeCast.sol") ||
+      loadContract("contracts/base/utils/math/SafeCast.sol"),
+    contractMap.get("contracts/base/governance/utils/Votes.sol") ||
+      loadContract("contracts/base/governance/utils/Votes.sol"),
+    contractMap.get("contracts/base/governance/utils/IVotes.sol") ||
+      loadContract("contracts/base/governance/utils/IVotes.sol"),
+    contractMap.get(
+      "contracts/base/token/ERC721/extensions/ERC721Enumerable.sol"
+    ) ||
+      loadContract(
+        "contracts/base/token/ERC721/extensions/ERC721Enumerable.sol"
+      ),
+    contractMap.get(
+      "contracts/base/token/ERC721/extensions/IERC721Enumerable.sol"
+    ) ||
+      loadContract(
+        "contracts/base/token/ERC721/extensions/IERC721Enumerable.sol"
+      ),
+    contractMap.get(
+      "contracts/base/token/ERC721/extensions/ERC721URIStorage.sol"
+    ) ||
+      loadContract(
+        "contracts/base/token/ERC721/extensions/ERC721URIStorage.sol"
+      ),
+  ]);
 
   const isOwnable = managementType === "Ownable";
   const isAccessControl = managementType === "AccessControl";
@@ -170,7 +142,6 @@ export const generateERC721Source = (
     "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol": {
       content: ERC721BurnableContract,
     },
-    //context
     "@openzeppelin/contracts/utils/Context.sol": {
       content: ContextContract,
     },
@@ -189,27 +160,21 @@ export const generateERC721Source = (
     "@openzeppelin/contracts/utils/Checkpoints.sol": {
       content: CheckpointsContract,
     },
-    // ecdsa
     "@openzeppelin/contracts/utils/cryptography/ECDSA.sol": {
       content: ECDSAContract,
     },
-    // strings
     "@openzeppelin/contracts/utils/Strings.sol": {
       content: StringsContract,
     },
-    // math
     "@openzeppelin/contracts/utils/math/Math.sol": {
       content: MathContract,
     },
-    // context
     "@openzeppelin/contracts/utils/Context.sol": {
       content: ContextContract,
     },
-    // counters
     "@openzeppelin/contracts/utils/Counters.sol": {
       content: CountersContract,
     },
-    // eip712
     "@openzeppelin/contracts/utils/cryptography/EIP712.sol": {
       content: EIP712Contract,
     },

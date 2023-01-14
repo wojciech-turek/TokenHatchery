@@ -15,18 +15,20 @@ export const generateERC721Contract = ({
   maxSupply: string;
   mintPrice: string;
 }) => {
-  const mintable = extensions.includes("Mintable");
-  const publicMint = extensions.includes("Public Minting");
-  const burnable = extensions.includes("Burnable");
-  const pausable = extensions.includes("Pausable");
-  const votes = extensions.includes("Votes");
-  const enumerable = extensions.includes("Enumerable");
-  const autoIncrementIds = extensions.includes("Auto Increment Ids");
-  const URIStorage = extensions.includes("URI Storage");
+  const extensionTypeSet = new Set(extensions);
+
+  const mintable = extensionTypeSet.has("Mintable");
+  const publicMint = extensionTypeSet.has("Public Minting");
+  const burnable = extensionTypeSet.has("Burnable");
+  const pausable = extensionTypeSet.has("Pausable");
+  const votes = extensionTypeSet.has("Votes");
+  const enumerable = extensionTypeSet.has("Enumerable");
+  const autoIncrementIds = extensionTypeSet.has("Auto Increment IDs");
+  const URIStorage = extensionTypeSet.has("URI Storage");
 
   const burnableExtension = ["ERC721Burnable"];
   const pausableExtension = ["Pausable"];
-  const votesExtension = ["EIP712, ERC721Votes"];
+  const votesExtension = ["EIP712", "ERC721Votes"];
   const enumerableExtension = ["ERC721Enumerable"];
   const URIStorageExtension = ["ERC721URIStorage"];
 
@@ -38,7 +40,7 @@ export const generateERC721Contract = ({
     URIStorage ? URIStorageExtension : [],
   ];
 
-  const extensionsSet = new Set(extensionsArray.flat());
+  const extensionsSet = new Set(...extensionsArray);
 
   const isOwnable = managementType === "Ownable";
   const isAccessControl = managementType === "AccessControl";
@@ -53,7 +55,7 @@ export const generateERC721Contract = ({
     extensionsSet.add("AccessControl");
   }
 
-  const extensionsString = Array.from(extensionsSet).join(", ");
+  const extensionsString = [...extensionsSet].join(", ");
 
   const newERC721Contract = `
     // SPDX-License-Identifier: MIT
