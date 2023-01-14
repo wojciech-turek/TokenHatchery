@@ -87,6 +87,7 @@ const ContractDeploy = ({
     {
       id: 3,
       title: "Token symbol",
+      // @ts-ignore - I am aware the decimals are not present on other token types, and this is on purpose
       description: tokenData.symbol,
     },
     {
