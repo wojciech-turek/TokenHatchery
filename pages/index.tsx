@@ -31,10 +31,6 @@ export default function Home({
                   knowledge. Chose from a variety of token types like ERC20,
                   ERC721, ERC1155 and select your desired extensions.
                 </p>
-                <p className="mt-6 text-lg leading-8 text-gray-600 sm:text-center">
-                  The platform is geared towards utility based NFTs like
-                  tickets, game items, loyalty points rather than collectibles.
-                </p>
                 <div className="mt-8 flex gap-x-4 sm:justify-center">
                   <Link
                     href="/create"
