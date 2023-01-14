@@ -103,7 +103,7 @@ export const erc721Extensions: Extension[] = [
   },
 ];
 
-const erc1155Extensions: Extension[] = [
+export const erc1155Extensions: Extension[] = [
   {
     name: "Mintable",
     description: "Privileged accounts will be able to create more supply.",
@@ -115,12 +115,12 @@ const erc1155Extensions: Extension[] = [
   {
     name: "Pausable",
     description:
-      "Privileged accounts will be able to pause the functionality marked as whenNotPaused. Useful for emergency response.",
+      "Contract will be able to be paused by a privilledged account. Useful for emergency response.",
   },
   {
     name: "Updateable URI",
     description:
-      "Token URI will be able to be updated by the owner of the contract.",
+      "Privileged accounts will be able to set a new URI for all token types.",
   },
   {
     name: "Supply Tracking",
@@ -160,6 +160,6 @@ export const tokenTypes = [
     accessControl: ["Ownable", "Roles"],
     link: "/create/erc1155",
     license: "MIT",
-    enabled: false,
+    enabled: true,
   },
 ];
