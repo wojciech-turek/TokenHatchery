@@ -79,7 +79,6 @@ export default async function handler(
     } else if (type === "ERC1155") {
       compilationResult = await compileERC1155Contract(contractId);
     }
-    console.log("compilationResult", compilationResult);
     const abi =
       compilationResult.contracts[`${contractId}.sol`][nameCapitalized].abi;
 
