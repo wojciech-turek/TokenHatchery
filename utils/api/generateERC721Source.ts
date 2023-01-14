@@ -130,12 +130,6 @@ export const generateERC721Source = async (
     "@openzeppelin/contracts/access/IAccessControl.sol": {
       content: IAccessControlContract,
     },
-    "@openzeppelin/contracts/utils/introspection/ERC165.sol": {
-      content: ERC165Contract,
-    },
-    "@openzeppelin/contracts/utils/introspection/IERC165.sol": {
-      content: IERC165Contract,
-    },
   };
 
   const burnableExtension = {
@@ -150,6 +144,9 @@ export const generateERC721Source = async (
   const pausableExtension = {
     "@openzeppelin/contracts/security/Pausable.sol": {
       content: PausableContract,
+    },
+    "@openzeppelin/contracts/utils/Context.sol": {
+      content: ContextContract,
     },
   };
 

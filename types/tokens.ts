@@ -1,4 +1,4 @@
-export type TokenData = ERC20TokenData | ERC721TokenData;
+export type TokenData = ERC20TokenData | ERC721TokenData | ERC1155TokenData;
 
 export type ERC20TokenData = {
   name: string;
@@ -27,6 +27,18 @@ export type ERC721TokenData = {
   type: TokenType;
   maxSupply?: string;
   mintPrice?: string;
+};
+
+export type ERC1155TokenData = {
+  name: string;
+  extensions: string[];
+  managementType: string;
+  networkName: string;
+  networkChainId: string;
+  baseURI: string;
+  address: string;
+  contractId: string;
+  type: TokenType;
 };
 
 export enum TokenType {

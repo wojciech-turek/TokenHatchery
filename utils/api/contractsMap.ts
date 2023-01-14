@@ -5,7 +5,11 @@ const readFile = promisify(fs.readFile);
 export const contractMap = new Map();
 
 export const loadContract = async (contractPath: string) => {
-  const contract = await readFile(contractPath, "utf8");
-  contractMap.set(contractPath, contract);
-  return contract;
+  try {
+    const contract = await readFile(contractPath, "utf8");
+    contractMap.set(contractPath, contract);
+    return contract;
+  } catch {
+    throw new Error(`Failed to load contract at ${contractPath}`);
+  }
 };

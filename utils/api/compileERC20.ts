@@ -54,66 +54,58 @@ export const compileERC20Contract = async (uuid: string) => {
       "contracts/base/token/ERC20/extensions/ERC20Burnable.sol"
     ) ||
       loadContract("contracts/base/token/ERC20/extensions/ERC20Burnable.sol"),
-    contractMap.get("contracts/base/lifecycle/Pausable.sol") ||
-      loadContract("contracts/base/lifecycle/Pausable.sol"),
+    contractMap.get("contracts/base/security/Pausable.sol") ||
+      loadContract("contracts/base/security/Pausable.sol"),
     contractMap.get(
       "contracts/base/token/ERC20/extensions/ERC20Snapshot.sol"
     ) ||
       loadContract("contracts/base/token/ERC20/extensions/ERC20Snapshot.sol"),
     contractMap.get("contracts/base/token/ERC20/extensions/ERC20Votes.sol") ||
       loadContract("contracts/base/token/ERC20/extensions/ERC20Votes.sol"),
-    contractMap.get("contracts/base/token/ERC20/extensions/ERC20Permit.sol") ||
-      loadContract("contracts/base/token/ERC20/extensions/ERC20Permit.sol"),
+    contractMap.get(
+      "contracts/base/token/ERC20/extensions/draft-ERC20Permit.sol"
+    ) ||
+      loadContract(
+        "contracts/base/token/ERC20/extensions/draft-ERC20Permit.sol"
+      ),
     contractMap.get(
       "contracts/base/token/ERC20/extensions/ERC20FlashMint.sol"
     ) ||
       loadContract("contracts/base/token/ERC20/extensions/ERC20FlashMint.sol"),
-    contractMap.get("contracts/base/access/interfaces/IAccessControl.sol") ||
-      loadContract("contracts/base/access/interfaces/IAccessControl.sol"),
+    contractMap.get("contracts/base/access/IAccessControl.sol") ||
+      loadContract("contracts/base/access/IAccessControl.sol"),
     contractMap.get("contracts/base/utils/Strings.sol") ||
       loadContract("contracts/base/utils/Strings.sol"),
-    contractMap.get("contracts/base/introspection/ERC165.sol") ||
-      loadContract("contracts/base/introspection/ERC165.sol"),
-    contractMap.get("contracts/base/introspection/interfaces/IERC165.sol") ||
-      loadContract("contracts/base/introspection/interfaces/IERC165.sol"),
+    contractMap.get("contracts/base/utils/introspection/ERC165.sol") ||
+      loadContract("contracts/base/utils/introspection/ERC165.sol"),
+    contractMap.get("contracts/base/utils/introspection/IERC165.sol") ||
+      loadContract("contracts/base/utils/introspection/IERC165.sol"),
     contractMap.get("contracts/base/utils/StorageSlot.sol") ||
       loadContract("contracts/base/utils/StorageSlot.sol"),
-    contractMap.get(
-      "contracts/base/token/ERC20/extensions/interfaces/IERC3156FlashBorrower.sol"
-    ) ||
-      loadContract(
-        "contracts/base/token/ERC20/extensions/interfaces/IERC3156FlashBorrower.sol"
-      ),
-    contractMap.get(
-      "contracts/base/token/ERC20/extensions/interfaces/IERC3156FlashLender.sol"
-    ) ||
-      loadContract(
-        "contracts/base/token/ERC20/extensions/interfaces/IERC3156FlashLender.sol"
-      ),
+    contractMap.get("contracts/base/interfaces/IERC3156FlashBorrower.sol") ||
+      loadContract("contracts/base/interfaces/IERC3156FlashBorrower.sol"),
+    contractMap.get("contracts/base/interfaces/IERC3156FlashLender.sol") ||
+      loadContract("contracts/base/interfaces/IERC3156FlashLender.sol"),
     contractMap.get("contracts/base/utils/Arrays.sol") ||
       loadContract("contracts/base/utils/Arrays.sol"),
     contractMap.get("contracts/base/utils/Counters.sol") ||
       loadContract("contracts/base/utils/Counters.sol"),
     contractMap.get("contracts/base/math/Math.sol") ||
-      loadContract("contracts/base/math/Math.sol"),
-    contractMap.get(
-      "contracts/base/token/ERC20/extensions/interfaces/IVotes.sol"
-    ) ||
-      loadContract(
-        "contracts/base/token/ERC20/extensions/interfaces/IVotes.sol"
-      ),
+      loadContract("contracts/base/utils/math/Math.sol"),
+    contractMap.get("contracts/base/governance/utils/IVotes.sol") ||
+      loadContract("contracts/base/governance/utils/IVotes.sol"),
     contractMap.get("contracts/base/utils/math/SafeCast.sol") ||
       loadContract("contracts/base/utils/math/SafeCast.sol"),
-    contractMap.get("contracts/base/cryptography/ECDSA.sol") ||
-      loadContract("contracts/base/cryptography/ECDSA.sol"),
+    contractMap.get("contracts/base/utils/cryptography/ECDSA.sol") ||
+      loadContract("contracts/base/utils/cryptography/ECDSA.sol"),
     contractMap.get(
       "contracts/base/token/ERC20/extensions/draft-IERC20Permit.sol"
     ) ||
       loadContract(
         "contracts/base/token/ERC20/extensions/draft-IERC20Permit.sol"
       ),
-    contractMap.get("contracts/base/cryptography/draft-EIP712.sol") ||
-      loadContract("contracts/base/cryptography/draft-EIP712.sol"),
+    contractMap.get("contracts/base/utils/cryptography/EIP712.sol") ||
+      loadContract("contracts/base/utils/cryptography/EIP712.sol"),
   ]);
 
   const input = {

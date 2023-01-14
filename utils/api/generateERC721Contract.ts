@@ -40,7 +40,7 @@ export const generateERC721Contract = ({
     URIStorage ? URIStorageExtension : [],
   ];
 
-  const extensionsSet = new Set(...extensionsArray);
+  const extensionsSet = new Set(extensionsArray.flat());
 
   const isOwnable = managementType === "Ownable";
   const isAccessControl = managementType === "AccessControl";

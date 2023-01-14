@@ -40,7 +40,7 @@ export const generateERC20Contract = ({
     flashMinting ? flashMintingExtension : [],
   ];
 
-  const extensionsSet = new Set(...extensionsArray);
+  const extensionsSet = new Set(extensionsArray.flat());
 
   const isAccessControl = managementType === "AccessControl";
   const isOwnable = managementType === "Ownable";
