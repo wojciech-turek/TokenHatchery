@@ -1,144 +1,121 @@
-import fs from "fs";
+import { contractMap, loadContract } from "./contractsMap";
 
-export const generateERC20Source = (
+export const generateERC20Source = async (
   contractId: string,
   extensions: string[],
   managementType: string
 ) => {
-  const generatedContract = fs.readFileSync(`/tmp/${contractId}.sol`, "utf8");
-
-  const ERC20Contract = fs.readFileSync(
-    "contracts/base/token/ERC20/ERC20.sol",
-    "utf8"
-  );
-  const IERC20Contract = fs.readFileSync(
-    "contracts/base/token/ERC20/IERC20.sol",
-    "utf8"
-  );
-  const IERC20MetadataContract = fs.readFileSync(
-    "contracts/base/token/ERC20/extensions/IERC20Metadata.sol",
-    "utf8"
-  );
-
-  const ContextContract = fs.readFileSync(
-    "contracts/base/utils/Context.sol",
-    "utf8"
-  );
-
-  const OwnableContract = fs.readFileSync(
-    "contracts/base/access/Ownable.sol",
-    "utf8"
-  );
-
-  const AccessControlContract = fs.readFileSync(
-    "contracts/base/access/AccessControl.sol",
-    "utf8"
-  );
-
-  const ERC20BurnableContract = fs.readFileSync(
-    "contracts/base/token/ERC20/extensions/ERC20Burnable.sol",
-    "utf8"
-  );
-
-  const ERC20PausableContract = fs.readFileSync(
-    "contracts/base/security/Pausable.sol",
-    "utf8"
-  );
-
-  const ERC20SnapshotContract = fs.readFileSync(
-    "contracts/base/token/ERC20/extensions/ERC20Snapshot.sol",
-    "utf8"
-  );
-
-  const ERC20VotesContract = fs.readFileSync(
-    "contracts/base/token/ERC20/extensions/ERC20Votes.sol",
-    "utf8"
-  );
-
-  const ERC20PermitContract = fs.readFileSync(
-    "contracts/base/token/ERC20/extensions/draft-ERC20Permit.sol",
-    "utf8"
-  );
-
-  const ERC20FlashMintContract = fs.readFileSync(
-    "contracts/base/token/ERC20/extensions/ERC20FlashMint.sol",
-    "utf8"
-  );
-
-  const IAccessControlContract = fs.readFileSync(
-    "contracts/base/access/IAccessControl.sol",
-    "utf8"
-  );
-
-  const StringsContract = fs.readFileSync(
-    "contracts/base/utils/Strings.sol",
-    "utf8"
-  );
-
-  const ERC165Contract = fs.readFileSync(
-    "contracts/base/utils/introspection/ERC165.sol",
-    "utf8"
-  );
-
-  const IERC165Contract = fs.readFileSync(
-    "contracts/base/utils/introspection/IERC165.sol",
-    "utf8"
-  );
-
-  const StorageSlotContract = fs.readFileSync(
-    "contracts/base/utils/StorageSlot.sol",
-    "utf8"
-  );
-
-  const IERC3156FlashBorrowerContract = fs.readFileSync(
-    "contracts/base/interfaces/IERC3156FlashBorrower.sol",
-    "utf8"
-  );
-
-  const IERC3156FlashLenderContract = fs.readFileSync(
-    "contracts/base/interfaces/IERC3156FlashLender.sol",
-    "utf8"
-  );
-
-  const ArraysContract = fs.readFileSync(
-    "contracts/base/utils/Arrays.sol",
-    "utf8"
-  );
-
-  const CountersContract = fs.readFileSync(
-    "contracts/base/utils/Counters.sol",
-    "utf8"
-  );
-
-  const MathContract = fs.readFileSync(
-    "contracts/base/utils/math/Math.sol",
-    "utf8"
-  );
-
-  const IVotesContract = fs.readFileSync(
-    "contracts/base/governance/utils/IVotes.sol",
-    "utf8"
-  );
-
-  const SafeCastContract = fs.readFileSync(
-    "contracts/base/utils/math/SafeCast.sol",
-    "utf8"
-  );
-
-  const ECDSAContract = fs.readFileSync(
-    "contracts/base/utils/cryptography/ECDSA.sol",
-    "utf8"
-  );
-
-  const draftIERC20PermitContract = fs.readFileSync(
-    "contracts/base/token/ERC20/extensions/draft-IERC20Permit.sol",
-    "utf8"
-  );
-
-  const EIP712Contract = fs.readFileSync(
-    "contracts/base/utils/cryptography/EIP712.sol",
-    "utf8"
-  );
+  const [
+    generatedContract,
+    ERC20Contract,
+    IERC20Contract,
+    IERC20MetadataContract,
+    ContextContract,
+    OwnableContract,
+    AccessControlContract,
+    ERC20BurnableContract,
+    PausableContract,
+    ERC20SnapshotContract,
+    ERC20VotesContract,
+    ERC20PermitContract,
+    ERC20FlashMintContract,
+    IAccessControlContract,
+    StringsContract,
+    ERC165Contract,
+    IERC165Contract,
+    StorageSlotContract,
+    IERC3156FlashBorrowerContract,
+    IERC3156FlashLenderContract,
+    ArraysContract,
+    CountersContract,
+    MathContract,
+    IVotesContract,
+    SafeCastContract,
+    ECDSAContract,
+    draftIERC20PermitContract,
+    EIP712Contract,
+  ] = await Promise.all([
+    contractMap.get(`/tmp/${contractId}.sol`) ||
+      loadContract(`/tmp/${contractId}.sol`),
+    contractMap.get("contracts/base/token/ERC20/ERC20.sol") ||
+      loadContract("contracts/base/token/ERC20/ERC20.sol"),
+    contractMap.get("contracts/base/token/ERC20/IERC20.sol") ||
+      loadContract("contracts/base/token/ERC20/IERC20.sol"),
+    contractMap.get(
+      "contracts/base/token/ERC20/extensions/IERC20Metadata.sol"
+    ) ||
+      loadContract("contracts/base/token/ERC20/extensions/IERC20Metadata.sol"),
+    contractMap.get("contracts/base/utils/Context.sol") ||
+      loadContract("contracts/base/utils/Context.sol"),
+    contractMap.get("contracts/base/access/Ownable.sol") ||
+      loadContract("contracts/base/access/Ownable.sol"),
+    contractMap.get("contracts/base/access/AccessControl.sol") ||
+      loadContract("contracts/base/access/AccessControl.sol"),
+    contractMap.get(
+      "contracts/base/token/ERC20/extensions/ERC20Burnable.sol"
+    ) ||
+      loadContract("contracts/base/token/ERC20/extensions/ERC20Burnable.sol"),
+    contractMap.get("contracts/base/lifecycle/Pausable.sol") ||
+      loadContract("contracts/base/lifecycle/Pausable.sol"),
+    contractMap.get(
+      "contracts/base/token/ERC20/extensions/ERC20Snapshot.sol"
+    ) ||
+      loadContract("contracts/base/token/ERC20/extensions/ERC20Snapshot.sol"),
+    contractMap.get("contracts/base/token/ERC20/extensions/ERC20Votes.sol") ||
+      loadContract("contracts/base/token/ERC20/extensions/ERC20Votes.sol"),
+    contractMap.get("contracts/base/token/ERC20/extensions/ERC20Permit.sol") ||
+      loadContract("contracts/base/token/ERC20/extensions/ERC20Permit.sol"),
+    contractMap.get(
+      "contracts/base/token/ERC20/extensions/ERC20FlashMint.sol"
+    ) ||
+      loadContract("contracts/base/token/ERC20/extensions/ERC20FlashMint.sol"),
+    contractMap.get("contracts/base/access/interfaces/IAccessControl.sol") ||
+      loadContract("contracts/base/access/interfaces/IAccessControl.sol"),
+    contractMap.get("contracts/base/utils/Strings.sol") ||
+      loadContract("contracts/base/utils/Strings.sol"),
+    contractMap.get("contracts/base/introspection/ERC165.sol") ||
+      loadContract("contracts/base/introspection/ERC165.sol"),
+    contractMap.get("contracts/base/introspection/interfaces/IERC165.sol") ||
+      loadContract("contracts/base/introspection/interfaces/IERC165.sol"),
+    contractMap.get("contracts/base/utils/StorageSlot.sol") ||
+      loadContract("contracts/base/utils/StorageSlot.sol"),
+    contractMap.get(
+      "contracts/base/token/ERC20/extensions/interfaces/IERC3156FlashBorrower.sol"
+    ) ||
+      loadContract(
+        "contracts/base/token/ERC20/extensions/interfaces/IERC3156FlashBorrower.sol"
+      ),
+    contractMap.get(
+      "contracts/base/token/ERC20/extensions/interfaces/IERC3156FlashLender.sol"
+    ) ||
+      loadContract(
+        "contracts/base/token/ERC20/extensions/interfaces/IERC3156FlashLender.sol"
+      ),
+    contractMap.get("contracts/base/utils/Arrays.sol") ||
+      loadContract("contracts/base/utils/Arrays.sol"),
+    contractMap.get("contracts/base/utils/Counters.sol") ||
+      loadContract("contracts/base/utils/Counters.sol"),
+    contractMap.get("contracts/base/math/Math.sol") ||
+      loadContract("contracts/base/math/Math.sol"),
+    contractMap.get(
+      "contracts/base/token/ERC20/extensions/interfaces/IVotes.sol"
+    ) ||
+      loadContract(
+        "contracts/base/token/ERC20/extensions/interfaces/IVotes.sol"
+      ),
+    contractMap.get("contracts/base/utils/math/SafeCast.sol") ||
+      loadContract("contracts/base/utils/math/SafeCast.sol"),
+    contractMap.get("contracts/base/cryptography/ECDSA.sol") ||
+      loadContract("contracts/base/cryptography/ECDSA.sol"),
+    contractMap.get(
+      "contracts/base/token/ERC20/extensions/draft-IERC20Permit.sol"
+    ) ||
+      loadContract(
+        "contracts/base/token/ERC20/extensions/draft-IERC20Permit.sol"
+      ),
+    contractMap.get("contracts/base/cryptography/draft-EIP712.sol") ||
+      loadContract("contracts/base/cryptography/draft-EIP712.sol"),
+  ]);
 
   const burnable = extensions.includes("Burnable");
   const pausable = extensions.includes("Pausable");
@@ -157,7 +134,7 @@ export const generateERC20Source = (
   };
   const pausableExtension = {
     "@openzeppelin/contracts/security/Pausable.sol": {
-      content: ERC20PausableContract,
+      content: PausableContract,
     },
   };
 

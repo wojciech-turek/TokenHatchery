@@ -15,13 +15,14 @@ export const generateERC20Contract = ({
   extensions,
   managementType,
 }: ContractGenerationProps) => {
-  const mintable = extensions.includes("Mintable");
-  const burnable = extensions.includes("Burnable");
-  const pausable = extensions.includes("Pausable");
-  const permit = extensions.includes("Permit");
-  const votes = extensions.includes("Votes");
-  const flashMinting = extensions.includes("Flash minting");
-  const snapshots = extensions.includes("Snapshots");
+  const extensionTypeSet = new Set(extensions);
+  const mintable = extensionTypeSet.has("Mintable");
+  const burnable = extensionTypeSet.has("Burnable");
+  const pausable = extensionTypeSet.has("Pausable");
+  const permit = extensionTypeSet.has("Permit");
+  const votes = extensionTypeSet.has("Votes");
+  const flashMinting = extensionTypeSet.has("Flash Minting");
+  const snapshots = extensionTypeSet.has("Snapshots");
 
   const burnableExtension = ["ERC20Burnable"];
   const pausableExtension = ["Pausable"];
@@ -39,8 +40,7 @@ export const generateERC20Contract = ({
     flashMinting ? flashMintingExtension : [],
   ];
 
-  // remove duplicates
-  const extensionsSet = new Set(extensionsArray.flat());
+  const extensionsSet = new Set(...extensionsArray);
 
   const isAccessControl = managementType === "AccessControl";
   const isOwnable = managementType === "Ownable";
@@ -51,7 +51,7 @@ export const generateERC20Contract = ({
     extensionsSet.add("AccessControl");
   }
 
-  const extensionsString = Array.from(extensionsSet).join(", ");
+  const extensionsString = [...extensionsSet].join(", ");
 
   const accessTypeImport = isOwnable
     ? "@openzeppelin/contracts/access/Ownable.sol"
