@@ -1,8 +1,11 @@
 import Features from "components/LandingPage/Features";
 import NFTCollections from "components/LandingPage/NFTCollections";
 import SecuredBy from "components/LandingPage/SecuredBy";
+import ERC20 from "models/ERC20Contract";
+import ERC721 from "models/ERC721Contract";
+import ERC1155 from "models/ERC1155Contract";
 import { TokensCreated } from "components/LandingPage/TokensCreated";
-import clientPromise from "lib/mongodb";
+import connectMongo from "lib/mongodb";
 import Link from "next/link";
 
 export default function Home({
@@ -67,20 +70,17 @@ export default function Home({
 }
 
 export const getStaticProps = async () => {
-  const client = await clientPromise;
-  const db = client.db("Deployments");
-  const erc20Collection = db.collection(`ERC20`);
-  const erc721Collection = db.collection(`ERC721`);
-  const erc1155Collection = db.collection(`ERC1155`);
-  const erc20Count = await erc20Collection.countDocuments();
-  const erc721Count = await erc721Collection.countDocuments();
-  const erc1155Count = await erc1155Collection.countDocuments();
+  await connectMongo();
+  const erc20count = await ERC20.countDocuments();
+  const erc721count = await ERC721.countDocuments();
+  const erc1155count = await ERC1155.countDocuments();
+
   return {
     props: {
       tokenCount: {
-        erc20: erc20Count,
-        erc721: erc721Count,
-        erc1155: erc1155Count,
+        erc20: erc20count,
+        erc721: erc721count,
+        erc1155: erc1155count,
       },
       revalidate: 3600,
     },

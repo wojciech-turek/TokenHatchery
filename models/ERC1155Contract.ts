@@ -1,16 +1,9 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, models } from "mongoose";
 
-const Erc20ContractSchema = new Schema({
+const Erc1155ContractSchema = new Schema({
   name: {
     type: String,
     required: true,
-  },
-  symbol: {
-    type: String,
-    required: true,
-  },
-  decimals: {
-    type: String,
   },
   creator: {
     type: String,
@@ -20,9 +13,6 @@ const Erc20ContractSchema = new Schema({
     type: String,
     required: false,
   },
-  initialSupply: {
-    type: String,
-  },
   extensions: {
     type: Array,
     required: true,
@@ -31,11 +21,7 @@ const Erc20ContractSchema = new Schema({
     type: String,
     required: true,
   },
-  abi: {
-    type: String,
-    required: true,
-  },
-  bytecode: {
+  baseURI: {
     type: String,
     required: true,
   },
@@ -73,7 +59,8 @@ const Erc20ContractSchema = new Schema({
   },
 });
 
-Erc20ContractSchema.index({ contractId: 1 }, { unique: true });
-Erc20ContractSchema.index({ address: 1 }, { unique: true });
+Erc1155ContractSchema.index({ contractId: 1 }, { unique: true });
+Erc1155ContractSchema.index({ creator: 1 });
+Erc1155ContractSchema.index({ address: 1 });
 
-export default model("ERC20", Erc20ContractSchema);
+export default models.ERC1155 || model("ERC1155", Erc1155ContractSchema);

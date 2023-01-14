@@ -1,4 +1,7 @@
-import clientPromise from "lib/mongodb";
+import ERC20 from "models/ERC20Contract";
+import ERC721 from "models/ERC721Contract";
+import ERC1155 from "models/ERC1155Contract";
+import connectMongo from "lib/mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -6,32 +9,31 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const { address } = req.body;
-  const client = await clientPromise;
-  const db = client.db("Deployments");
-  const tokenTypes = ["ERC20", "ERC721", "ERC1155"];
-  const tokens = await Promise.all(
-    tokenTypes.map(async (tokenType) => {
-      const collection = db.collection(`${tokenType}`);
-      const contracts = await collection
-        .find(
-          { creator: address, address: { $exists: true } },
-          {
-            projection: {
-              _id: 1,
-              name: 1,
-              symbol: 1,
-              address: 1,
-              type: 1,
-              networkChainId: 1,
-            },
-          }
-        )
-        .toArray();
-      return {
-        type: tokenType,
-        deployments: contracts,
-      };
-    })
-  );
+  await connectMongo();
+
+  const selectData = "_id name symbol address networkChainId";
+
+  const promises = [
+    await ERC20.find({ creator: address }).select(selectData),
+    await ERC721.find({ creator: address }).select(selectData),
+    await ERC1155.find({ creator: address }).select(selectData),
+  ];
+
+  const [erc20, erc721, erc1155] = await Promise.all(promises);
+  const tokens = [
+    {
+      type: "ERC20",
+      deployments: erc20,
+    },
+    {
+      type: "ERC721",
+      deployments: erc721,
+    },
+    {
+      type: "ERC1155",
+      deployments: erc1155,
+    },
+  ];
+
   res.status(200).json(tokens);
 }

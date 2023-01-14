@@ -1,8 +1,12 @@
+import connectMongo from "lib/mongodb";
+import ERC20 from "models/ERC20Contract";
+import ERC721 from "models/ERC721Contract";
+import ERC1155 from "models/ERC1155Contract";
 import type { NextApiRequest, NextApiResponse } from "next";
 import FormData from "form-data";
-import clientPromise from "lib/mongodb";
 import { generateERC20Source } from "utils/api/generateERC20Source";
 import { generateERC721Source } from "utils/api/generateERC721Source";
+import { generateERC1155Source } from "utils/api/generateERC1155Source";
 
 export default async function handler(
   req: NextApiRequest,
@@ -10,19 +14,14 @@ export default async function handler(
 ) {
   const { contractId, tokenType } = req.body;
 
-  const client = await clientPromise;
-  const db = client.db("Deployments");
-  const collection = db.collection(`${tokenType}`);
-  const contract = await collection.findOne({ contractId });
-  if (!contract) {
-    res.status(404).json({ message: "Contract not found" });
-    return;
-  }
+  await connectMongo();
 
+  let contract;
   let sourceCode;
 
   switch (tokenType) {
     case "ERC20":
+      contract = await ERC20.findOne({ contractId });
       sourceCode = generateERC20Source(
         contractId,
         contract.extensions,
@@ -30,7 +29,16 @@ export default async function handler(
       );
       break;
     case "ERC721":
+      contract = await ERC721.findOne({ contractId });
       sourceCode = generateERC721Source(
+        contractId,
+        contract.extensions,
+        contract.managementType
+      );
+      break;
+    case "ERC1155":
+      contract = await ERC1155.findOne({ contractId });
+      sourceCode = generateERC1155Source(
         contractId,
         contract.extensions,
         contract.managementType
@@ -39,6 +47,11 @@ export default async function handler(
     default:
       res.status(400).json({ message: "Invalid token type" });
       return;
+  }
+
+  if (!contract) {
+    res.status(404).json({ message: "Contract not found" });
+    return;
   }
 
   const copilerVersion = "v0.8.17+commit.8df45f5f";
