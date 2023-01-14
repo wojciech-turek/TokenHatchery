@@ -1,18 +1,14 @@
 import React, { Fragment } from "react";
 import { classNames } from "utils/client/classNames";
-import useApi from "hooks/useApi";
 import { getNetworkImage, getNetworkName } from "constants/supportedNetworks";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { FolderOpenIcon } from "@heroicons/react/24/outline";
-import { useQuery } from "@tanstack/react-query";
+import { useGetContracts } from "hooks/useGetContracts";
 
 const TokenTable = ({ address }: { address: string }) => {
-  const { getContractsByAddress } = useApi();
-  const { data, isLoading } = useQuery([address], () =>
-    getContractsByAddress(address)
-  );
+  const { data, isLoading } = useGetContracts(address);
 
   return (
     <div className="relative">
