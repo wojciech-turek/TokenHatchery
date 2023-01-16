@@ -18,6 +18,13 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  // include all types declared in types folder d.ts files
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.json",
+    "types/*.d.ts"
+  ],
   "exclude": ["node_modules"]
 }
