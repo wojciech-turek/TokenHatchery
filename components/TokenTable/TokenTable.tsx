@@ -172,7 +172,7 @@ const TokenTable = ({ address }: { address: string }) => {
                                   </td>
                                   <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                                     <Link
-                                      href={`/manage/${deployment.address}`}
+                                      href={`/manage/${contract.type}/${deployment.address}`}
                                       className="text-indigo-700 font-bold hover:text-indigo-900 cursor-pointer hidden sm:inline-block"
                                     >
                                       View
