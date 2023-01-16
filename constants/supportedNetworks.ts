@@ -49,12 +49,6 @@ export const supportedNetworks: {
       verifiable: false,
     },
     {
-      chainId: 250,
-      name: "Fantom Opera Mainnet",
-      image: fantom,
-      verifiable: false,
-    },
-    {
       chainId: 42161,
       name: "Arbitrum Mainnet",
       verifiable: false,
@@ -65,12 +59,6 @@ export const supportedNetworks: {
       name: "Avalanche Mainnet",
       verifiable: false,
       image: avax,
-    },
-    {
-      name: "EVMOS Mainnet",
-      chainId: 9001,
-      verifiable: false,
-      image: evmos,
     },
     {
       name: "Optimism Mainnet",
@@ -106,12 +94,6 @@ export const supportedNetworks: {
       image: matic,
     },
     {
-      chainId: 4002,
-      name: "Fantom Opera Testnet",
-      verifiable: false,
-      image: fantom,
-    },
-    {
       chainId: 421613,
       name: "Arbitrum Goerli Testnet",
       verifiable: false,
@@ -122,12 +104,6 @@ export const supportedNetworks: {
       name: "Avalanche Fuji Testnet",
       verifiable: false,
       image: avax,
-    },
-    {
-      name: "EVMOS Testnet",
-      chainId: 9000,
-      verifiable: false,
-      image: evmos,
     },
     {
       name: "Optimism Testnet",
