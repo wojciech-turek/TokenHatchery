@@ -1,7 +1,7 @@
 import Container from "components/Container/Container";
 import PageHeading from "components/shared/PageHeading/PageHeading";
 import Steps from "components/Steps/Steps";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { mintingSteps } from "constants/mintingSteps";
 import WalletConnect from "components/Minting/WalletConnect/WalletConnect";
 import NetworkSelect from "components/Minting/NetworkSelect/NetworkSelect";
@@ -35,6 +35,10 @@ const Erc721 = () => {
   const handleCompleteStep = (value: boolean) => {
     setStepComplete(value);
   };
+
+  useEffect(() => {
+    setStepComplete(false);
+  }, [currentStep]);
 
   const goToManagePage = () => {
     router.push("/manage");

@@ -66,12 +66,12 @@ export const erc721Extensions: Extension[] = [
     name: "Mintable",
     description: "Adds functionality to mint new tokens.",
   },
-  {
-    name: "Public Minting",
-    description:
-      "Anyone will be able to mint new tokens. You will be able to set a mint limit and a minting fee.",
-    require: ["Mintable", "Auto Increment Ids"],
-  },
+  // {
+  //   name: "Public Minting",
+  //   description:
+  //     "Anyone will be able to mint new tokens. You will be able to set a mint limit and a minting fee.",
+  //   require: ["Mintable", "Auto Increment Ids"],
+  // },
   {
     name: "Auto Increment Ids",
     description: "New tokens will be automatically assigned an incremental id.",

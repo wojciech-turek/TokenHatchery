@@ -252,6 +252,24 @@ export const generateERC721Contract = ({
             : ""
         }
         ${
+          publicMint
+            ? `
+        function changeMintPrice(uint256 newPrice) public ${
+          isAccessControl ? "onlyRole(DEFAULT_ADMIN_ROLE)" : "onlyOwner"
+        } {MINT_PRICE = newPrice;}`
+            : ""
+        } 
+
+        ${
+          publicMint
+            ? `
+          function changeMaxSupply(uint256 newMaxSupply) public ${
+            isAccessControl ? "onlyRole(DEFAULT_ADMIN_ROLE)" : "onlyOwner"
+          } {MAX_SUPPLY = newMaxSupply;}`
+            : ""
+        }
+        
+        ${
           URIStorage
             ? `
           function tokenURI(uint256 tokenId)

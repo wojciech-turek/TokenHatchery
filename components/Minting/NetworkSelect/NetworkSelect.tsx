@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSwitchNetwork } from "wagmi";
 import { Switch } from "@headlessui/react";
 import { Network, supportedNetworks } from "constants/supportedNetworks";
@@ -35,12 +35,6 @@ const NetworkSelect = ({
       console.error(error);
     }
   };
-
-  useEffect(() => {
-    if (tokenData?.networkName) {
-      setStepComplete(true);
-    }
-  }, [setStepComplete, tokenData?.networkName]);
 
   const renderNetworks = (networks: Network[]) => (
     <ul

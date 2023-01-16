@@ -54,7 +54,10 @@ const useApi = () => {
     }
   };
 
-  const checkVerifyStatus = async (verificationGuid: string) => {
+  const checkVerifyStatus = async (
+    verificationGuid: string,
+    type: TokenType
+  ) => {
     const response = await fetch("/api/verificationStatus", {
       method: "POST",
       headers: {
@@ -62,6 +65,7 @@ const useApi = () => {
       },
       body: JSON.stringify({
         guid: verificationGuid,
+        tokenType: type,
       }),
     });
     const data = await response.json();

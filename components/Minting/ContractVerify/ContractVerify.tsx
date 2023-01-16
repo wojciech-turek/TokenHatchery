@@ -40,7 +40,7 @@ const ContractVerify = ({
       setRequestId(data.guid);
     } else if (data.error) {
       if (data.error.startsWith("Unable to locate ContractCode")) {
-        setError("Contract not yet ready, please try again in a few moments");
+        setError("Contract not yet ready, please try again in a moment");
         setVerifySubmitted(false);
       } else if (
         data.error.startsWith("Contract source code already verified")
@@ -53,7 +53,8 @@ const ContractVerify = ({
   };
   const handleVerifyStatus = useCallback(async () => {
     if (!requestId) return;
-    const status = await checkVerifyStatus(requestId);
+    const { type } = tokenData;
+    const status = await checkVerifyStatus(requestId, type);
     if (status === "Pass - Verified") {
       setSuccess(true);
     } else if (status === "Pending in queue") {
@@ -64,7 +65,7 @@ const ContractVerify = ({
       setError(status);
     }
     setVerifySubmitted(false);
-  }, [requestId, checkVerifyStatus]);
+  }, [requestId, checkVerifyStatus, tokenData]);
 
   useEffect(() => {
     if (verifySubmitted) {

@@ -35,11 +35,6 @@ const Erc1155ContractSchema = new Schema({
   },
   verificationGuid: {
     type: String,
-    required: false,
-  },
-  verificationStatus: {
-    type: String,
-    required: false,
   },
   createdAt: {
     type: Date,
