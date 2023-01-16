@@ -59,7 +59,7 @@ const ERC1155Form = ({
               setTokenData({ ...tokenData, baseURI: e.target.value.trim() });
             }}
             error={tokenData.baseURI !== "" && !validateURL(tokenData.baseURI)}
-            errorMessage="Please enter a valid URL, it should start with https://. If you are using IPFS, you can use the IPFS gateway. For example: https://ipfs.io/ipfs/. Your base URI should contain {id} to be replaced with the token ID."
+            errorMessage="Please enter a valid URL, it should start with https://. If you are using IPFS, you can use the IPFS gateway. For example: https://ipfs.io/ipfs/."
           />
           <p className="mt-2 text-sm text-gray-500" id="baseURI">
             Enter the base URI for your token. This will be used to generate the

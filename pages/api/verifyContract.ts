@@ -22,7 +22,7 @@ export default async function handler(
   switch (tokenType) {
     case "ERC20":
       contract = await ERC20.findOne({ contractId });
-      sourceCode = generateERC20Source(
+      sourceCode = await generateERC20Source(
         contractId,
         contract.extensions,
         contract.managementType
@@ -30,7 +30,7 @@ export default async function handler(
       break;
     case "ERC721":
       contract = await ERC721.findOne({ contractId });
-      sourceCode = generateERC721Source(
+      sourceCode = await generateERC721Source(
         contractId,
         contract.extensions,
         contract.managementType
@@ -38,7 +38,7 @@ export default async function handler(
       break;
     case "ERC1155":
       contract = await ERC1155.findOne({ contractId });
-      sourceCode = generateERC1155Source(
+      sourceCode = await generateERC1155Source(
         contractId,
         contract.extensions,
         contract.managementType
@@ -74,10 +74,33 @@ export default async function handler(
 
   const parsedResponse = await response.json();
   const { status, result } = parsedResponse;
+
+  switch (tokenType) {
+    case "ERC20":
+      await ERC20.findOneAndUpdate(
+        { contractId },
+        { verificationGuid: result }
+      );
+      break;
+    case "ERC721":
+      await ERC721.findOneAndUpdate(
+        { contractId },
+        { verificationGuid: result }
+      );
+      break;
+    case "ERC1155":
+      await ERC1155.findOneAndUpdate(
+        { contractId },
+        { verificationGuid: result }
+      );
+      break;
+  }
   if (status === "1") {
     res
       .status(200)
       .json({ message: "Verification request sent", guid: result });
+
+    // update guid for the contract in the database
   } else {
     res.status(500).json({ error: result });
   }
