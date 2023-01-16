@@ -6,6 +6,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { FolderOpenIcon } from "@heroicons/react/24/outline";
 import { useGetContracts } from "hooks/useGetContracts";
+import { TokenType } from "types/tokens";
 
 const TokenTable = ({ address }: { address: string }) => {
   const { data, isLoading } = useGetContracts(address);
@@ -170,14 +171,16 @@ const TokenTable = ({ address }: { address: string }) => {
                                   <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:table-cell">
                                     {deployment.address}
                                   </td>
-                                  <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                    <Link
-                                      href={`/manage/${contract.type}/${deployment.address}`}
-                                      className="text-indigo-700 font-bold hover:text-indigo-900 cursor-pointer hidden sm:inline-block"
-                                    >
-                                      View
-                                    </Link>
-                                  </td>
+                                  {contract.type === TokenType.ERC721 && (
+                                    <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                                      <Link
+                                        href={`/manage/${contract.type}/${deployment.address}`}
+                                        className="text-indigo-700 font-bold hover:text-indigo-900 cursor-pointer hidden sm:inline-block"
+                                      >
+                                        View
+                                      </Link>
+                                    </td>
+                                  )}
                                 </tr>
                               )
                             )}
