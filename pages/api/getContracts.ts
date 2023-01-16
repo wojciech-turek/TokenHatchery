@@ -14,9 +14,15 @@ export default async function handler(
   const selectData = "_id name symbol address networkChainId";
 
   const promises = [
-    await ERC20.find({ creator: address }).select(selectData),
-    await ERC721.find({ creator: address }).select(selectData),
-    await ERC1155.find({ creator: address }).select(selectData),
+    await ERC20.find({ creator: address, address: { $ne: null } }).select(
+      selectData
+    ),
+    await ERC721.find({ creator: address, address: { $ne: null } }).select(
+      selectData
+    ),
+    await ERC1155.find({ creator: address, address: { $ne: null } }).select(
+      selectData
+    ),
   ];
 
   const [erc20, erc721, erc1155] = await Promise.all(promises);
