@@ -1,6 +1,19 @@
+import fs from "fs";
+import { promisify } from "util";
+const readFile = promisify(fs.readFile);
 //@ts-ignore
 import solc from "solc";
-import { contractMap, loadContract } from "./contractsMap";
+
+const contractMap = new Map();
+const loadContract = async (contractPath: string) => {
+  try {
+    const contract = await readFile(contractPath, "utf8");
+    contractMap.set(contractPath, contract);
+    return contract;
+  } catch {
+    throw new Error(`Failed to load contract at ${contractPath}`);
+  }
+};
 
 export const compileERC721Contract = async (uuid: string) => {
   const contractName = `${uuid}.sol`;
