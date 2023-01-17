@@ -1,6 +1,5 @@
 import fs from "fs";
 import { promisify } from "util";
-import "contracts";
 const readFile = promisify(fs.readFile);
 
 export const contractMap = new Map();

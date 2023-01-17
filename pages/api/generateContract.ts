@@ -1,17 +1,18 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { v4 as uuidv4 } from "uuid";
 import fs from "fs";
-import { compileERC20Contract } from "../../utils/api/compileERC20";
-import { generateERC20Contract } from "utils/api/generateERC20Contract";
 import "prettier-plugin-solidity";
-import { generateERC721Contract } from "utils/api/generateERC721Contract";
-import { compileERC721Contract } from "utils/api/compileERC721";
 import { formatSol } from "utils/api/formatSol";
+import connectMongo from "lib/mongodb";
 import ERC20 from "models/ERC20Contract";
 import ERC721 from "models/ERC721Contract";
 import ERC1155 from "models/ERC1155Contract";
+import "contracts";
+import { generateERC20Contract } from "utils/api/generateERC20Contract";
+import { compileERC20Contract } from "../../utils/api/compileERC20";
+import { generateERC721Contract } from "utils/api/generateERC721Contract";
+import { compileERC721Contract } from "utils/api/compileERC721";
 import { generateERC1155Contract } from "utils/api/generateERC1155Contract";
-import connectMongo from "lib/mongodb";
 import { compileERC1155Contract } from "utils/api/compileERC1155";
 
 export default async function handler(

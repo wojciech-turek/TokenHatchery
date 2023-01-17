@@ -34,7 +34,7 @@ export const compileERC721Contract = async (uuid: string) => {
     ERC721URIStorageContract,
   ] = await Promise.all([
     contractMap.get(`/tmp/${uuid}.sol`) || loadContract(`/tmp/${uuid}.sol`),
-    contractMap.get("/contracts/base/token/ERC721/ERC721.sol") ||
+    contractMap.get("contracts/base/token/ERC721/ERC721.sol") ||
       loadContract("contracts/base/token/ERC721/ERC721.sol"),
     contractMap.get("contracts/base/token/ERC721/IERC721.sol") ||
       loadContract("contracts/base/token/ERC721/IERC721.sol"),
