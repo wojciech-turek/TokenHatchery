@@ -32,38 +32,48 @@ export const generateERC1155Source = async (
   ] = await Promise.all([
     contractMap.get(`/tmp/${contractId}.sol`) ||
       loadContract(`/tmp/${contractId}.sol`),
-    contractMap.get("contracts/token/ERC1155/ERC1155.sol") ||
-      loadContract("contracts/token/ERC1155/ERC1155.sol"),
-    contractMap.get("contracts/token/ERC1155/IERC1155.sol") ||
-      loadContract("contracts/token/ERC1155/IERC1155.sol"),
-    contractMap.get("contracts/token/ERC1155/IERC1155Receiver.sol") ||
-      loadContract("contracts/token/ERC1155/IERC1155Receiver.sol"),
+    contractMap.get("contracts/base/token/ERC1155/ERC1155.sol") ||
+      loadContract("contracts/base/token/ERC1155/ERC1155.sol"),
+    contractMap.get("contracts/base/token/ERC1155/IERC1155.sol") ||
+      loadContract("contracts/base/token/ERC1155/IERC1155.sol"),
+    contractMap.get("contracts/base/token/ERC1155/IERC1155Receiver.sol") ||
+      loadContract("contracts/base/token/ERC1155/IERC1155Receiver.sol"),
     contractMap.get(
       "contracts/base/token/ERC1155/extensions/IERC1155MetadataURI.sol"
     ) ||
       loadContract(
         "contracts/base/token/ERC1155/extensions/IERC1155MetadataURI.sol"
       ),
-    contractMap.get("contracts/utils/Context.sol") ||
-      loadContract("contracts/utils/Context.sol"),
-    contractMap.get("contracts/utils/Address.sol") ||
-      loadContract("contracts/utils/Address.sol"),
-    contractMap.get("contracts/utils/introspection/ERC165.sol") ||
-      loadContract("contracts/utils/introspection/ERC165.sol"),
-    contractMap.get("contracts/utils/introspection/IERC165.sol") ||
-      loadContract("contracts/utils/introspection/IERC165.sol"),
-    contractMap.get("contracts/token/ERC1155/extensions/ERC1155Burnable.sol") ||
-      loadContract("contracts/token/ERC1155/extensions/ERC1155Burnable.sol"),
-    contractMap.get("contracts/security/Pausable.sol") ||
-      loadContract("contracts/security/Pausable.sol"),
-    contractMap.get("contracts/token/ERC1155/extensions/ERC1155Supply.sol") ||
-      loadContract("contracts/token/ERC1155/extensions/ERC1155Supply.sol"),
-    contractMap.get("contracts/access/Ownable.sol") ||
-      loadContract("contracts/access/Ownable.sol"),
-    contractMap.get("contracts/access/AccessControl.sol") ||
-      loadContract("contracts/access/AccessControl.sol"),
-    contractMap.get("contracts/access/IAccessControl.sol") ||
-      loadContract("contracts/access/IAccessControl.sol"),
+    contractMap.get("contracts/base/utils/Context.sol") ||
+      loadContract("contracts/base/utils/Context.sol"),
+    contractMap.get("contracts/base/utils/Address.sol") ||
+      loadContract("contracts/base/utils/Address.sol"),
+    contractMap.get("contracts/base/utils/introspection/ERC165.sol") ||
+      loadContract("contracts/base/utils/introspection/ERC165.sol"),
+    contractMap.get("contracts/base/utils/introspection/IERC165.sol") ||
+      loadContract("contracts/base/utils/introspection/IERC165.sol"),
+    contractMap.get(
+      "contracts/base/token/ERC1155/extensions/ERC1155Burnable.sol"
+    ) ||
+      loadContract(
+        "contracts/base/token/ERC1155/extensions/ERC1155Burnable.sol"
+      ),
+    contractMap.get("contracts/base/security/Pausable.sol") ||
+      loadContract("contracts/base/security/Pausable.sol"),
+    contractMap.get(
+      "contracts/base/token/ERC1155/extensions/ERC1155Supply.sol"
+    ) ||
+      loadContract("contracts/base/token/ERC1155/extensions/ERC1155Supply.sol"),
+    contractMap.get("contracts/base/access/Ownable.sol") ||
+      loadContract("contracts/base/access/Ownable.sol"),
+    contractMap.get("contracts/base/access/AccessControl.sol") ||
+      loadContract("contracts/base/access/AccessControl.sol"),
+    contractMap.get("contracts/base/access/IAccessControl.sol") ||
+      loadContract("contracts/base/access/IAccessControl.sol"),
+    contractMap.get("contracts/base/utils/Strings.sol") ||
+      loadContract("contracts/base/utils/Strings.sol"),
+    contractMap.get("contracts/base/utils/math/Math.sol") ||
+      loadContract("contracts/base/utils/math/Math.sol"),
   ]);
 
   const burnableExtension = {
