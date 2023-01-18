@@ -1,14 +1,12 @@
 import fs from "fs";
 import { promisify } from "util";
 const path = require("path");
+
 const readFile = promisify(fs.readFile);
+// Include the path to the contracts folder so that the contracts can be loaded from the filesystem
+path.join(process.cwd(), `contracts`);
 
 export const contractMap = new Map();
-console.log("map", fs.readdirSync("."));
-console.log("map, next", fs.readdirSync("./.next/server"));
-const directory = path.join(process.cwd(), `contracts`);
-console.log(fs.readdirSync(directory));
-console.log("map", fs.readdirSync("/"));
 
 export const loadContract = async (contractPath: string) => {
   try {
