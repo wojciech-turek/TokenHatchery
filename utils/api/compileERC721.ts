@@ -3,8 +3,11 @@ import fs from "fs";
 import solc from "solc";
 import { contractMap, loadContract } from "./contractsMap";
 
+fs.readFileSync("contracts/base/token/ERC721/ERC721.sol", "utf8");
+
 console.log("compile", fs.readdirSync("."));
 console.log("compile", fs.readdirSync("/"));
+console.log("compile", fs.readdirSync("contracts/"));
 
 export const compileERC721Contract = async (uuid: string) => {
   const contractName = `${uuid}.sol`;
