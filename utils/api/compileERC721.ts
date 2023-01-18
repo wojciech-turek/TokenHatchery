@@ -1,15 +1,8 @@
-import fs from "fs";
 //@ts-ignore
 import solc from "solc";
 import { contractMap, loadContract } from "./contractsMap";
 
-console.log("compile", fs.readdirSync("."));
-console.log("compile", fs.readdirSync("/"));
-
 export const compileERC721Contract = async (uuid: string) => {
-  fs.readFileSync("contracts/base/token/ERC721/ERC721.sol", "utf8");
-  console.log("file read");
-
   const contractName = `${uuid}.sol`;
   const [
     generatedContract,
