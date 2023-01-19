@@ -20,7 +20,6 @@ import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
 import { LedgerConnector } from "wagmi/connectors/ledger";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
-import { Analytics } from "@vercel/analytics/react";
 import { publicProvider } from "wagmi/providers/public";
 import Layout from "components/Layout/Layout";
 import Head from "next/head";
@@ -75,7 +74,6 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Analytics />
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={false} />
         <WagmiConfig client={client}>
