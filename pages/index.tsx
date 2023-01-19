@@ -1,22 +1,10 @@
 import Features from "components/LandingPage/Features";
 import NFTCollections from "components/LandingPage/NFTCollections";
 import SecuredBy from "components/LandingPage/SecuredBy";
-import ERC20 from "models/ERC20Contract";
-import ERC721 from "models/ERC721Contract";
-import ERC1155 from "models/ERC1155Contract";
 import { TokensCreated } from "components/LandingPage/TokensCreated";
-import connectMongo from "lib/mongodb";
 import Link from "next/link";
 
-export default function Home({
-  tokenCount,
-}: {
-  tokenCount: {
-    erc20: number;
-    erc721: number;
-    erc1155: number;
-  };
-}) {
+export default function Home() {
   return (
     <>
       <div>
@@ -62,27 +50,9 @@ export default function Home({
           <SecuredBy />
         </div>
         <Features />
-        <TokensCreated tokenCount={tokenCount} />
+        <TokensCreated />
         <NFTCollections />
       </div>
     </>
   );
 }
-
-export const getStaticProps = async () => {
-  await connectMongo();
-  const erc20count = await ERC20.countDocuments();
-  const erc721count = await ERC721.countDocuments();
-  const erc1155count = await ERC1155.countDocuments();
-
-  return {
-    props: {
-      tokenCount: {
-        erc20: erc20count,
-        erc721: erc721count,
-        erc1155: erc1155count,
-      },
-      revalidate: 3600,
-    },
-  };
-};

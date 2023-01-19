@@ -1,16 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import { animate } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import useCountContracts from "hooks/useCountContracts";
 
-export const TokensCreated = ({
-  tokenCount,
-}: {
-  tokenCount: {
-    erc20: number;
-    erc721: number;
-    erc1155: number;
-  };
-}) => {
+export const TokensCreated = () => {
+  const { data, isLoading } = useCountContracts();
   const erc20Ref = useRef<HTMLElement>(null);
   const erc721Ref = useRef<HTMLElement>(null);
   const erc1155Ref = useRef<HTMLElement>(null);
@@ -21,19 +15,21 @@ export const TokensCreated = ({
   });
 
   useEffect(() => {
+    if (isLoading) return;
+    const { erc20, erc721, erc1155 } = data;
     const erc20node = erc20Ref.current;
     const erc721node = erc721Ref.current;
     const erc1155node = erc1155Ref.current;
 
     if (!erc20node || !inView) return;
-    const erc20controls = animate(0, tokenCount.erc20, {
+    const erc20controls = animate(0, erc20, {
       duration: 3,
       onUpdate(value) {
         erc20node.textContent = value.toFixed();
       },
     });
     if (!erc721node || !inView) return;
-    const erc721controls = animate(0, tokenCount.erc721, {
+    const erc721controls = animate(0, erc721, {
       duration: 3,
       onUpdate(value) {
         erc721node.textContent = value.toFixed();
@@ -41,7 +37,7 @@ export const TokensCreated = ({
     });
 
     if (!erc1155node || !inView) return;
-    const erc1155controls = animate(0, tokenCount.erc1155, {
+    const erc1155controls = animate(0, erc1155, {
       duration: 3,
       onUpdate(value) {
         erc1155node.textContent = value.toFixed();
@@ -53,7 +49,7 @@ export const TokensCreated = ({
       erc721controls.stop();
       erc1155controls.stop();
     };
-  }, [inView, tokenCount.erc20, tokenCount.erc721, tokenCount.erc1155]);
+  }, [inView, isLoading, data]);
 
   return (
     <div className="bg-indigo-800">
