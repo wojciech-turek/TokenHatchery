@@ -70,7 +70,14 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <title>TokenHatchery</title>
-        <meta name="description" content="Hatch your own tokens!" />
+        <meta
+          property="og:image"
+          content={"https://tokenhatchery.com/ogimage.jpg"}
+        />
+        <meta
+          name="description"
+          content="TokenHatchery is a token deployer and manager supporting standards like ERC20, ERC721 and ERC1155. Create a contract, mint new tokens and view statistics all in one place."
+        />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
