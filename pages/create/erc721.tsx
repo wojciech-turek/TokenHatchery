@@ -11,12 +11,10 @@ import ContractDeploy from "components/Minting/ContractDeploy/ContractDeploy";
 import ContractVerify from "components/Minting/ContractVerify/ContractVerify";
 import { TokenData, TokenType } from "types/tokens";
 import Personalization from "components/Minting/Personalization/Personalization";
-import Button from "components/shared/Button";
-import { useRouter } from "next/router";
 import { scrollToTop } from "utils/client/scrollTop";
+import { NextButton } from "components/Minting/NextButton";
 
 const Erc721 = () => {
-  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
   const [stepComplete, setStepComplete] = useState<boolean>(false);
   const [tokenData, setTokenData] = useState<TokenData>({
@@ -39,10 +37,6 @@ const Erc721 = () => {
   useEffect(() => {
     setStepComplete(false);
   }, [currentStep]);
-
-  const goToManagePage = () => {
-    router.push("/manage");
-  };
 
   const nextStep = () => {
     scrollToTop();
@@ -108,21 +102,14 @@ const Erc721 = () => {
           currentStep={currentStep}
           setCurrentStep={setCurrentStep}
         />
-        {stepComponents[currentStep].body}
-        <div className="mt-12">
-          <Button
-            disabled={!stepComplete}
-            onClick={
-              mintingSteps.length - 1 === currentStep
-                ? goToManagePage
-                : () => nextStep()
-            }
-          >
-            {mintingSteps.length - 1 === currentStep
-              ? "Go to manage page"
-              : "Continue"}
-          </Button>
-        </div>
+        <>
+          {stepComponents[currentStep].body}
+          <NextButton
+            stepComplete={stepComplete}
+            currentStep={currentStep}
+            moveToNextStep={nextStep}
+          />
+        </>
       </div>
     </Container>
   );

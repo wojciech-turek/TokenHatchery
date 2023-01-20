@@ -8,6 +8,8 @@ const useCountContracts = () => {
     },
     {
       staleTime: 1000 * 60 * 5,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
     }
   );
   return contractsCountQuery;

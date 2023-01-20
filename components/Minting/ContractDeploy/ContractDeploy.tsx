@@ -35,7 +35,7 @@ const ContractDeploy = ({
 
   const deployContract = async () => {
     if (!currentNetwork) {
-      setError("Please select a network");
+      setError("You're on an unsupported network.");
       return;
     }
     setDeploying(true);

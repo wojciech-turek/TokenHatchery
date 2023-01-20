@@ -11,9 +11,8 @@ import Personalization from "components/Minting/Personalization/Personalization"
 import Steps from "components/Steps/Steps";
 import { mintingSteps } from "constants/mintingSteps";
 import { erc20Extensions } from "constants/availableTokenTypes";
-import Button from "components/shared/Button";
-import { useRouter } from "next/router";
 import { scrollToTop } from "utils/client/scrollTop";
+import { NextButton } from "../../components/Minting/NextButton";
 
 const Erc20 = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -31,7 +30,6 @@ const Erc20 = () => {
     managementType: "Ownable",
     type: TokenType.ERC20,
   });
-  const router = useRouter();
 
   const handleCompleteStep = (value: boolean) => {
     setStepComplete(value);
@@ -40,10 +38,6 @@ const Erc20 = () => {
   useEffect(() => {
     setStepComplete(false);
   }, [currentStep]);
-
-  const goToManagePage = () => {
-    router.push("/manage");
-  };
 
   const nextStep = () => {
     scrollToTop();
@@ -110,21 +104,14 @@ const Erc20 = () => {
             currentStep={currentStep}
             setCurrentStep={setCurrentStep}
           />
-          {stepComponents[currentStep].body}
-          <div className="mt-12">
-            <Button
-              disabled={!stepComplete}
-              onClick={
-                mintingSteps.length - 1 === currentStep
-                  ? goToManagePage
-                  : () => nextStep()
-              }
-            >
-              {mintingSteps.length - 1 === currentStep
-                ? "Go to manage page"
-                : "Continue"}
-            </Button>
-          </div>
+          <>
+            {stepComponents[currentStep].body}
+            <NextButton
+              stepComplete={stepComplete}
+              currentStep={currentStep}
+              moveToNextStep={nextStep}
+            />
+          </>
         </div>
       </Container>
     </>
