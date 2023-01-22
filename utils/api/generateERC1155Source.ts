@@ -29,6 +29,8 @@ export const generateERC1155Source = async (
     OwnableContract,
     AccessControlContract,
     IAccessControlContract,
+    StringsContract,
+    MathContract,
   ] = await Promise.all([
     contractMap.get(`/tmp/${contractId}.sol`) ||
       loadContract(`/tmp/${contractId}.sol`),
@@ -108,6 +110,12 @@ export const generateERC1155Source = async (
     "@openzeppelin/contracts/access/IAccessControl.sol": {
       content: IAccessControlContract,
     },
+    "@openzeppelin/contracts/utils/Strings.sol": {
+      content: StringsContract,
+    },
+    "@openzeppelin/contracts/utils/math/Math.sol": {
+      content: MathContract,
+    },
   };
 
   const sourceCode = {
@@ -125,9 +133,10 @@ export const generateERC1155Source = async (
       "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol": {
         content: IERC1155ReceiverContract,
       },
-      "@openzeppelin/contracts/token/ERC1155/IERC1155MetadataURI.sol": {
-        content: IERC1155MetadataURIContract,
-      },
+      "@openzeppelin/contracts/token/ERC1155/extensions/IERC1155MetadataURI.sol":
+        {
+          content: IERC1155MetadataURIContract,
+        },
       "@openzeppelin/contracts/utils/Address.sol": {
         content: AddressContract,
       },

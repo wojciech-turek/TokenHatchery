@@ -154,16 +154,14 @@ const TokenTable = ({ address }: { address: string }) => {
                                   <div className="flex gap-2 items-center">
                                     <Image
                                       src={getNetworkImage(
-                                        Number(deployment.networkChainId)
+                                        deployment.networkChainId
                                       )}
                                       width={20}
                                       height={20}
                                       alt={deployment.name}
                                     />
 
-                                    {getNetworkName(
-                                      Number(deployment.networkChainId)
-                                    )}
+                                    {getNetworkName(deployment.networkChainId)}
                                   </div>
                                 </td>
                                 <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:table-cell">
