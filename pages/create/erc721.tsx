@@ -22,7 +22,7 @@ const Erc721 = () => {
     symbol: "",
     address: "",
     contractId: "",
-    networkChainId: "",
+    networkChainId: 0,
     baseURI: "",
     networkName: "",
     extensions: [],
