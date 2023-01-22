@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import useApi from "hooks/useApi";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TokenData } from "types/tokens";
 import { useNetwork, useSigner } from "wagmi";
 import { allSupportedNetworks } from "constants/supportedNetworks";
@@ -32,6 +32,12 @@ const ContractDeploy = ({
   const currentNetwork = allSupportedNetworks.find(
     (network) => network.chainId === chain?.id
   );
+
+  useEffect(() => {
+    if (tokenData.address) {
+      setStepComplete(true);
+    }
+  }, [tokenData.address, setStepComplete]);
 
   const deployContract = async () => {
     if (!currentNetwork) {

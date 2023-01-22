@@ -13,8 +13,10 @@ export type Network = {
   chainId: number;
   name: string;
   image: StaticImageData;
-  blockExplorer?: string;
   verifiable?: boolean;
+  blockExplorer?: string;
+  verificationApi?: string;
+  apiKey?: string;
 };
 
 export const supportedNetworks: {
@@ -27,6 +29,9 @@ export const supportedNetworks: {
       name: "Ethereum Mainnet",
       image: eth,
       verifiable: true,
+      blockExplorer: "https://etherscan.io",
+      verificationApi: "https://api.etherscan.io",
+      apiKey: process.env.ETHERSCAN_MAINNET_API_KEY,
     },
     {
       name: "SAGA Chainlet",
@@ -44,7 +49,10 @@ export const supportedNetworks: {
       chainId: 137,
       name: "Polygon Mainnet",
       image: matic,
-      verifiable: false,
+      verifiable: true,
+      blockExplorer: "https://polygonscan.com",
+      verificationApi: "https://api.polygonscan.com",
+      apiKey: process.env.POLYGONSCAN_MAINNET_API_KEY,
     },
     {
       chainId: 42161,
@@ -78,6 +86,8 @@ export const supportedNetworks: {
       verifiable: true,
       image: eth,
       blockExplorer: "https://goerli.etherscan.io",
+      verificationApi: "https://api-goerli.etherscan.io/api",
+      apiKey: process.env.ETHERSCAN_GOERLI_API_KEY,
     },
     {
       chainId: 97,
@@ -88,8 +98,11 @@ export const supportedNetworks: {
     {
       chainId: 80001,
       name: "Polygon Mumbai Testnet",
-      verifiable: false,
+      verifiable: true,
       image: matic,
+      blockExplorer: "https://mumbai.polygonscan.com",
+      verificationApi: "https://api-testnet.polygonscan.com/api",
+      apiKey: process.env.POLYGONSCAN_MUMBAI_API_KEY,
     },
     {
       chainId: 421613,
@@ -139,6 +152,14 @@ export const getNetworkName = (chainId: number) => {
 export const getNetworkImage = (chainId: number) => {
   const network = getNetwork(chainId);
   return network ? network.image : eth;
+};
+
+export const getVerificationApiData = (chainId: number) => {
+  const network = getNetwork(chainId);
+  return {
+    apiUrl: network?.verificationApi,
+    apiKey: network?.apiKey,
+  };
 };
 
 export const sagaChainlet: Chain = {

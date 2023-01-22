@@ -7,6 +7,8 @@ import FormData from "form-data";
 import { generateERC20Source } from "utils/api/generateERC20Source";
 import { generateERC721Source } from "utils/api/generateERC721Source";
 import { generateERC1155Source } from "utils/api/generateERC1155Source";
+import { getVerificationApiData } from "constants/supportedNetworks";
+import { Contract } from "types/contract";
 
 export default async function handler(
   req: NextApiRequest,
@@ -21,7 +23,7 @@ export default async function handler(
 
   switch (tokenType) {
     case "ERC20":
-      contract = await ERC20.findOne({ contractId });
+      contract = (await ERC20.findOne({ contractId })) as Contract;
       sourceCode = await generateERC20Source(
         contractId,
         contract.extensions,
@@ -29,7 +31,7 @@ export default async function handler(
       );
       break;
     case "ERC721":
-      contract = await ERC721.findOne({ contractId });
+      contract = (await ERC721.findOne({ contractId })) as Contract;
       sourceCode = await generateERC721Source(
         contractId,
         contract.extensions,
@@ -37,7 +39,7 @@ export default async function handler(
       );
       break;
     case "ERC1155":
-      contract = await ERC1155.findOne({ contractId });
+      contract = (await ERC1155.findOne({ contractId })) as Contract;
       sourceCode = await generateERC1155Source(
         contractId,
         contract.extensions,
@@ -56,24 +58,37 @@ export default async function handler(
 
   const copilerVersion = "v0.8.17+commit.8df45f5f";
 
+  const { apiKey, apiUrl } = getVerificationApiData(contract.networkChainId);
+
+  if (!apiUrl || !apiKey)
+    return res.status(500).json({ message: "Network not supported" });
+
   const formData = new FormData();
   formData.append("module", "contract");
   formData.append("action", "verifysourcecode");
   formData.append("codeformat", "solidity-standard-json-input");
-  formData.append("apikey", process.env.ETHERSCAN_API_KEY || "");
+  formData.append("apikey", apiKey);
   formData.append("contractaddress", contract?.address);
   formData.append("sourceCode", JSON.stringify(sourceCode));
   formData.append("contractname", `${contractId}.sol:${contract?.name}`);
   formData.append("compilerVersion", copilerVersion);
 
-  const response = await fetch("http://api-goerli.etherscan.io/api", {
-    method: "POST",
-    //@ts-ignore
-    body: formData,
-  });
+  let data;
+  try {
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      //@ts-ignore
+      body: formData,
+    });
+    data = await response.json();
+  } catch (e) {
+    console.log(e);
+    return res
+      .status(500)
+      .json({ message: "Error sending verification request" });
+  }
 
-  const parsedResponse = await response.json();
-  const { status, result } = parsedResponse;
+  const { status, result } = data;
 
   switch (tokenType) {
     case "ERC20":
