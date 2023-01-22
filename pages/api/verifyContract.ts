@@ -76,12 +76,11 @@ export default async function handler(
 
   let data;
   try {
-    const response = await fetchWithError(apiUrl, {
+    data = await fetchWithError(apiUrl, {
       method: "POST",
       //@ts-ignore
       body: formData,
     });
-    data = await response.json();
   } catch (e) {
     console.log(e);
     return res

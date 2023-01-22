@@ -53,8 +53,8 @@ const ContractVerify = ({
   };
   const handleVerifyStatus = useCallback(async () => {
     if (!requestId) return;
-    const { type } = tokenData;
-    const status = await checkVerifyStatus(requestId, type);
+    const { type, networkChainId } = tokenData;
+    const status = await checkVerifyStatus(requestId, type, networkChainId);
     if (status === "Pass - Verified") {
       setSuccess(true);
     } else if (status === "Pending in queue") {

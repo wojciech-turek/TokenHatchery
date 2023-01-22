@@ -13,7 +13,7 @@ export default async function handler(
   const { guid, tokenType, networkChainId } = req.body;
   const verificationData = new FormData();
 
-  const { apiKey, apiUrl } = getVerificationApiData(networkChainId);
+  const { apiKey, apiUrl } = getVerificationApiData(Number(networkChainId));
 
   if (!apiUrl || !apiKey)
     return res.status(500).json({ message: "Network not supported" });
@@ -27,9 +27,7 @@ export default async function handler(
     //@ts-ignore
     body: verificationData,
   });
-  const parsedVerificationStatus = await verificationStatus.json();
-  if (parsedVerificationStatus.result === "Pass - Verified") {
-    // update contract in the database
+  if (verificationStatus.result === "Pass - Verified") {
     switch (tokenType) {
       case "ERC20":
         await ERC20.findOneAndUpdate(
@@ -52,5 +50,5 @@ export default async function handler(
     }
   }
 
-  res.status(200).json(parsedVerificationStatus.result);
+  res.status(200).json(verificationStatus.result);
 }

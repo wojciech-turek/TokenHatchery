@@ -25,13 +25,6 @@ const ERC1155Form = ({
     }
   }, [tokenData, setStepComplete]);
 
-  console.log(
-    tokenData.name !== "" &&
-      tokenData.baseURI !== "" &&
-      validateInput(tokenData.name) &&
-      validateURL(tokenData.baseURI)
-  );
-
   return (
     <>
       <form className="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-8">

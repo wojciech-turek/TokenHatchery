@@ -8,7 +8,7 @@ export type ERC20TokenData = {
   extensions: string[];
   managementType: string;
   networkName: string;
-  networkChainId: string;
+  networkChainId: number;
   address: string;
   contractId: string;
   type: TokenType;
@@ -20,7 +20,7 @@ export type ERC721TokenData = {
   extensions: string[];
   managementType: string;
   networkName: string;
-  networkChainId: string;
+  networkChainId: number;
   baseURI: string;
   address: string;
   contractId: string;
@@ -34,7 +34,7 @@ export type ERC1155TokenData = {
   extensions: string[];
   managementType: string;
   networkName: string;
-  networkChainId: string;
+  networkChainId: number;
   baseURI: string;
   address: string;
   contractId: string;

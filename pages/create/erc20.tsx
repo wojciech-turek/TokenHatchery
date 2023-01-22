@@ -24,7 +24,7 @@ const Erc20 = () => {
     initialSupply: "",
     address: "",
     contractId: "",
-    networkChainId: "",
+    networkChainId: 0,
     networkName: "",
     extensions: [],
     managementType: "Ownable",

@@ -51,7 +51,8 @@ const useApi = () => {
 
   const checkVerifyStatus = async (
     verificationGuid: string,
-    type: TokenType
+    type: TokenType,
+    networkChainId: number
   ) => {
     const response = await fetchWithError("/api/verificationStatus", {
       method: "POST",
@@ -61,6 +62,7 @@ const useApi = () => {
       body: JSON.stringify({
         guid: verificationGuid,
         tokenType: type,
+        networkChainId,
       }),
     });
     return response;

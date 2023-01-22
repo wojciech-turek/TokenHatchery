@@ -27,7 +27,7 @@ const NetworkSelect = ({
       setTokenData({
         ...tokenData,
         networkName: name,
-        networkChainId: String(chainId),
+        networkChainId: chainId,
       });
 
       setStepComplete(true);
