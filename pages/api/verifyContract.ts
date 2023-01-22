@@ -1,3 +1,4 @@
+import { fetchWithError } from "utils/client/fetchWithError";
 import connectMongo from "lib/mongodb";
 import ERC20 from "models/ERC20Contract";
 import ERC721 from "models/ERC721Contract";
@@ -75,7 +76,7 @@ export default async function handler(
 
   let data;
   try {
-    const response = await fetch(apiUrl, {
+    const response = await fetchWithError(apiUrl, {
       method: "POST",
       //@ts-ignore
       body: formData,

@@ -1,20 +1,13 @@
+import useApi from "hooks/useApi";
 import { useQuery } from "@tanstack/react-query";
-import { Deployments } from "types/tokens";
 
 export const useGetContracts = (address: string) => {
-  const getContracts = async () => {
-    const response = await fetch("/api/getContracts", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        address,
-      }),
-    });
-    const data = await response.json();
-    return data as Deployments[];
-  };
-
-  return useQuery(["getContracts", address], getContracts);
+  const { getContractsByAddress } = useApi();
+  return useQuery(
+    ["contracts", address],
+    () => getContractsByAddress(address),
+    {
+      staleTime: 1000 * 60 * 5,
+    }
+  );
 };

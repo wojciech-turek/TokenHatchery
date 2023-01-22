@@ -1,5 +1,6 @@
-import { useMemo } from "react";
+import { fetchWithError } from "utils/client/fetchWithError";
 import { TokenData, Deployments, TokenType } from "types/tokens";
+
 const useApi = () => {
   const generateContract = async ({
     tokenData,
@@ -9,7 +10,7 @@ const useApi = () => {
 
     creator: string;
   }) => {
-    const response = await fetch("/api/generateContract", {
+    const response = await fetchWithError("/api/generateContract", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -19,8 +20,7 @@ const useApi = () => {
         creator: creator,
       }),
     });
-    const data = await response.json();
-    const { contractId, abi, bytecode } = data;
+    const { contractId, abi, bytecode } = response;
 
     return {
       contractId,
@@ -36,29 +36,24 @@ const useApi = () => {
     contractId: string;
     tokenType: TokenType;
   }) => {
-    try {
-      const response = await fetch("/api/verifyContract", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          contractId,
-          tokenType,
-        }),
-      });
-      const data = await response.json();
-      return data;
-    } catch (e: any) {
-      return e;
-    }
+    const response = await fetchWithError("/api/verifyContract", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        contractId,
+        tokenType,
+      }),
+    });
+    return response;
   };
 
   const checkVerifyStatus = async (
     verificationGuid: string,
     type: TokenType
   ) => {
-    const response = await fetch("/api/verificationStatus", {
+    const response = await fetchWithError("/api/verificationStatus", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -68,8 +63,7 @@ const useApi = () => {
         tokenType: type,
       }),
     });
-    const data = await response.json();
-    return data;
+    return response;
   };
 
   const saveDeployedAddress = async ({
@@ -81,48 +75,40 @@ const useApi = () => {
     address: string;
     type: TokenType;
   }) => {
-    try {
-      const response = await fetch("/api/saveDeployedAddress", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          contractId,
-          address,
-          type,
-        }),
-      });
-      const data = await response.json();
-      return data;
-    } catch (e: any) {
-      console.error(e);
-    }
+    const response = await fetchWithError("/api/saveDeployedAddress", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        contractId,
+        address,
+        type,
+      }),
+    });
+    return response;
   };
 
-  const getContractsByAddress = useMemo(
-    () => async (address: string) => {
-      try {
-        const response = await fetch("/api/getContracts", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            address,
-          }),
-        });
-        const data = await response.json();
-        return data as Deployments[];
-      } catch (e: any) {
-        console.error(e);
-      }
-    },
-    []
-  );
+  const getCountractCount = async () => {
+    return await fetchWithError("/api/getContractsCount");
+  };
+
+  const getContractsByAddress = async (address: string) => {
+    const response = await fetchWithError("/api/getContracts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        address,
+      }),
+    });
+    return response as Deployments[];
+  };
 
   return {
     generateContract,
+    getCountractCount,
     getContractsByAddress,
     handleVerify,
     checkVerifyStatus,

@@ -10,6 +10,7 @@ import Button from "components/shared/Button";
 import { classNames } from "utils/client/classNames";
 import Link from "next/link";
 import Fader from "components/Fader/Fader";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ContractDeployProps {
   tokenData: TokenData;
@@ -28,6 +29,7 @@ const ContractDeploy = ({
   const [stage, setStage] = useState(0);
   const [error, setError] = useState("");
   const { chain } = useNetwork();
+  const queryClient = useQueryClient();
 
   const currentNetwork = allSupportedNetworks.find(
     (network) => network.chainId === chain?.id
@@ -71,6 +73,7 @@ const ContractDeploy = ({
         type: tokenData.type,
       });
       setDeploying(false);
+      queryClient.invalidateQueries(["contractsCount"]);
       setStepComplete(true);
     } catch (e) {
       console.log(e);

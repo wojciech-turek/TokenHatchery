@@ -1,20 +1,28 @@
+import { fetchWithError } from "utils/client/fetchWithError";
 import type { NextApiRequest, NextApiResponse } from "next";
 import ERC20 from "models/ERC20Contract";
 import ERC721 from "models/ERC721Contract";
 import ERC1155 from "models/ERC1155Contract";
 import FormData from "form-data";
+import { getVerificationApiData } from "constants/supportedNetworks";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { guid, tokenType } = req.body;
+  const { guid, tokenType, networkChainId } = req.body;
   const verificationData = new FormData();
+
+  const { apiKey, apiUrl } = getVerificationApiData(networkChainId);
+
+  if (!apiUrl || !apiKey)
+    return res.status(500).json({ message: "Network not supported" });
+
   verificationData.append("module", "contract");
   verificationData.append("action", "checkverifystatus");
   verificationData.append("guid", guid);
-  verificationData.append("apikey", process.env.ETHERSCAN_API_KEY || "");
-  const verificationStatus = await fetch("http://api-goerli.etherscan.io/api", {
+  verificationData.append("apikey", apiKey || "");
+  const verificationStatus = await fetchWithError(apiUrl, {
     method: "POST",
     //@ts-ignore
     body: verificationData,

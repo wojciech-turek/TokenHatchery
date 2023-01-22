@@ -1,17 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
+import useApi from "./useApi";
 
 const useCountContracts = () => {
-  const contractsCountQuery = useQuery(
-    ["contractsCount"],
-    () => {
-      return fetch("/api/getContractsCount").then((res) => res.json());
-    },
-    {
-      staleTime: 1000 * 60 * 5,
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-    }
-  );
+  const { getCountractCount } = useApi();
+  const contractsCountQuery = useQuery(["contractsCount"], getCountractCount, {
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
   return contractsCountQuery;
 };
 

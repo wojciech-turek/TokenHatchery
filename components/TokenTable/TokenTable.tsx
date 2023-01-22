@@ -74,107 +74,106 @@ const TokenTable = ({ address }: { address: string }) => {
                       </tr>
                     </thead>
                     <tbody className="bg-white">
-                      {data &&
-                        data.map((contract) => (
-                          <Fragment key={contract.type}>
+                      {data?.map((contract) => (
+                        <Fragment key={contract.type}>
+                          <tr className="border-t border-gray-200">
+                            <th
+                              colSpan={6}
+                              scope="colgroup"
+                              className="bg-gray-50 px-4 py-2 text-left text-sm font-semibold text-gray-900 sm:px-6"
+                            >
+                              {contract.type}
+                            </th>
+                          </tr>
+                          {contract.deployments.length === 0 && (
                             <tr className="border-t border-gray-200">
-                              <th
+                              <td
                                 colSpan={6}
                                 scope="colgroup"
-                                className="bg-gray-50 px-4 py-2 text-left text-sm font-semibold text-gray-900 sm:px-6"
+                                className="px-4 py-2 text-left text-sm text-center text-gray-900 sm:px-6"
                               >
-                                {contract.type}
-                              </th>
+                                <FolderOpenIcon
+                                  className="inline-block w-5 text-gray-400"
+                                  aria-hidden="true"
+                                />
+                                <span className="inline-block pl-2 relative top-0.5">
+                                  No tokens found
+                                </span>
+                              </td>
                             </tr>
-                            {contract.deployments.length === 0 && (
-                              <tr className="border-t border-gray-200">
-                                <td
-                                  colSpan={6}
-                                  scope="colgroup"
-                                  className="px-4 py-2 text-left text-sm text-center text-gray-900 sm:px-6"
-                                >
-                                  <FolderOpenIcon
-                                    className="inline-block w-5 text-gray-400"
-                                    aria-hidden="true"
-                                  />
-                                  <span className="inline-block pl-2 relative top-0.5">
-                                    No tokens found
+                          )}
+                          {contract.deployments.map(
+                            (deployment, deploymentIdx) => (
+                              <tr
+                                key={deployment._id}
+                                className={classNames(
+                                  deploymentIdx === 0
+                                    ? "border-gray-300"
+                                    : "border-gray-200",
+                                  "border-t "
+                                )}
+                              >
+                                <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                                  {deployment.name}{" "}
+                                  <span className="inline-block sm:hidden">
+                                    - {deployment.symbol}
                                   </span>
-                                </td>
-                              </tr>
-                            )}
-                            {contract.deployments.map(
-                              (deployment, deploymentIdx) => (
-                                <tr
-                                  key={deployment._id}
-                                  className={classNames(
-                                    deploymentIdx === 0
-                                      ? "border-gray-300"
-                                      : "border-gray-200",
-                                    "border-t "
-                                  )}
-                                >
-                                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                                    {deployment.name}{" "}
-                                    <span className="inline-block sm:hidden">
-                                      - {deployment.symbol}
-                                    </span>
-                                    <dl className="font-normal lg:hidden">
-                                      <dt className="sr-only">Title</dt>
-                                      <dd className="mt-1 text-gray-700">
-                                        <div className="flex gap-2 items-center">
-                                          <Image
-                                            src={getNetworkImage(
-                                              deployment.networkChainId
-                                            )}
-                                            width={20}
-                                            height={20}
-                                            alt={deployment.name}
-                                          />
-
-                                          {getNetworkName(
+                                  <dl className="font-normal lg:hidden">
+                                    <dt className="sr-only">Title</dt>
+                                    <dd className="mt-1 text-gray-700">
+                                      <div className="flex gap-2 items-center">
+                                        <Image
+                                          src={getNetworkImage(
                                             deployment.networkChainId
                                           )}
-                                        </div>
-                                      </dd>
-                                      <dd className="mt-1 truncate text-gray-500 sm:hidden">
-                                        {deployment.address}
-                                      </dd>
-                                      <Link
-                                        href={`/manage/${deployment.address}`}
-                                        className="text-indigo-700 font-bold hover:text-indigo-900 cursor-pointer inline-block sm:hidden"
-                                      >
-                                        View
-                                      </Link>
-                                    </dl>
-                                  </td>
-                                  <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell">
-                                    {deployment.symbol}
-                                  </td>
-                                  <td className="hidden whitespace-nowrap px-4 py-4 text-sm text-gray-500 lg:table-cell">
-                                    <div className="flex gap-2 items-center">
-                                      <Image
-                                        src={getNetworkImage(
-                                          Number(deployment.networkChainId)
-                                        )}
-                                        width={20}
-                                        height={20}
-                                        alt={deployment.name}
-                                      />
+                                          width={20}
+                                          height={20}
+                                          alt={deployment.name}
+                                        />
 
-                                      {getNetworkName(
+                                        {getNetworkName(
+                                          deployment.networkChainId
+                                        )}
+                                      </div>
+                                    </dd>
+                                    <dd className="mt-1 truncate text-gray-500 sm:hidden">
+                                      {deployment.address}
+                                    </dd>
+                                    <Link
+                                      href={`/manage/${deployment.address}`}
+                                      className="text-indigo-700 font-bold hover:text-indigo-900 cursor-pointer inline-block sm:hidden"
+                                    >
+                                      View
+                                    </Link>
+                                  </dl>
+                                </td>
+                                <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell">
+                                  {deployment.symbol}
+                                </td>
+                                <td className="hidden whitespace-nowrap px-4 py-4 text-sm text-gray-500 lg:table-cell">
+                                  <div className="flex gap-2 items-center">
+                                    <Image
+                                      src={getNetworkImage(
                                         Number(deployment.networkChainId)
                                       )}
-                                    </div>
-                                  </td>
-                                  <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                                    {deployment.address}
-                                  </td>
-                                </tr>
-                              )
-                            )}
-                          </Fragment>
-                        ))}
+                                      width={20}
+                                      height={20}
+                                      alt={deployment.name}
+                                    />
+
+                                    {getNetworkName(
+                                      Number(deployment.networkChainId)
+                                    )}
+                                  </div>
+                                </td>
+                                <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:table-cell">
+                                  {deployment.address}
+                                </td>
+                              </tr>
+                            )
+                          )}
+                        </Fragment>
+                      ))}
                     </tbody>
                   </table>
                 </div>
