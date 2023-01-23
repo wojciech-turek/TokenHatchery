@@ -1,13 +1,14 @@
 import Button from "components/shared/Button";
 import SubHeading from "components/SubHeading/SubHeading";
 import useApi from "hooks/useApi";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import { TokenData } from "types/tokens";
 import { allSupportedNetworks } from "constants/supportedNetworks";
 import { useNetwork } from "wagmi";
 import ExternalLink from "components/shared/ExternalLink";
 import Fader from "components/Fader/Fader";
+import { useMutation } from "@tanstack/react-query";
 
 const ContractVerify = ({
   tokenData,
@@ -16,12 +17,59 @@ const ContractVerify = ({
   tokenData: TokenData;
   setStepComplete: (val: boolean) => void;
 }) => {
-  const [verifySubmitted, setVerifySubmitted] = useState<boolean>(false);
-  const [requestId, setRequestId] = useState<string>("");
   const { handleVerify, checkVerifyStatus } = useApi();
+  const [loading, setLoading] = useState(false);
   const { chain } = useNetwork();
-  const [success, setSuccess] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
+
+  const statusStates = {
+    pending: "Pending in queue",
+    pass: "Pass - Verified",
+  };
+  const alreadyVerifiedString = "Contract source code already verified";
+
+  const verifyContract = useMutation(handleVerify, {
+    onMutate: () => {
+      setLoading(true);
+    },
+    onSuccess: (data) => {
+      setTimeout(() => {
+        const { type, networkChainId } = tokenData;
+        verifyStatus.mutate({
+          verificationGuid: data.guid,
+          type,
+          networkChainId,
+        });
+      }, 15000);
+    },
+    onError() {
+      setLoading(false);
+    },
+  });
+  const verifyStatus = useMutation(checkVerifyStatus, {
+    onMutate: () => {
+      setLoading(true);
+    },
+    onSuccess: (data, variables) => {
+      if (data === statusStates.pass) {
+        setLoading(false);
+      } else if (data === statusStates.pending) {
+        setTimeout(() => {
+          const { type, networkChainId } = tokenData;
+          const { verificationGuid } = variables as {
+            verificationGuid: string;
+          };
+          verifyStatus.mutate({
+            verificationGuid: verificationGuid,
+            type,
+            networkChainId,
+          });
+        }, 150000);
+      }
+    },
+    onError() {
+      setLoading(false);
+    },
+  });
 
   const currentNetwork = allSupportedNetworks.find(
     (network) => network.chainId === chain?.id
@@ -30,50 +78,6 @@ const ContractVerify = ({
   useEffect(() => {
     setStepComplete(true);
   }, [setStepComplete]);
-
-  const handleVerifyRequest = async () => {
-    setError("");
-    setVerifySubmitted(true);
-    const { contractId, type } = tokenData;
-    const data = await handleVerify({ contractId, tokenType: type });
-    if (data.guid) {
-      setRequestId(data.guid);
-    } else if (data.error) {
-      if (data.error.startsWith("Unable to locate ContractCode")) {
-        setError("Contract not yet ready, please try again in a moment");
-        setVerifySubmitted(false);
-      } else if (
-        data.error.startsWith("Contract source code already verified")
-      ) {
-        setSuccess(true);
-      } else {
-        setError(data.error);
-      }
-    }
-  };
-  const handleVerifyStatus = useCallback(async () => {
-    if (!requestId) return;
-    const { type, networkChainId } = tokenData;
-    const status = await checkVerifyStatus(requestId, type, networkChainId);
-    if (status === "Pass - Verified") {
-      setSuccess(true);
-    } else if (status === "Pending in queue") {
-      setTimeout(() => {
-        handleVerifyStatus();
-      }, 5000);
-    } else {
-      setError(status);
-    }
-    setVerifySubmitted(false);
-  }, [requestId, checkVerifyStatus, tokenData]);
-
-  useEffect(() => {
-    if (verifySubmitted) {
-      setTimeout(() => {
-        handleVerifyStatus();
-      }, 10000);
-    }
-  }, [verifySubmitted, handleVerifyStatus]);
 
   return (
     <Fader>
@@ -88,23 +92,35 @@ const ContractVerify = ({
       </p>
       <Button
         color="green"
-        disabled={verifySubmitted || success}
-        onClick={handleVerifyRequest}
+        disabled={verifyContract.isLoading}
+        onClick={() => {
+          const { contractId, type } = tokenData;
+          verifyContract.mutate({ contractId, tokenType: type });
+        }}
       >
         Verify
       </Button>
-      {verifySubmitted && error === "" && !success ? (
+      {loading ? (
         <div className="flex text-gray-700 my-6 gap-2">
           <span className="h-6 w-6 block rounded-full border-4 border-t-blue-300 animate-spin"></span>
           <span>Please wait while we verify your contract</span>
         </div>
       ) : null}
-      {error !== "" ? (
+      {verifyStatus.isError ? (
         <div className="flex text-red-700 my-6 gap-2">
-          <span>{error}</span>
+          <span>{(verifyContract.error as Error).message}</span>
         </div>
       ) : null}
-      {success ? (
+      {verifyContract.error &&
+      (verifyContract.error as Error).message !== alreadyVerifiedString ? (
+        <div className="flex text-red-700 my-6 gap-2">
+          <div>{(verifyContract.error as Error).message}</div>
+          <div>Please try again in a few moments</div>
+        </div>
+      ) : null}
+      {verifyStatus.data === statusStates.pass ||
+      (verifyContract.error &&
+        (verifyContract.error as Error).message === alreadyVerifiedString) ? (
         <>
           <div className="flex text-green-700 my-6 gap-2">
             <span>Success! Your contract has been verified!</span>

@@ -46,14 +46,18 @@ const useApi = () => {
         tokenType,
       }),
     });
-    return response;
+    return response as { guid: string };
   };
 
-  const checkVerifyStatus = async (
-    verificationGuid: string,
-    type: TokenType,
-    networkChainId: number
-  ) => {
+  const checkVerifyStatus = async ({
+    verificationGuid,
+    type,
+    networkChainId,
+  }: {
+    verificationGuid: string;
+    type: TokenType;
+    networkChainId: number;
+  }) => {
     const response = await fetchWithError("/api/verificationStatus", {
       method: "POST",
       headers: {
