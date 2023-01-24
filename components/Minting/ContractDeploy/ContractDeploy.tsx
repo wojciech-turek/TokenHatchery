@@ -1,8 +1,8 @@
 import { ethers } from "ethers";
 import useApi from "hooks/useApi";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { TokenData } from "types/tokens";
-import { useNetwork, useSigner } from "wagmi";
+import { useAccount, useNetwork, useSigner } from "wagmi";
 import { allSupportedNetworks } from "constants/supportedNetworks";
 import SubHeading from "components/SubHeading/SubHeading";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
@@ -10,7 +10,7 @@ import Button from "components/shared/Button";
 import { classNames } from "utils/client/classNames";
 import Link from "next/link";
 import Fader from "components/Fader/Fader";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface ContractDeployProps {
   tokenData: TokenData;
@@ -24,63 +24,54 @@ const ContractDeploy = ({
   setStepComplete,
 }: ContractDeployProps) => {
   const { data: signer } = useSigner();
+  const { address } = useAccount();
   const { generateContract, saveDeployedAddress } = useApi();
-  const [deploying, setDeploying] = useState(false);
   const [stage, setStage] = useState(0);
-  const [error, setError] = useState("");
   const { chain } = useNetwork();
   const queryClient = useQueryClient();
 
-  const currentNetwork = allSupportedNetworks.find(
-    (network) => network.chainId === chain?.id
-  );
-
-  useEffect(() => {
-    if (tokenData.address) {
-      setStepComplete(true);
-    }
-  }, [tokenData.address, setStepComplete]);
-
-  const deployContract = async () => {
-    if (!currentNetwork) {
-      setError("You're on an unsupported network.");
-      return;
-    }
-    setDeploying(true);
-    if (!signer) return;
-    try {
-      const address = await signer.getAddress();
-      const { contractId, abi, bytecode } = await generateContract({
-        tokenData,
-        creator: address,
+  const generateContractMutation = useMutation(generateContract, {
+    onMutate: () => {
+      setTokenData({
+        ...tokenData,
+        address: "",
       });
       setStage(1);
-      const contract = new ethers.ContractFactory(abi, bytecode, signer);
+    },
+    onSuccess: async (data) => {
+      if (!signer) return;
+      const { contractId, abi, bytecode } = data;
       setStage(2);
+      const contract = new ethers.ContractFactory(abi, bytecode, signer);
       const deployedContract = await contract.deploy();
       setStage(3);
       await deployedContract.deployTransaction.wait();
-      setStage(4);
       setTokenData({
         ...tokenData,
         contractId,
         address: deployedContract.address,
       });
-
-      await saveDeployedAddress({
+      await saveDeployedAddressMutation.mutateAsync({
         contractId: contractId,
         address: deployedContract.address,
         type: tokenData.type,
       });
-      setDeploying(false);
+      setStage(4);
+    },
+    onError: () => {
+      setStage(0);
+    },
+  });
+  const saveDeployedAddressMutation = useMutation(saveDeployedAddress, {
+    onSettled: () => {
       queryClient.invalidateQueries(["contractsCount"]);
       setStepComplete(true);
-    } catch (e) {
-      console.log(e);
-      setStage(0);
-      setDeploying(false);
-    }
-  };
+    },
+  });
+
+  const currentNetwork = allSupportedNetworks.find(
+    (network) => network.chainId === chain?.id
+  );
 
   const summaryData = [
     {
@@ -138,10 +129,11 @@ const ContractDeploy = ({
   ];
 
   const stages = [
+    "Ready to deploy",
     "Generating contract...",
-    "Preparing transaction...",
     "Sending transaction...",
     "Waiting for confirmation...",
+    "Success!",
   ];
 
   return (
@@ -183,18 +175,15 @@ const ContractDeploy = ({
           <div className="flex gap-2">
             <div className="font-bold">Status:</div>
             <div className="text-gray-500 flex">
-              {error ? (
+              {generateContractMutation.isError ? (
                 <div className="flex">
                   <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
-                  <span className="ml-2">{error}</span>
+                  <span className="ml-2">
+                    Something went wrong. Please try again.
+                  </span>
                 </div>
-              ) : deploying ? (
-                stages[stage]
-              ) : tokenData.address !== "" ? (
-                "Success!"
-              ) : (
-                "Ready to deploy"
-              )}
+              ) : null}
+              {stages[stage]}
             </div>
           </div>
           <div>
@@ -239,8 +228,15 @@ const ContractDeploy = ({
           <div className="py-4">
             <Button
               color="green"
-              disabled={error !== "" || deploying}
-              onClick={deployContract}
+              disabled={
+                generateContractMutation.isLoading && !tokenData.address
+              }
+              onClick={() =>
+                generateContractMutation.mutate({
+                  tokenData,
+                  creator: address as string,
+                })
+              }
             >
               {tokenData.address ? "Deploy another" : "Deploy"}
             </Button>
