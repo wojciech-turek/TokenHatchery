@@ -92,7 +92,7 @@ const ContractVerify = ({
       </p>
       <Button
         color="green"
-        disabled={verifyContract.isLoading}
+        disabled={verifyContract.isLoading || loading}
         onClick={() => {
           const { contractId, type } = tokenData;
           verifyContract.mutate({ contractId, tokenType: type });
