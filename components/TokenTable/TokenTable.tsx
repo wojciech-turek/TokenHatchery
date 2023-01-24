@@ -116,7 +116,11 @@ const TokenTable = ({ address }: { address: string }) => {
                                 <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                                   {deployment.name}{" "}
                                   <span className="inline-block sm:hidden">
-                                    - {deployment.symbol}
+                                    {deployment.symbol && (
+                                      <span className="text-gray-500">
+                                        ({deployment.symbol})
+                                      </span>
+                                    )}
                                   </span>
                                   <dl className="font-normal lg:hidden">
                                     <dt className="sr-only">Title</dt>
