@@ -12,11 +12,20 @@ export default async function handler(
   try {
     await connectMongo();
     if (type === "ERC20") {
-      await ERC20.findOneAndUpdate({ contractId }, { address });
+      await ERC20.findOneAndUpdate(
+        { contractId },
+        { address: address.toLowerCase() }
+      );
     } else if (type === "ERC721") {
-      await ERC721.findOneAndUpdate({ contractId }, { address });
+      await ERC721.findOneAndUpdate(
+        { contractId },
+        { address: address.toLowerCase() }
+      );
     } else if (type === "ERC1155") {
-      await ERC1155.findOneAndUpdate({ contractId }, { address });
+      await ERC1155.findOneAndUpdate(
+        { contractId },
+        { address: address.toLowerCase() }
+      );
     }
     res.status(200).json({ message: "Success" });
   } catch (error) {
