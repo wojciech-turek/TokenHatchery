@@ -11,7 +11,7 @@ export type ERC20TokenData = {
   networkChainId: number;
   address: string;
   contractId: string;
-  type: TokenType;
+  type: ContractType;
 };
 
 export type ERC721TokenData = {
@@ -24,7 +24,7 @@ export type ERC721TokenData = {
   baseURI: string;
   address: string;
   contractId: string;
-  type: TokenType;
+  type: ContractType;
   maxSupply?: string;
   mintPrice?: string;
 };
@@ -38,10 +38,10 @@ export type ERC1155TokenData = {
   baseURI: string;
   address: string;
   contractId: string;
-  type: TokenType;
+  type: ContractType;
 };
 
-export enum TokenType {
+export enum ContractType {
   ERC20 = "ERC20",
   ERC721 = "ERC721",
   ERC1155 = "ERC1155",
@@ -56,6 +56,6 @@ type Deployment = {
 };
 
 export type Deployments = {
-  type: TokenType;
+  type: ContractType;
   deployments: Deployment[];
 };

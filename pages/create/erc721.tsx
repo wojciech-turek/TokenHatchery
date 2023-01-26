@@ -9,7 +9,7 @@ import ExtensionSelect from "components/Minting/ExtensionSelect/ExtensionSelect"
 import { erc721Extensions } from "constants/availableTokenTypes";
 import ContractDeploy from "components/Minting/ContractDeploy/ContractDeploy";
 import ContractVerify from "components/Minting/ContractVerify/ContractVerify";
-import { TokenData, TokenType } from "types/tokens";
+import { TokenData, ContractType } from "types/tokens";
 import Personalization from "components/Minting/Personalization/Personalization";
 import { scrollToTop } from "utils/client/scrollTop";
 import { NextButton } from "components/Minting/NextButton";
@@ -27,7 +27,7 @@ const Erc721 = () => {
     networkName: "",
     extensions: [],
     managementType: "Ownable",
-    type: TokenType.ERC721,
+    type: ContractType.ERC721,
   });
 
   const handleCompleteStep = (value: boolean) => {
@@ -70,7 +70,7 @@ const Erc721 = () => {
           tokenData={tokenData}
           setTokenData={setTokenData}
           setStepComplete={handleCompleteStep}
-          type={TokenType.ERC721}
+          type={ContractType.ERC721}
         />
       ),
     },

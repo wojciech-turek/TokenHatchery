@@ -5,7 +5,7 @@ import {
   ERC1155TokenData,
   ERC721TokenData,
   TokenData,
-  TokenType,
+  ContractType,
 } from "types/tokens";
 import ERC20Form from "./ERC20Form";
 import ERC721Form from "./ERC721Form";
@@ -18,14 +18,14 @@ const Personalization = ({
   setTokenData,
   setStepComplete,
 }: {
-  type: TokenType;
+  type: ContractType;
   tokenData: TokenData;
   setTokenData: (value: TokenData) => void;
   setStepComplete: (value: boolean) => void;
 }) => {
   const renderComponent = () => {
     switch (type) {
-      case TokenType.ERC721:
+      case ContractType.ERC721:
         return (
           <ERC721Form
             tokenData={tokenData as ERC721TokenData}
@@ -33,7 +33,7 @@ const Personalization = ({
             setStepComplete={setStepComplete}
           />
         );
-      case TokenType.ERC1155:
+      case ContractType.ERC1155:
         return (
           <ERC1155Form
             tokenData={tokenData as ERC1155TokenData}
@@ -41,7 +41,7 @@ const Personalization = ({
             setStepComplete={setStepComplete}
           />
         );
-      case TokenType.ERC20:
+      case ContractType.ERC20:
         return (
           <ERC20Form
             tokenData={tokenData as ERC20TokenData}

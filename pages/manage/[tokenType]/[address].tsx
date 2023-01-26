@@ -40,8 +40,8 @@ const TokenPage = ({
   mintPrice,
 }: TokenPageProps) => {
   const router = useRouter();
-  const { tokenType, address } = router.query as {
-    tokenType: string;
+  const { contractType, address } = router.query as {
+    contractType: string;
     address: string;
   };
 
@@ -114,7 +114,7 @@ const TokenPage = ({
                     <div className="sm:flex sm:space-x-5">
                       <div className="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
                         <p className="text-sm font-medium text-gray-600">
-                          {tokenType}
+                          {contractType}
                         </p>
                         <p className="text-xl font-bold text-gray-900 sm:text-2xl">
                           {name} ({symbol}) - {truncateAddress(address)}
@@ -238,7 +238,7 @@ const TokenPage = ({
 export default TokenPage;
 
 export async function getServerSideProps(context: NextPageContext) {
-  const { tokenType, address } = context.query;
+  const { contractType, address } = context.query;
   await connectMongo();
 
   let contractDetails;
@@ -256,7 +256,7 @@ export async function getServerSideProps(context: NextPageContext) {
     "mintPrice",
   ];
 
-  switch (tokenType) {
+  switch (contractType) {
     case "ERC20":
       contractDetails = await ERC20.findOne({ address }).select(selectedData);
       break;

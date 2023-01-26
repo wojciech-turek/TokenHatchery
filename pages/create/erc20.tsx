@@ -5,7 +5,7 @@ import NetworkSelect from "components/Minting/NetworkSelect/NetworkSelect";
 import WalletConnect from "components/Minting/WalletConnect/WalletConnect";
 import ContractDeploy from "components/Minting/ContractDeploy/ContractDeploy";
 import ContractVerify from "components/Minting/ContractVerify/ContractVerify";
-import { TokenData, TokenType } from "types/tokens";
+import { TokenData, ContractType } from "types/tokens";
 import PageHeading from "components/shared/PageHeading/PageHeading";
 import Personalization from "components/Minting/Personalization/Personalization";
 import Steps from "components/Steps/Steps";
@@ -28,7 +28,7 @@ const Erc20 = () => {
     networkName: "",
     extensions: [],
     managementType: "Ownable",
-    type: TokenType.ERC20,
+    type: ContractType.ERC20,
   });
 
   const handleCompleteStep = (value: boolean) => {
@@ -71,7 +71,7 @@ const Erc20 = () => {
           setTokenData={setTokenData}
           tokenData={tokenData}
           setStepComplete={handleCompleteStep}
-          type={TokenType.ERC20}
+          type={ContractType.ERC20}
         />
       ),
     },

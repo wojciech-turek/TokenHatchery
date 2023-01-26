@@ -10,7 +10,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { guid, tokenType, networkChainId } = req.body;
+  const { guid, contractType, networkChainId } = req.body;
   const verificationData = new FormData();
 
   const { apiKey, apiUrl } = getVerificationApiData(Number(networkChainId));
@@ -28,7 +28,7 @@ export default async function handler(
     body: verificationData,
   });
   if (verificationStatus.result === "Pass - Verified") {
-    switch (tokenType) {
+    switch (contractType) {
       case "ERC20":
         await ERC20.findOneAndUpdate(
           { verificationGuid: guid },

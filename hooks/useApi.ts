@@ -1,5 +1,5 @@
 import { fetchWithError } from "utils/client/fetchWithError";
-import { TokenData, Deployments, TokenType } from "types/tokens";
+import { TokenData, Deployments, ContractType } from "types/tokens";
 
 const useApi = () => {
   const generateContract = async ({
@@ -31,10 +31,10 @@ const useApi = () => {
 
   const handleVerify = async ({
     contractId,
-    tokenType,
+    contractType,
   }: {
     contractId: string;
-    tokenType: TokenType;
+    contractType: ContractType;
   }) => {
     const response = await fetchWithError("/api/verifyContract", {
       method: "POST",
@@ -43,7 +43,7 @@ const useApi = () => {
       },
       body: JSON.stringify({
         contractId,
-        tokenType,
+        contractType,
       }),
     });
     return response as { guid: string };
@@ -55,7 +55,7 @@ const useApi = () => {
     networkChainId,
   }: {
     verificationGuid: string;
-    type: TokenType;
+    type: ContractType;
     networkChainId: number;
   }) => {
     const response = await fetchWithError("/api/verificationStatus", {
@@ -65,7 +65,7 @@ const useApi = () => {
       },
       body: JSON.stringify({
         guid: verificationGuid,
-        tokenType: type,
+        contractType: type,
         networkChainId,
       }),
     });
@@ -79,7 +79,7 @@ const useApi = () => {
   }: {
     contractId: string;
     address: string;
-    type: TokenType;
+    type: ContractType;
   }) => {
     const response = await fetchWithError("/api/saveDeployedAddress", {
       method: "POST",

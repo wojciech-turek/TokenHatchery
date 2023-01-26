@@ -95,7 +95,7 @@ const ContractVerify = ({
         disabled={verifyContract.isLoading || loading}
         onClick={() => {
           const { contractId, type } = tokenData;
-          verifyContract.mutate({ contractId, tokenType: type });
+          verifyContract.mutate({ contractId, contractType: type });
         }}
       >
         Verify

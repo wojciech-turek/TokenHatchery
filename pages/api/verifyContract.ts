@@ -15,14 +15,14 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { contractId, tokenType } = req.body;
+  const { contractId, contractType } = req.body;
 
   await connectMongo();
 
   let contract;
   let sourceCode;
 
-  switch (tokenType) {
+  switch (contractType) {
     case "ERC20":
       contract = (await ERC20.findOne({ contractId })) as Contract;
       sourceCode = await generateERC20Source(
@@ -90,7 +90,7 @@ export default async function handler(
 
   const { status, result } = data;
 
-  switch (tokenType) {
+  switch (contractType) {
     case "ERC20":
       await ERC20.findOneAndUpdate(
         { contractId },

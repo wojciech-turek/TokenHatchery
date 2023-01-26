@@ -11,7 +11,8 @@ export default async function handler(
   const { address } = req.body;
   await connectMongo();
 
-  const selectData = "_id name symbol address networkChainId";
+  const selectData =
+    "_id name symbol address creator extensions networkChainId managementType baseURI";
 
   const promises = [
     await ERC20.find({ creator: address, address: { $ne: null } }).select(
