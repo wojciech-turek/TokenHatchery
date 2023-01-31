@@ -1,5 +1,4 @@
 import SubHeading from "components/SubHeading/SubHeading";
-import { accessControl } from "constants/availableTokenTypes";
 import React, { useEffect } from "react";
 
 import { TokenData } from "types/tokens";
@@ -93,50 +92,6 @@ const ExtensionSelect = ({
               </div>
             ))}
           </div>
-          <SubHeading className="mb-12">Select management type</SubHeading>
-          <fieldset className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {accessControl.map((controlType) => (
-              <div
-                key={controlType.name}
-                onClick={() =>
-                  setTokenData({
-                    ...tokenData,
-                    managementType: controlType.type,
-                  })
-                }
-                className={classNames(
-                  tokenData?.managementType === controlType.type
-                    ? "border-indigo-600"
-                    : "border-gray-300 hover:border-gray-400",
-                  "relative flex items-center space-x-3 rounded-lg border bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2  cursor-pointer"
-                )}
-              >
-                <div className="px-2">
-                  <input
-                    type="radio"
-                    value={controlType.type}
-                    checked={
-                      tokenData?.managementType === controlType.type || false
-                    }
-                    onChange={() =>
-                      setTokenData({
-                        ...tokenData,
-                        managementType: controlType.type,
-                      })
-                    }
-                  />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="text-lg font-medium text-gray-900">
-                    {controlType.name}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    {controlType.description}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </fieldset>
         </div>
       </Fader>
     </>

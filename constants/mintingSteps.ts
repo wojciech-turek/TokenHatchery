@@ -13,21 +13,16 @@ export const mintingSteps: Step[] = [
   },
   {
     id: "3",
-    title: "Select extensions",
+    title: "Customize your token",
     status: "upcoming",
   },
   {
     id: "4",
-    title: "Personalize your token",
-    status: "upcoming",
-  },
-  {
-    id: "5",
     title: "Deploy contract",
     status: "upcoming",
   },
   {
-    id: "6",
+    id: "5",
     title: "Verify contract",
     status: "upcoming",
   },

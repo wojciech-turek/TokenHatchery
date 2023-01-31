@@ -27,7 +27,13 @@ const ContractVerify = ({
   };
   const alreadyVerifiedString = "Contract source code already verified";
 
-  const verifyContract = useMutation(handleVerify, {
+  const verifyContract = useMutation<
+    {
+      guid: string;
+    },
+    Error,
+    any
+  >(handleVerify, {
     onMutate: () => {
       setLoading(true);
     },
@@ -108,19 +114,19 @@ const ContractVerify = ({
       ) : null}
       {verifyStatus.isError ? (
         <div className="flex text-red-700 my-6 gap-2">
-          <span>{(verifyContract.error as Error).message}</span>
+          <span>{verifyContract.error?.message}</span>
         </div>
       ) : null}
       {verifyContract.error &&
-      (verifyContract.error as Error).message !== alreadyVerifiedString ? (
+      verifyContract.error?.message !== alreadyVerifiedString ? (
         <div className="flex text-red-700 my-6 gap-2">
-          <div>{(verifyContract.error as Error).message}</div>
+          <div>{verifyContract.error?.message}</div>
           <div>Please try again in a few moments</div>
         </div>
       ) : null}
       {verifyStatus.data === statusStates.pass ||
       (verifyContract.error &&
-        (verifyContract.error as Error).message === alreadyVerifiedString) ? (
+        verifyContract.error?.message === alreadyVerifiedString) ? (
         <>
           <div className="flex text-green-700 my-6 gap-2">
             <span>Success! Your contract has been verified!</span>
