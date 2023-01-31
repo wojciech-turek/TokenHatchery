@@ -5,12 +5,10 @@ import React, { useEffect, useState } from "react";
 import { mintingSteps } from "constants/mintingSteps";
 import WalletConnect from "components/Minting/WalletConnect/WalletConnect";
 import NetworkSelect from "components/Minting/NetworkSelect/NetworkSelect";
-import ExtensionSelect from "components/Minting/ExtensionSelect/ExtensionSelect";
-import { erc721Extensions } from "constants/availableTokenTypes";
 import ContractDeploy from "components/Minting/ContractDeploy/ContractDeploy";
 import ContractVerify from "components/Minting/ContractVerify/ContractVerify";
 import { TokenData, ContractType } from "types/tokens";
-import Personalization from "components/Minting/Personalization/Personalization";
+import Personalization from "components/Minting/Customization/Customization";
 import { scrollToTop } from "utils/client/scrollTop";
 import { NextButton } from "components/Minting/NextButton";
 
@@ -25,8 +23,18 @@ const Erc721 = () => {
     networkChainId: 0,
     baseURI: "",
     networkName: "",
-    extensions: [],
-    managementType: "Ownable",
+    options: {
+      publicMinting: false,
+      customPaymentToken: false,
+      customPaymentTokenData: {
+        address: "",
+        symbol: "",
+        decimals: "",
+      },
+      mintFee: "",
+      maxSupply: "",
+      walletLimit: "",
+    },
     type: ContractType.ERC721,
   });
 
@@ -51,16 +59,6 @@ const Erc721 = () => {
           setStepComplete={handleCompleteStep}
           setTokenData={setTokenData}
           tokenData={tokenData}
-        />
-      ),
-    },
-    {
-      body: (
-        <ExtensionSelect
-          extensions={erc721Extensions}
-          tokenData={tokenData}
-          setTokenData={setTokenData}
-          setStepComplete={handleCompleteStep}
         />
       ),
     },

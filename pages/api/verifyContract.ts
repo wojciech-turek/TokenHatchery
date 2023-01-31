@@ -10,6 +10,8 @@ import { generateERC721Source } from "utils/api/generateERC721Source";
 import { generateERC1155Source } from "utils/api/generateERC1155Source";
 import { getVerificationApiData } from "constants/supportedNetworks";
 import { Contract } from "types/contract";
+import { ethers } from "ethers";
+import { ERC721TokenData } from "types/tokens";
 
 export default async function handler(
   req: NextApiRequest,
@@ -21,6 +23,7 @@ export default async function handler(
 
   let contract;
   let sourceCode;
+  let constructorArguements;
 
   switch (contractType) {
     case "ERC20":
@@ -32,12 +35,35 @@ export default async function handler(
       );
       break;
     case "ERC721":
-      contract = (await ERC721.findOne({ contractId })) as Contract;
-      sourceCode = await generateERC721Source(
-        contractId,
-        contract.extensions,
-        contract.managementType
+      contract = (await ERC721.findOne({ contractId })) as ERC721TokenData;
+      const mintFee = contract.options.mintFee;
+      const maxSupply = contract.options.maxSupply;
+      const mintTokens = contract.options.customPaymentTokenData.address;
+      const walletLimit = contract.options.walletLimit;
+      const types = [];
+      const values = [];
+      if (mintFee) {
+        types.push("uint256");
+        values.push(mintFee);
+      }
+      if (maxSupply) {
+        types.push("uint256");
+        values.push(maxSupply);
+      }
+      if (mintTokens) {
+        types.push("address");
+        values.push(mintTokens);
+      }
+      if (walletLimit) {
+        types.push("uint32");
+        values.push(walletLimit);
+      }
+      constructorArguements = ethers.utils.defaultAbiCoder.encode(
+        types,
+        values
       );
+      constructorArguements = constructorArguements.slice(2);
+      sourceCode = await generateERC721Source(contractId);
       break;
     case "ERC1155":
       contract = (await ERC1155.findOne({ contractId })) as Contract;
@@ -72,6 +98,7 @@ export default async function handler(
   formData.append("contractaddress", contract?.address);
   formData.append("sourceCode", JSON.stringify(sourceCode));
   formData.append("contractname", `${contractId}.sol:${contract?.name}`);
+  formData.append("constructorArguements", constructorArguements);
   formData.append("compilerVersion", copilerVersion);
 
   let data;

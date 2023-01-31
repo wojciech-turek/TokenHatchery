@@ -1,5 +1,6 @@
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import React from "react";
+import { classNames } from "utils/client/classNames";
 
 const Input = ({
   type,
@@ -7,6 +8,8 @@ const Input = ({
   placeholder,
   error,
   errorMessage,
+  disabled,
+  subtext,
   onChange,
   value,
 }: {
@@ -15,12 +18,14 @@ const Input = ({
   placeholder?: string;
   error?: boolean;
   errorMessage?: string;
+  subtext?: string;
+  disabled?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  value?: string;
+  value?: string | number;
 }) => {
   const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
   return (
-    <div>
+    <div className={classNames(disabled ? "opacity-50" : "")}>
       <label htmlFor={name} className="block text-sm font-bold text-gray-700">
         {capitalizedName}
       </label>
@@ -29,8 +34,13 @@ const Input = ({
           type={type}
           name={name}
           id={name}
+          disabled={disabled}
           value={value}
-          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          className={classNames(
+            disabled ? "bg-gray-50 cursor-not-allowed" : "",
+            error ? "border-red-500" : "",
+            "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm placeholder-gray-400"
+          )}
           placeholder={placeholder}
           aria-invalid={error ? "true" : "false"}
           onChange={onChange}
@@ -42,6 +52,11 @@ const Input = ({
         ) : null}
       </div>
       <p className="mt-2 text-sm text-red-600">{error ? errorMessage : ""}</p>
+      {subtext ? (
+        <p className="mt-2 text-sm text-gray-500" id="mintPrice">
+          {subtext}
+        </p>
+      ) : null}
     </div>
   );
 };

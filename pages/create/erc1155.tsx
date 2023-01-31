@@ -10,7 +10,7 @@ import { erc1155Extensions } from "constants/availableTokenTypes";
 import ContractDeploy from "components/Minting/ContractDeploy/ContractDeploy";
 import ContractVerify from "components/Minting/ContractVerify/ContractVerify";
 import { TokenData, ContractType } from "types/tokens";
-import Personalization from "components/Minting/Personalization/Personalization";
+import Personalization from "components/Minting/Customization/Customization";
 import { scrollToTop } from "utils/client/scrollTop";
 import { NextButton } from "components/Minting/NextButton";
 

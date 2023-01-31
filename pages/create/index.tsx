@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import Container from "components/Container/Container";
 import { tokenTypes } from "constants/availableTokenTypes";
 import PageHeading from "components/shared/PageHeading/PageHeading";
-import { CheckIcon } from "@heroicons/react/24/outline";
+import { CheckIcon, InformationCircleIcon } from "@heroicons/react/24/outline";
 import Button from "components/shared/Button";
 import { motion } from "framer-motion";
 
@@ -59,7 +59,21 @@ const Create = () => {
                 {contractType.description}
               </p>
               <p className="mt-6 text-gray-700 text-xl font-bold tracking-tight">
-                Available extensions
+                Customization options
+              </p>
+              <ul role="list" className="mt-6 space-y-4">
+                {contractType.settings.map((setting) => (
+                  <li key={setting.name} className="flex">
+                    <CheckIcon
+                      className="h- w-6 flex-shrink-0 text-indigo-500"
+                      aria-hidden="true"
+                    />
+                    <span className="ml-3 text-gray-500">{setting.name}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-6 text-gray-700 text-xl font-bold tracking-tight">
+                Extensions
               </p>
               <ul role="list" className="mt-6 space-y-4">
                 {contractType.extensions.map((extension) => (
@@ -68,21 +82,14 @@ const Create = () => {
                       className="h- w-6 flex-shrink-0 text-indigo-500"
                       aria-hidden="true"
                     />
-                    <span className="ml-3 text-gray-500">{extension.name}</span>
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-6 text-gray-700 text-xl font-bold tracking-tight">
-                Access control types
-              </p>
-              <ul role="list" className="mt-6 space-y-6">
-                {contractType.accessControl.map((accessControl) => (
-                  <li key={accessControl} className="flex">
-                    <CheckIcon
-                      className="h-6 w-6 flex-shrink-0 text-indigo-500"
-                      aria-hidden="true"
-                    />
-                    <span className="ml-3 text-gray-500">{accessControl}</span>
+                    <span className="inline-flex ml-3 text-gray-500">
+                      {extension.name}
+
+                      <span className="tooltip">
+                        <InformationCircleIcon width={16} height={16} />
+                        <div className="hidden">{extension.description}</div>
+                      </span>
+                    </span>
                   </li>
                 ))}
               </ul>

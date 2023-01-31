@@ -17,17 +17,8 @@ const Erc721ContractSchema = new Schema({
     type: String,
     required: false,
   },
-  extensions: {
-    type: Array,
-    required: true,
-  },
-  managementType: {
-    type: String,
-    required: true,
-  },
   baseURI: {
     type: String,
-    required: true,
   },
   contractId: {
     type: String,
@@ -36,6 +27,10 @@ const Erc721ContractSchema = new Schema({
   verified: {
     type: Boolean,
     required: true,
+  },
+  type: {
+    type: String,
+    default: "ERC721",
   },
   verificationGuid: {
     type: String,
@@ -56,11 +51,39 @@ const Erc721ContractSchema = new Schema({
     type: Boolean,
     default: true,
   },
-  maxSupply: {
-    type: Number,
-  },
-  mintPrice: {
-    type: Number,
+  options: {
+    individualTokens: {
+      type: Boolean,
+      default: false,
+    },
+    publicMinting: {
+      type: Boolean,
+      default: false,
+    },
+    customPaymentToken: {
+      type: Boolean,
+      default: false,
+    },
+    customPaymentTokenData: {
+      address: {
+        type: String,
+      },
+      decimals: {
+        type: String,
+      },
+      symbol: {
+        type: String,
+      },
+    },
+    mintFee: {
+      type: String,
+    },
+    maxSupply: {
+      type: String,
+    },
+    walletLimit: {
+      type: String,
+    },
   },
 });
 

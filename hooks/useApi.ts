@@ -7,10 +7,78 @@ const useApi = () => {
     creator,
   }: {
     tokenData: TokenData;
-
     creator: string;
   }) => {
-    const response = await fetchWithError("/api/generateContract", {
+    switch (tokenData.type) {
+      case ContractType.ERC20:
+        return generateERC20Contract({ tokenData, creator });
+      case ContractType.ERC721:
+        return generateERC721Contract({ tokenData, creator });
+      case ContractType.ERC1155:
+        return generateERC1155Contract({ tokenData, creator });
+    }
+  };
+
+  const generateERC20Contract = async ({
+    tokenData,
+    creator,
+  }: {
+    tokenData: TokenData;
+    creator: string;
+  }) => {
+    const response = await fetchWithError("/api/generateERC20Contract", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...tokenData,
+        creator: creator,
+      }),
+    });
+    const { contractId, abi, bytecode } = response;
+
+    return {
+      contractId,
+      abi,
+      bytecode,
+    };
+  };
+
+  const generateERC721Contract = async ({
+    tokenData,
+    creator,
+  }: {
+    tokenData: TokenData;
+    creator: string;
+  }) => {
+    const response = await fetchWithError("/api/generateERC721Contract", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...tokenData,
+        creator: creator,
+      }),
+    });
+    const { contractId, abi, bytecode } = response;
+
+    return {
+      contractId,
+      abi,
+      bytecode,
+    };
+  };
+
+  const generateERC1155Contract = async ({
+    tokenData,
+    creator,
+  }: {
+    tokenData: TokenData;
+    creator: string;
+  }) => {
+    const response = await fetchWithError("/api/generateERC1155Contract", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

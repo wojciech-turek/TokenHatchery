@@ -7,7 +7,7 @@ import ContractDeploy from "components/Minting/ContractDeploy/ContractDeploy";
 import ContractVerify from "components/Minting/ContractVerify/ContractVerify";
 import { TokenData, ContractType } from "types/tokens";
 import PageHeading from "components/shared/PageHeading/PageHeading";
-import Personalization from "components/Minting/Personalization/Personalization";
+import Personalization from "components/Minting/Customization/Customization";
 import Steps from "components/Steps/Steps";
 import { mintingSteps } from "constants/mintingSteps";
 import { erc20Extensions } from "constants/availableTokenTypes";
