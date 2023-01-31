@@ -57,7 +57,7 @@ const Personalization = ({
   return (
     <Fader>
       <div>
-        <SubHeading>Personalize your token</SubHeading>
+        <SubHeading>Customize your token</SubHeading>
         <p className="text-sm font-medium text-gray-700 mb-12">
           Specify your tokens details, such as name, symbol and other token
           specific information.

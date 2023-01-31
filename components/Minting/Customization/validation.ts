@@ -1,7 +1,9 @@
+import { ethers } from "ethers";
+
 export const validateInput = (val: string) => {
   if (val === "") return false;
   const value = val.trim();
-  const regex = /^[a-zA-Z]{2,10}$/;
+  const regex = /^[a-zA-Z]{2,16}$/;
   return regex.test(value);
 };
 
@@ -12,7 +14,10 @@ export const validateNumber = (val: string | undefined) => {
 };
 
 export const validateURL = (val: string) => {
-  const urlRegex =
-    /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}[-a-zA-Z0-9()@:%_\+.~#?&//=]*/;
+  const urlRegex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/$/;
   return urlRegex.test(val);
+};
+
+export const validateAddress = (val: string) => {
+  return ethers.utils.isAddress(val);
 };
