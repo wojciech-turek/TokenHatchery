@@ -1,14 +1,11 @@
 import { contractMap, loadContract } from "./contractsMap";
 
-export const generateERC721Source = async (
-  contractId: string,
-  extensions: string[],
-  managementType: string
-) => {
+export const generateERC721Source = async (contractId: string) => {
   const [
     generatedContract,
     ERC721Contract,
     IERC721Contract,
+    IERC20Contract,
     IERC721MetadataContract,
     AddressContract,
     ContextContract,
@@ -19,17 +16,8 @@ export const generateERC721Source = async (
     IERC165Contract,
     MathContract,
     OwnableContract,
-    AccessControlContract,
-    IAccessControlContract,
-    ECDSAContract,
     CountersContract,
     PausableContract,
-    EIP712Contract,
-    ERC721VotesContract,
-    CheckpointsContract,
-    SafeCastContract,
-    VotesContract,
-    IVotesContract,
     ERC721EnumerableContract,
     IERC721EnumerableContract,
     ERC721URIStorageContract,
@@ -40,6 +28,8 @@ export const generateERC721Source = async (
       loadContract("contracts/base/token/ERC721/ERC721.sol"),
     contractMap.get("contracts/base/token/ERC721/IERC721.sol") ||
       loadContract("contracts/base/token/ERC721/IERC721.sol"),
+    contractMap.get("contracts/base/token/ERC20/IERC20.sol") ||
+      loadContract("contracts/base/token/ERC20/IERC20.sol"),
     contractMap.get(
       "contracts/base/token/ERC721/extensions/IERC721Metadata.sol"
     ) ||
@@ -66,28 +56,11 @@ export const generateERC721Source = async (
       loadContract("contracts/base/utils/math/Math.sol"),
     contractMap.get("contracts/base/access/Ownable.sol") ||
       loadContract("contracts/base/access/Ownable.sol"),
-    contractMap.get("contracts/base/access/AccessControl.sol") ||
-      loadContract("contracts/base/access/AccessControl.sol"),
-    contractMap.get("contracts/base/access/IAccessControl.sol") ||
-      loadContract("contracts/base/access/IAccessControl.sol"),
-    contractMap.get("contracts/base/utils/cryptography/ECDSA.sol") ||
-      loadContract("contracts/base/utils/cryptography/ECDSA.sol"),
     contractMap.get("contracts/base/utils/Counters.sol") ||
       loadContract("contracts/base/utils/Counters.sol"),
     contractMap.get("contracts/base/security/Pausable.sol") ||
       loadContract("contracts/base/security/Pausable.sol"),
-    contractMap.get("contracts/base/utils/cryptography/EIP712.sol") ||
-      loadContract("contracts/base/utils/cryptography/EIP712.sol"),
-    contractMap.get("contracts/base/token/ERC721/extensions/ERC721Votes.sol") ||
-      loadContract("contracts/base/token/ERC721/extensions/ERC721Votes.sol"),
-    contractMap.get("contracts/base/utils/Checkpoints.sol") ||
-      loadContract("contracts/base/utils/Checkpoints.sol"),
-    contractMap.get("contracts/base/utils/math/SafeCast.sol") ||
-      loadContract("contracts/base/utils/math/SafeCast.sol"),
-    contractMap.get("contracts/base/governance/utils/Votes.sol") ||
-      loadContract("contracts/base/governance/utils/Votes.sol"),
-    contractMap.get("contracts/base/governance/utils/IVotes.sol") ||
-      loadContract("contracts/base/governance/utils/IVotes.sol"),
+
     contractMap.get(
       "contracts/base/token/ERC721/extensions/ERC721Enumerable.sol"
     ) ||
@@ -108,27 +81,9 @@ export const generateERC721Source = async (
       ),
   ]);
 
-  const isOwnable = managementType === "Ownable";
-  const isAccessControl = managementType === "AccessControl";
-
-  const burnable = extensions.includes("Burnable");
-  const pausable = extensions.includes("Pausable");
-  const votes = extensions.includes("Votes");
-  const enumerable = extensions.includes("Enumerable");
-  const autoIncrementIds = extensions.includes("Auto Increment Ids");
-  const URIStorage = extensions.includes("URI Storage");
-
   const ownableControl = {
     "@openzeppelin/contracts/access/Ownable.sol": {
       content: OwnableContract,
-    },
-  };
-  const accessControl = {
-    "@openzeppelin/contracts/access/AccessControl.sol": {
-      content: AccessControlContract,
-    },
-    "@openzeppelin/contracts/access/IAccessControl.sol": {
-      content: IAccessControlContract,
     },
   };
 
@@ -147,42 +102,6 @@ export const generateERC721Source = async (
     },
     "@openzeppelin/contracts/utils/Context.sol": {
       content: ContextContract,
-    },
-  };
-
-  const votesExtension = {
-    "@openzeppelin/contracts/token/ERC721/extensions/ERC721Votes.sol": {
-      content: ERC721VotesContract,
-    },
-    "@openzeppelin/contracts/utils/Checkpoints.sol": {
-      content: CheckpointsContract,
-    },
-    "@openzeppelin/contracts/utils/cryptography/ECDSA.sol": {
-      content: ECDSAContract,
-    },
-    "@openzeppelin/contracts/utils/Strings.sol": {
-      content: StringsContract,
-    },
-    "@openzeppelin/contracts/utils/math/Math.sol": {
-      content: MathContract,
-    },
-    "@openzeppelin/contracts/utils/Context.sol": {
-      content: ContextContract,
-    },
-    "@openzeppelin/contracts/utils/Counters.sol": {
-      content: CountersContract,
-    },
-    "@openzeppelin/contracts/utils/cryptography/EIP712.sol": {
-      content: EIP712Contract,
-    },
-    "@openzeppelin/contracts/utils/math/SafeCast.sol": {
-      content: SafeCastContract,
-    },
-    "@openzeppelin/contracts/governance/utils/Votes.sol": {
-      content: VotesContract,
-    },
-    "@openzeppelin/contracts/governance/utils/IVotes.sol": {
-      content: IVotesContract,
     },
   };
 
@@ -225,9 +144,6 @@ export const generateERC721Source = async (
       "@openzeppelin/contracts/utils/Address.sol": {
         content: AddressContract,
       },
-      "@openzeppelin/contracts/utils/Context.sol": {
-        content: ContextContract,
-      },
       "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol": {
         content: IERC721ReceiverContract,
       },
@@ -243,14 +159,15 @@ export const generateERC721Source = async (
       "@openzeppelin/contracts/utils/math/Math.sol": {
         content: MathContract,
       },
-      ...(burnable && burnableExtension),
-      ...(pausable && pausableExtension),
-      ...(votes && votesExtension),
-      ...(enumerable && enumerableExtension),
-      ...(URIStorage && URIStorageExtension),
-      ...(autoIncrementIds && autoIncrementIdsExtension),
-      ...(isOwnable && ownableControl),
-      ...(isAccessControl && accessControl),
+      "@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+        content: IERC20Contract,
+      },
+      ...burnableExtension,
+      ...pausableExtension,
+      ...enumerableExtension,
+      ...URIStorageExtension,
+      ...autoIncrementIdsExtension,
+      ...ownableControl,
     },
     settings: { optimizer: { enabled: true, runs: 200 } },
   };

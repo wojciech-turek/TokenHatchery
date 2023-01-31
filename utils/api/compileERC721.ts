@@ -8,6 +8,7 @@ export const compileERC721Contract = async (uuid: string) => {
     generatedContract,
     ERC721Contract,
     IERC721Contract,
+    IERC20Contract,
     IERC721MetadataContract,
     AddressContract,
     ContextContract,
@@ -18,17 +19,8 @@ export const compileERC721Contract = async (uuid: string) => {
     IERC165Contract,
     MathContract,
     OwnableContract,
-    AccessControlContract,
-    IAccessControlContract,
-    ECDSAContract,
     CountersContract,
     PausableContract,
-    EIP712Contract,
-    ERC721VotesContract,
-    CheckpointsContract,
-    SafeCastContract,
-    VotesContract,
-    IVotesContract,
     ERC721EnumerableContract,
     IERC721EnumerableContract,
     ERC721URIStorageContract,
@@ -38,6 +30,8 @@ export const compileERC721Contract = async (uuid: string) => {
       loadContract("contracts/base/token/ERC721/ERC721.sol"),
     contractMap.get("contracts/base/token/ERC721/IERC721.sol") ||
       loadContract("contracts/base/token/ERC721/IERC721.sol"),
+    contractMap.get("contracts/base/token/ERC20/IERC20.sol") ||
+      loadContract("contracts/base/token/ERC20/IERC20.sol"),
     contractMap.get(
       "contracts/base/token/ERC721/extensions/IERC721Metadata.sol"
     ) ||
@@ -64,28 +58,10 @@ export const compileERC721Contract = async (uuid: string) => {
       loadContract("contracts/base/utils/math/Math.sol"),
     contractMap.get("contracts/base/access/Ownable.sol") ||
       loadContract("contracts/base/access/Ownable.sol"),
-    contractMap.get("contracts/base/access/AccessControl.sol") ||
-      loadContract("contracts/base/access/AccessControl.sol"),
-    contractMap.get("contracts/base/access/IAccessControl.sol") ||
-      loadContract("contracts/base/access/IAccessControl.sol"),
-    contractMap.get("contracts/base/utils/cryptography/ECDSA.sol") ||
-      loadContract("contracts/base/utils/cryptography/ECDSA.sol"),
     contractMap.get("contracts/base/utils/Counters.sol") ||
       loadContract("contracts/base/utils/Counters.sol"),
     contractMap.get("contracts/base/security/Pausable.sol") ||
       loadContract("contracts/base/security/Pausable.sol"),
-    contractMap.get("contracts/base/utils/cryptography/EIP712.sol") ||
-      loadContract("contracts/base/utils/cryptography/EIP712.sol"),
-    contractMap.get("contracts/base/token/ERC721/extensions/ERC721Votes.sol") ||
-      loadContract("contracts/base/token/ERC721/extensions/ERC721Votes.sol"),
-    contractMap.get("contracts/base/utils/Checkpoints.sol") ||
-      loadContract("contracts/base/utils/Checkpoints.sol"),
-    contractMap.get("contracts/base/utils/math/SafeCast.sol") ||
-      loadContract("contracts/base/utils/math/SafeCast.sol"),
-    contractMap.get("contracts/base/governance/utils/Votes.sol") ||
-      loadContract("contracts/base/governance/utils/Votes.sol"),
-    contractMap.get("contracts/base/governance/utils/IVotes.sol") ||
-      loadContract("contracts/base/governance/utils/IVotes.sol"),
     contractMap.get(
       "contracts/base/token/ERC721/extensions/ERC721Enumerable.sol"
     ) ||
@@ -131,6 +107,8 @@ export const compileERC721Contract = async (uuid: string) => {
       return { contents: ERC721Contract };
     else if (path === "@openzeppelin/contracts/token/ERC721/IERC721.sol")
       return { contents: IERC721Contract };
+    else if (path === "@openzeppelin/contracts/token/ERC20/IERC20.sol")
+      return { contents: IERC20Contract };
     else if (
       path ===
       "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol"
@@ -150,12 +128,6 @@ export const compileERC721Contract = async (uuid: string) => {
       return { contents: MathContract };
     else if (path === "@openzeppelin/contracts/access/Ownable.sol")
       return { contents: OwnableContract };
-    else if (path === "@openzeppelin/contracts/access/AccessControl.sol")
-      return { contents: AccessControlContract };
-    else if (path === "@openzeppelin/contracts/access/IAccessControl.sol")
-      return { contents: IAccessControlContract };
-    else if (path === "@openzeppelin/contracts/utils/cryptography/ECDSA.sol")
-      return { contents: ECDSAContract };
     else if (
       path ===
       "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol"
@@ -169,20 +141,6 @@ export const compileERC721Contract = async (uuid: string) => {
       return { contents: CountersContract };
     else if (path === "@openzeppelin/contracts/security/Pausable.sol")
       return { contents: PausableContract };
-    else if (path === "@openzeppelin/contracts/utils/cryptography/EIP712.sol")
-      return { contents: EIP712Contract };
-    else if (
-      path === "@openzeppelin/contracts/token/ERC721/extensions/ERC721Votes.sol"
-    )
-      return { contents: ERC721VotesContract };
-    else if (path === "@openzeppelin/contracts/utils/Checkpoints.sol")
-      return { contents: CheckpointsContract };
-    else if (path === "@openzeppelin/contracts/utils/math/SafeCast.sol")
-      return { contents: SafeCastContract };
-    else if (path === "@openzeppelin/contracts/governance/utils/Votes.sol")
-      return { contents: VotesContract };
-    else if (path === "@openzeppelin/contracts/governance/utils/IVotes.sol")
-      return { contents: IVotesContract };
     else if (
       path ===
       "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol"

@@ -2,277 +2,172 @@ export const generateERC721Contract = ({
   name,
   symbol,
   baseURI,
-  extensions,
-  managementType,
-  maxSupply,
-  mintPrice,
+  options,
 }: {
   name: string;
   symbol: string;
   baseURI: string;
-  extensions: string[];
-  managementType: string;
-  maxSupply: string;
-  mintPrice: string;
+  options: {
+    individualTokens: boolean;
+    publicMinting: boolean;
+    customPaymentToken: boolean;
+    mintFee: string;
+    maxSupply: string;
+    walletLimit: string;
+  };
 }) => {
-  const extensionTypeSet = new Set(extensions);
-
-  const mintable = extensionTypeSet.has("Mintable");
-  const publicMint = extensionTypeSet.has("Public Minting");
-  const burnable = extensionTypeSet.has("Burnable");
-  const pausable = extensionTypeSet.has("Pausable");
-  const votes = extensionTypeSet.has("Votes");
-  const enumerable = extensionTypeSet.has("Enumerable");
-  const autoIncrementIds = extensionTypeSet.has("Auto Increment IDs");
-  const URIStorage = extensionTypeSet.has("URI Storage");
-
-  const burnableExtension = ["ERC721Burnable"];
-  const pausableExtension = ["Pausable"];
-  const votesExtension = ["EIP712", "ERC721Votes"];
-  const enumerableExtension = ["ERC721Enumerable"];
-  const URIStorageExtension = ["ERC721URIStorage"];
-
-  const extensionsArray = [
-    burnable ? burnableExtension : [],
-    pausable ? pausableExtension : [],
-    votes ? votesExtension : [],
-    enumerable ? enumerableExtension : [],
-    URIStorage ? URIStorageExtension : [],
-  ];
-
-  const extensionsSet = new Set(extensionsArray.flat());
-
-  const isOwnable = managementType === "Ownable";
-  const isAccessControl = managementType === "AccessControl";
-
-  const accessTypeImport = isOwnable
-    ? "@openzeppelin/contracts/access/Ownable.sol"
-    : "@openzeppelin/contracts/access/AccessControl.sol";
-
-  if (isOwnable) {
-    extensionsSet.add("Ownable");
-  } else {
-    extensionsSet.add("AccessControl");
-  }
-
-  const extensionsString = [...extensionsSet].join(", ");
-
+  const { customPaymentToken, mintFee, maxSupply, walletLimit } = options;
+  console.log("generateERC721Contract", { name, symbol, baseURI });
+  console.log("generateERC721Contract", {
+    customPaymentToken,
+    mintFee,
+    maxSupply,
+    walletLimit,
+  });
   const newERC721Contract = `
-    // SPDX-License-Identifier: MIT
-    pragma solidity 0.8.17;
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.17;
 
-    import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+${
+  customPaymentToken
+    ? `import "@openzeppelin/contracts/token/ERC20/IERC20.sol";`
+    : ""
+}
 
-    ${`import "${accessTypeImport}";`}
+contract ${name} is
+    ERC721,
+    ERC721Enumerable,
+    ERC721URIStorage,
+    Pausable,
+    Ownable,
+    ERC721Burnable
+{
+    using Counters for Counters.Counter;
+    Counters.Counter private _tokenIdCounter;
+
+    ${customPaymentToken ? "IERC20 public mintToken;" : ""}
+    ${mintFee ? "uint256 public mintFee;" : ""}
+    ${maxSupply ? "uint256 public maxSupply;" : ""}
+    ${walletLimit ? "uint32 public maxTokensPerWallet;" : ""}
+
+    constructor(
+        ${mintFee !== "" ? "uint256 _mintFee," : ""}
+        ${maxSupply !== "" ? "uint256 _maxSupply," : ""}
+        ${customPaymentToken ? "address _mintToken," : ""}
+        ${walletLimit !== "" ? "uint32 _maxTokensPerWallet" : ""}
+    ) ERC721("${name}", "${symbol}") {
+        ${mintFee ? "mintFee = _mintFee;" : ""}
+        ${maxSupply ? "maxSupply = _maxSupply;" : ""}
+        ${customPaymentToken ? "mintToken = IERC20(_mintToken);" : ""}
+        ${walletLimit ? "maxTokensPerWallet = _maxTokensPerWallet;" : ""}
+    }
 
     ${
-      votes
-        ? `import "@openzeppelin/contracts/utils/cryptography/EIP712.sol";`
+      baseURI
+        ? `function _baseURI() internal pure override returns (string memory) { return "${baseURI}";}`
         : ""
     }
-    ${
-      votes
-        ? `import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Votes.sol";`
-        : ""
-    }
-    ${
-      burnable
-        ? `import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";`
-        : ""
-    }
-    ${pausable ? `import "@openzeppelin/contracts/security/Pausable.sol";` : ""}
-    ${
-      enumerable
-        ? `import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";`
-        : ""
-    }
-    ${
-      URIStorage
-        ? `import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";`
-        : ""
-    }
-    ${
-      autoIncrementIds
-        ? `import "@openzeppelin/contracts/utils/Counters.sol";`
-        : ""
+
+    function pause() public onlyOwner {
+        _pause();
     }
 
-    contract ${name} is ERC721${
-    extensionsString !== "" ? `, ${extensionsString}` : ""
-  } {
-      ${autoIncrementIds ? `using Counters for Counters.Counter;` : ""}
-      ${autoIncrementIds ? `Counters.Counter private _tokenIdCounter;` : ""}
-      ${
-        mintable && isAccessControl
-          ? ` bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");`
-          : ""
-      }
-      ${
-        pausable
-          ? `bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");`
-          : ""
-      }
-      ${
-        publicMint && maxSupply
-          ? `uint256 public MAX_SUPPLY = ${maxSupply};`
-          : ""
-      }
-      ${
-        publicMint && mintPrice
-          ? `uint256 public MINT_PRICE = ${mintPrice};`
-          : ""
-      }
-
-        constructor() ERC721("${name}", "${symbol}") ${
-    votes ? `EIP712("${name}", "1")` : ""
-  }{
-    ${isAccessControl ? ` _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);` : ""}
-    ${
-      mintable && isAccessControl ? " _grantRole(MINTER_ROLE, msg.sender);" : ""
-    }
-    ${
-      pausable && isAccessControl ? " _grantRole(PAUSER_ROLE, msg.sender);" : ""
-    }
-  }
-
-        ${
-          baseURI
-            ? `function _baseURI() internal pure override returns (string memory) {
-            return "${baseURI}";
-        }`
-            : ""
-        }
-        ${
-          mintable
-            ? `
-        function safeMint(address to${
-          autoIncrementIds ? "" : ", uint256 tokenId"
-        }${URIStorage ? ",string memory uri" : ""}) public ${
-                publicMint ? "payable" : ""
-              } ${
-                publicMint
-                  ? ""
-                  : isAccessControl
-                  ? "onlyRole(MINTER_ROLE)"
-                  : "onlyOwner"
-              } {
-                ${publicMint ? `require(msg.value >= MINT_PRICE);` : ""}
-                ${
-                  autoIncrementIds
-                    ? `uint256 tokenId = _tokenIdCounter.current() + 1;`
-                    : ""
-                }
-                ${publicMint ? `require(tokenId  <= MAX_SUPPLY);` : ""}
-          ${
-            autoIncrementIds
-              ? `
-          _tokenIdCounter.increment();`
-              : ""
-          }
-          _safeMint(to, tokenId);
-          ${URIStorage ? `_setTokenURI(tokenId, uri);` : ""}
-      }`
-            : ""
-        }
-        ${
-          pausable
-            ? ` function pause() public ${
-                isAccessControl ? "onlyRole(PAUSER_ROLE)" : "onlyOwner"
-              } {
-          _pause();
-      }`
-            : ""
-        }
-      ${
-        pausable
-          ? ` function unpause() public ${
-              isAccessControl ? "onlyRole(PAUSER_ROLE)" : "onlyOwner"
-            } {
+    function unpause() public onlyOwner {
         _unpause();
-    }`
-          : ""
-      }
-        ${
-          pausable || enumerable
-            ? `function _beforeTokenTransfer(address from, address to, uint256 tokenId, uint256 batchSize)
-        internal
-        ${pausable ? "whenNotPaused" : ""}
-        override${enumerable ? "(ERC721, ERC721Enumerable)" : ""}
-    {
-        super._beforeTokenTransfer(from, to, tokenId, batchSize);
-    }`
-            : ""
-        }
-        ${
-          votes
-            ? `
-        function _afterTokenTransfer(address from, address to, uint256 tokenId, uint256 batchSize)
-        internal
-        override(ERC721, ERC721Votes)
-    {
-        super._afterTokenTransfer(from, to, tokenId, batchSize);
     }
-        `
-            : ""
-        }
-        ${
-          enumerable || isAccessControl
-            ? `
-        function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        override(ERC721 ${enumerable ? ", ERC721Enumerable" : ""} ${
-                isAccessControl ? ", AccessControl" : ""
-              })
-        returns (bool)
-    {
-        return super.supportsInterface(interfaceId);
-    }
-        `
-            : ""
-        }
-        ${
-          URIStorage
-            ? `
-          function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
-            super._burn(tokenId);
-        }
-          `
-            : ""
-        }
-        ${
-          publicMint
-            ? `
-          function withdraw() public ${
-            isAccessControl ? "onlyRole(DEFAULT_ADMIN_ROLE)" : "onlyOwner"
-          } {
-            payable(msg.sender).transfer(address(this).balance);
-        }
-          `
-            : ""
-        }
-        ${
-          publicMint
-            ? `
-        function changeMintPrice(uint256 newPrice) public ${
-          isAccessControl ? "onlyRole(DEFAULT_ADMIN_ROLE)" : "onlyOwner"
-        } {MINT_PRICE = newPrice;}`
-            : ""
-        } 
 
+    function safeMint(address to, string memory uri) public payable onlyOwner {
         ${
-          publicMint
-            ? `
-          function changeMaxSupply(uint256 newMaxSupply) public ${
-            isAccessControl ? "onlyRole(DEFAULT_ADMIN_ROLE)" : "onlyOwner"
-          } {MAX_SUPPLY = newMaxSupply;}`
+          maxSupply
+            ? `require(_tokenIdCounter.current() < maxSupply, "Max supply reached");`
             : ""
         }
-        
         ${
-          URIStorage
-            ? `
-          function tokenURI(uint256 tokenId)
+          walletLimit
+            ? `require(
+            this.balanceOf(to) < maxTokensPerWallet,
+            "Max tokens per wallet reached"
+        ); `
+            : ""
+        }
+        ${
+          mintFee && customPaymentToken
+            ? `require(
+            mintToken.balanceOf(msg.sender) >= mintFee,
+            "Not enough tokens to mint"
+        );
+        mintToken.transferFrom(msg.sender, address(this), mintFee);`
+            : ""
+        }
+        ${
+          mintFee && !customPaymentToken
+            ? `require(msg.value >= mintFee, "Not enough ETH to mint");`
+            : ""
+        }
+
+
+        uint256 tokenId = _tokenIdCounter.current();
+        _tokenIdCounter.increment();
+        _safeMint(to, tokenId);
+        _setTokenURI(tokenId, uri);
+    }
+
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 tokenId,
+        uint256 batchSize
+    ) internal override(ERC721, ERC721Enumerable) whenNotPaused {
+        super._beforeTokenTransfer(from, to, tokenId, batchSize);
+    }
+
+    // The following functions are overrides required by Solidity.
+
+    function _burn(uint256 tokenId)
+        internal
+        override(ERC721, ERC721URIStorage)
+    {
+        super._burn(tokenId);
+    }
+
+    ${
+      mintFee
+        ? "function changeMintFee(uint256 newFee) public onlyOwner { mintFee = newFee;}"
+        : ""
+    }
+
+    ${
+      customPaymentToken
+        ? "function changeMintTokenAddress(address newAddress) public onlyOwner {mintToken = IERC20(newAddress);}"
+        : ""
+    }
+    ${
+      maxSupply
+        ? "function changeMaxSupply(uint256 newMaxSupply) public onlyOwner { maxSupply = newMaxSupply;}"
+        : ""
+    }
+
+    ${
+      walletLimit
+        ? "function changeMaxTokensPerWallet(uint32 newMaxTokensPerWallet) public onlyOwner { maxTokensPerWallet = newMaxTokensPerWallet;}"
+        : ""
+    }
+${
+  mintFee && !customPaymentToken
+    ? `function withdrawAccumulated() public onlyOwner {
+  payable(_msgSender()).transfer(address(this).balance);
+}`
+    : ""
+}
+
+    function tokenURI(uint256 tokenId)
         public
         view
         override(ERC721, ERC721URIStorage)
@@ -280,11 +175,19 @@ export const generateERC721Contract = ({
     {
         return super.tokenURI(tokenId);
     }
-          `
-            : ""
-        }
+
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC721, ERC721Enumerable)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
     }
-    `;
+}
+
+  
+  `;
 
   return newERC721Contract;
 };
