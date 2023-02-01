@@ -1,8 +1,6 @@
 export async function fetchWithError(url: string, options?: RequestInit) {
   const response = await fetch(url, options);
-
   const data = await response.json();
-
   if (!response.ok) {
     throw new Error(data.error);
   }
@@ -10,6 +8,8 @@ export async function fetchWithError(url: string, options?: RequestInit) {
   if (data.error) {
     throw new Error(data.error);
   }
-
+  if (!data) {
+    throw new Error("No data returned");
+  }
   return data;
 }
