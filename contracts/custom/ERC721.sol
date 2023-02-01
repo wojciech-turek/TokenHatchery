@@ -50,6 +50,10 @@ contract MyToken is
         _unpause();
     }
 
+    function decimals() public pure returns (uint8) {
+        return 0;
+    }
+
     function safeMint(address to, string memory uri) public payable onlyOwner {
         require(_tokenIdCounter.current() < maxSupply, "Max supply reached");
         require(
