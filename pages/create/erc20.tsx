@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Container from "components/Container/Container";
-import ExtensionSelect from "components/Minting/ExtensionSelect/ExtensionSelect";
 import NetworkSelect from "components/Minting/NetworkSelect/NetworkSelect";
 import WalletConnect from "components/Minting/WalletConnect/WalletConnect";
 import ContractDeploy from "components/Minting/ContractDeploy/ContractDeploy";
@@ -10,7 +9,6 @@ import PageHeading from "components/shared/PageHeading/PageHeading";
 import Personalization from "components/Minting/Customization/Customization";
 import Steps from "components/Steps/Steps";
 import { mintingSteps } from "constants/mintingSteps";
-import { erc20Extensions } from "constants/availableTokenTypes";
 import { scrollToTop } from "utils/client/scrollTop";
 import { NextButton } from "../../components/Minting/NextButton";
 
@@ -26,9 +24,10 @@ const Erc20 = () => {
     contractId: "",
     networkChainId: 0,
     networkName: "",
-    extensions: [],
-    managementType: "Ownable",
     type: ContractType.ERC20,
+    options:{
+      dynamicSupply: false,
+    }
   });
 
   const handleCompleteStep = (value: boolean) => {
@@ -49,16 +48,6 @@ const Erc20 = () => {
     {
       body: (
         <NetworkSelect
-          setStepComplete={handleCompleteStep}
-          tokenData={tokenData}
-          setTokenData={setTokenData}
-        />
-      ),
-    },
-    {
-      body: (
-        <ExtensionSelect
-          extensions={erc20Extensions}
           setStepComplete={handleCompleteStep}
           tokenData={tokenData}
           setTokenData={setTokenData}

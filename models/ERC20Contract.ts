@@ -22,15 +22,6 @@ const Erc20ContractSchema = new Schema({
   },
   initialSupply: {
     type: String,
-    required: true,
-  },
-  extensions: {
-    type: Array,
-    required: true,
-  },
-  managementType: {
-    type: String,
-    required: true,
   },
   contractId: {
     type: String,
@@ -58,6 +49,12 @@ const Erc20ContractSchema = new Schema({
   showInSearch: {
     type: Boolean,
     default: true,
+  },
+  options: {
+    dynamicSupply: {
+      type: Boolean,
+      required: true,
+    },
   },
 });
 

@@ -11,7 +11,7 @@ import { generateERC1155Source } from "utils/api/generateERC1155Source";
 import { getVerificationApiData } from "constants/supportedNetworks";
 import { Contract } from "types/contract";
 import { ethers } from "ethers";
-import { ERC721TokenData } from "types/tokens";
+import { ERC20TokenData, ERC721TokenData } from "types/tokens";
 
 export default async function handler(
   req: NextApiRequest,
@@ -27,12 +27,8 @@ export default async function handler(
 
   switch (contractType) {
     case "ERC20":
-      contract = (await ERC20.findOne({ contractId })) as Contract;
-      sourceCode = await generateERC20Source(
-        contractId,
-        contract.extensions,
-        contract.managementType
-      );
+      contract = (await ERC20.findOne({ contractId })) as ERC20TokenData;
+      sourceCode = await generateERC20Source(contractId);
       break;
     case "ERC721":
       contract = (await ERC721.findOne({ contractId })) as ERC721TokenData;
@@ -77,13 +73,12 @@ export default async function handler(
       res.status(400).json({ message: "Invalid token type" });
       return;
   }
-
   if (!contract) {
     res.status(404).json({ message: "Contract not found" });
     return;
   }
 
-  const copilerVersion = "v0.8.17+commit.8df45f5f";
+  const compilerVersion = "v0.8.17+commit.8df45f5f";
 
   const { apiKey, apiUrl } = getVerificationApiData(contract.networkChainId);
 
@@ -97,19 +92,19 @@ export default async function handler(
   formData.append("apikey", apiKey);
   formData.append("contractaddress", contract?.address);
   formData.append("sourceCode", JSON.stringify(sourceCode));
-  formData.append("contractname", `${contractId}.sol:${contract?.name}`);
-  formData.append("constructorArguements", constructorArguements);
-  formData.append("compilerVersion", copilerVersion);
-
+  formData.append("contractname", `${contractId}.sol:${contract.name}`);
+  formData.append("compilerVersion", compilerVersion);
+  if (constructorArguements) {
+    formData.append("constructorArguements", constructorArguements);
+  }
   let data;
   try {
     data = await fetchWithError(apiUrl, {
       method: "POST",
-      //@ts-ignore
+      // @ts-ignore
       body: formData,
     });
-  } catch (e) {
-    console.log(e);
+  } catch {
     return res
       .status(500)
       .json({ message: "Error sending verification request" });
@@ -141,8 +136,6 @@ export default async function handler(
     res
       .status(200)
       .json({ message: "Verification request sent", guid: result });
-
-    // update guid for the contract in the database
   } else {
     res.status(500).json({ error: result });
   }

@@ -9,6 +9,7 @@ import { classNames } from "utils/client/classNames";
 import { validateInput, validateNumber, validateURL } from "./validation";
 import { erc20ABI } from "@wagmi/core";
 import { useContractReads } from "wagmi";
+import { SectionHeader } from "./SectionHead";
 
 const mintPermissions = [
   {
@@ -105,12 +106,6 @@ const ERC721Form = ({
       setStepComplete(true);
     }
   }, [tokenData, setStepComplete]);
-
-  const SectionHeader = ({ children }: { children: React.ReactNode }) => (
-    <h3 className="my-6 text-xl font-bold leading-6 text-gray-900">
-      {children}
-    </h3>
-  );
 
   return (
     <>
@@ -233,7 +228,7 @@ const ERC721Form = ({
           }}
           transition={{ duration: 0.2 }}
         >
-          <div className="mt-6 grid sm:grid-cols-2 gap-y-6 sm:grid-cols-2 sm:gap-x-8 pl-0.5">
+          <div className="mt-6 grid sm:grid-cols-2 gap-y-6 sm:gap-x-8 pl-0.5">
             <div>
               <Input
                 type="text"
@@ -414,7 +409,7 @@ const ERC721Form = ({
               overflow: "hidden",
             }}
             transition={{ duration: 0.2 }}
-            className="mt-6 grid sm:grid-cols-2 gap-y-6 sm:grid-cols-2 sm:gap-x-8 pl-0.5"
+            className="mt-6 grid gap-y-6 sm:grid-cols-2 sm:gap-x-8 pl-0.5"
           >
             <div>
               <Input
@@ -511,3 +506,4 @@ const ERC721Form = ({
 };
 
 export default ERC721Form;
+

@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import useApi from "hooks/useApi";
-import React, { useState } from "react";
-import { ERC721TokenData, ERC721TokenOptions, TokenData } from "types/tokens";
+import React, { useEffect, useState } from "react";
+import { ERC20TokenData, ERC721TokenData, ERC721TokenOptions, TokenData } from "types/tokens";
 import { useAccount, useNetwork, useSigner } from "wagmi";
 import { allSupportedNetworks } from "constants/supportedNetworks";
 import SubHeading from "components/SubHeading/SubHeading";
@@ -28,6 +28,11 @@ const ContractDeploy = ({
   const [stage, setStage] = useState(0);
   const { chain } = useNetwork();
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if(tokenData.address !== "") setStepComplete(true);
+  }, [tokenData.address, setStepComplete])
+  
 
   const generateContractMutation = useMutation(generateContract, {
     onMutate: () => {
@@ -88,6 +93,39 @@ const ContractDeploy = ({
     (network) => network.chainId === chain?.id
   );
 
+  const erc20SummaryData = [
+    {
+      id: 1,
+      title: "Token type",
+      description: tokenData.type,
+    },
+    {
+      id: 2,
+      title: "Token name",
+      description: tokenData.name,
+    },
+    {
+      id: 3,
+      title: "Token symbol",
+      description: (tokenData as ERC20TokenData).symbol,
+    },
+    {
+      id: 4,
+      title: "Token decimals",
+      description: (tokenData as ERC20TokenData).decimals,
+    },
+    {
+      id: 5,
+      title: "Initial supply",
+      description: (tokenData as ERC20TokenData).initialSupply || "0",
+    },
+    {
+      id: 6,
+      title: "Dynamic supply",
+      description: (tokenData as ERC20TokenData).options.dynamicSupply ? "Yes" : "No",
+    }
+  ];
+
   const erc721SummaryData = [
     {
       id: 1,
@@ -124,6 +162,8 @@ const ContractDeploy = ({
 
   const getSummaryData = () => {
     switch (tokenData.type) {
+      case "ERC20":
+        return erc20SummaryData;
       case "ERC721":
         return erc721SummaryData;
       default:

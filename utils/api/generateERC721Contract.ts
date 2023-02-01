@@ -184,10 +184,7 @@ ${
     {
         return super.supportsInterface(interfaceId);
     }
-}
-
-  
-  `;
+}`;
 
   return newERC721Contract;
 };

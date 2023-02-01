@@ -5,14 +5,14 @@ export type ERC20TokenData = {
   symbol: string;
   decimals: string;
   initialSupply: string;
-  extensions: string[];
-  managementType: string;
   networkName: string;
   networkChainId: number;
   address: string;
   contractId: string;
   type: ContractType;
-  options: {};
+  options: {
+    dynamicSupply: boolean;
+  };
 };
 
 export type ERC721TokenOptions = {

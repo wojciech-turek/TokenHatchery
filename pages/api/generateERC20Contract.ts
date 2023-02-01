@@ -4,30 +4,31 @@ import fs from "fs";
 import "prettier-plugin-solidity";
 import { formatSol } from "utils/api/formatSol";
 import connectMongo from "lib/mongodb";
-import ERC721 from "models/ERC721Contract";
-import { generateERC721Contract } from "utils/api/generateERC721Contract";
-import { compileERC721Contract } from "utils/api/compileERC721";
+import ERC20 from "models/ERC20Contract";
+import { generateERC20Contract } from "utils/api/generateERC20Contract";
+import { compileERC20Contract } from "utils/api/compileERC20";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { name, symbol, baseURI, options } = req.body;
+  const { name, symbol, initialSupply, decimals, options } = req.body;
 
   const contractId = uuidv4();
   const nameCapitalized = name.charAt(0).toUpperCase() + name.slice(1);
 
-  const newContract = generateERC721Contract({
+  const newContract = generateERC20Contract({
     name: nameCapitalized,
     symbol,
-    baseURI,
+    initialSupply,
+    decimals,
     options,
   });
 
   fs.writeFileSync(`/tmp/${contractId}.sol`, formatSol(newContract));
 
   try {
-    const compilationResult = await compileERC721Contract(contractId);
+    const compilationResult = await compileERC20Contract(contractId);
     const abi =
       compilationResult.contracts[`${contractId}.sol`][nameCapitalized].abi;
     const bytecode =
@@ -35,7 +36,7 @@ export default async function handler(
         .bytecode.object;
 
     await connectMongo();
-    const contract = new ERC721({
+    const contract = new ERC20({
       ...req.body,
       name: nameCapitalized,
       createdAt: new Date(),
