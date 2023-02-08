@@ -63,11 +63,7 @@ export default async function handler(
       break;
     case "ERC1155":
       contract = (await ERC1155.findOne({ contractId })) as Contract;
-      sourceCode = await generateERC1155Source(
-        contractId,
-        contract.extensions,
-        contract.managementType
-      );
+      sourceCode = await generateERC1155Source(contractId);
       break;
     default:
       res.status(400).json({ message: "Invalid token type" });
