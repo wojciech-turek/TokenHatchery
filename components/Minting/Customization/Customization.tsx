@@ -2,17 +2,17 @@ import Fader from "components/Fader/Fader";
 import SubHeading from "components/SubHeading/SubHeading";
 import React from "react";
 import {
-  ERC1155TokenData,
-  ERC721TokenData,
+  ERC1155ContractData,
+  ERC721ContractData,
   TokenData,
   ContractType,
 } from "types/tokens";
 import ERC20Form from "./ERC20Form";
 import ERC721Form from "./ERC721Form";
-import { ERC20TokenData } from "types/tokens";
+import { ERC20ContractData } from "types/tokens";
 import ERC1155Form from "./ERC1155Form";
 
-const Personalization = ({
+const Customization = ({
   type,
   tokenData,
   setTokenData,
@@ -28,7 +28,7 @@ const Personalization = ({
       case ContractType.ERC721:
         return (
           <ERC721Form
-            tokenData={tokenData as ERC721TokenData}
+            tokenData={tokenData as ERC721ContractData}
             setTokenData={setTokenData}
             setStepComplete={setStepComplete}
           />
@@ -36,7 +36,7 @@ const Personalization = ({
       case ContractType.ERC1155:
         return (
           <ERC1155Form
-            tokenData={tokenData as ERC1155TokenData}
+            tokenData={tokenData as ERC1155ContractData}
             setTokenData={setTokenData}
             setStepComplete={setStepComplete}
           />
@@ -44,7 +44,7 @@ const Personalization = ({
       case ContractType.ERC20:
         return (
           <ERC20Form
-            tokenData={tokenData as ERC20TokenData}
+            tokenData={tokenData as ERC20ContractData}
             setTokenData={setTokenData}
             setStepComplete={setStepComplete}
           />
@@ -68,4 +68,4 @@ const Personalization = ({
   );
 };
 
-export default Personalization;
+export default Customization;

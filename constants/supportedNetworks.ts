@@ -35,7 +35,7 @@ export const supportedNetworks: {
     },
     {
       name: "SAGA Chainlet",
-      chainId: 1673014940,
+      chainId: 1674265550,
       image: saga,
       verifiable: false,
     },
@@ -162,8 +162,8 @@ export const getVerificationApiData = (chainId: number) => {
   };
 };
 
-export const sagaChainlet: Chain = {
-  id: 1673014940,
+export const sagaChainlet = {
+  id: 1674265550,
   name: "SAGA Chainlet",
   network: "saga",
   nativeCurrency: {
@@ -172,10 +172,11 @@ export const sagaChainlet: Chain = {
     symbol: "SAGA",
   },
   rpcUrls: {
+    public: {
+      http: ["https://tokenhatchery-1674265550-1.sagarpc.xyz"],
+    },
     default: {
-      http: [
-        "http://a60c0cbca38bc444ead0bc38dfa06627-47127bb129edf0ea.elb.us-west-1.amazonaws.com:8545",
-      ],
+      http: ["https://tokenhatchery-1674265550-1.sagarpc.xyz"],
     },
   },
-};
+} as Chain;

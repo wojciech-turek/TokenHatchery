@@ -1,6 +1,9 @@
-export type TokenData = ERC20TokenData | ERC721TokenData | ERC1155TokenData;
+export type TokenData =
+  | ERC20ContractData
+  | ERC721ContractData
+  | ERC1155ContractData;
 
-export type ERC20TokenData = {
+export type ERC20ContractData = {
   name: string;
   symbol: string;
   decimals: string;
@@ -15,7 +18,7 @@ export type ERC20TokenData = {
   };
 };
 
-export type ERC721TokenOptions = {
+export type ERC721ContractOptions = {
   publicMinting: boolean;
   customPaymentToken: boolean;
   customPaymentTokenData: {
@@ -28,7 +31,7 @@ export type ERC721TokenOptions = {
   walletLimit?: string;
 };
 
-export type ERC721TokenData = {
+export type ERC721ContractData = {
   name: string;
   symbol: string;
   networkName: string;
@@ -37,20 +40,17 @@ export type ERC721TokenData = {
   address: string;
   contractId: string;
   type: ContractType;
-  options: ERC721TokenOptions;
+  options: ERC721ContractOptions;
 };
 
-export type ERC1155TokenData = {
+export type ERC1155ContractData = {
   name: string;
-  extensions: string[];
-  managementType: string;
   networkName: string;
   networkChainId: number;
   baseURI: string;
   address: string;
   contractId: string;
   type: ContractType;
-  options: {};
 };
 
 export enum ContractType {

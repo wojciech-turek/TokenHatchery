@@ -18,10 +18,6 @@ export const compileERC1155Contract = async (uuid: string) => {
     PausableContract,
     ERC1155SupplyContract,
     OwnableContract,
-    AccessControlContract,
-    IAccessControlContract,
-    StringsContract,
-    MathContract,
   ] = await Promise.all([
     contractMap.get(`/tmp/${uuid}.sol`) || loadContract(`/tmp/${uuid}.sol`),
     contractMap.get("contracts/base/token/ERC1155/ERC1155.sol") ||
@@ -58,14 +54,6 @@ export const compileERC1155Contract = async (uuid: string) => {
       loadContract("contracts/base/token/ERC1155/extensions/ERC1155Supply.sol"),
     contractMap.get("contracts/base/access/Ownable.sol") ||
       loadContract("contracts/base/access/Ownable.sol"),
-    contractMap.get("contracts/base/access/AccessControl.sol") ||
-      loadContract("contracts/base/access/AccessControl.sol"),
-    contractMap.get("contracts/base/access/IAccessControl.sol") ||
-      loadContract("contracts/base/access/IAccessControl.sol"),
-    contractMap.get("contracts/base/utils/Strings.sol") ||
-      loadContract("contracts/base/utils/Strings.sol"),
-    contractMap.get("contracts/base/utils/math/Math.sol") ||
-      loadContract("contracts/base/utils/math/Math.sol"),
   ]);
 
   const input = {
@@ -124,14 +112,6 @@ export const compileERC1155Contract = async (uuid: string) => {
       return { contents: ERC1155SupplyContract };
     else if (path === "@openzeppelin/contracts/access/Ownable.sol")
       return { contents: OwnableContract };
-    else if (path === "@openzeppelin/contracts/access/AccessControl.sol")
-      return { contents: AccessControlContract };
-    else if (path === "@openzeppelin/contracts/access/IAccessControl.sol")
-      return { contents: IAccessControlContract };
-    else if (path === "@openzeppelin/contracts/utils/Strings.sol")
-      return { contents: StringsContract };
-    else if (path === "@openzeppelin/contracts/utils/math/Math.sol")
-      return { contents: MathContract };
     else return { error: "File not found" };
   };
 

@@ -1,6 +1,6 @@
 import Input from "components/shared/Input";
 import React, { useEffect } from "react";
-import { ERC1155TokenData, TokenData } from "types/tokens";
+import { ERC1155ContractData, TokenData } from "types/tokens";
 import { validateInput, validateURL } from "./validation";
 
 const ERC1155Form = ({
@@ -8,7 +8,7 @@ const ERC1155Form = ({
   setTokenData,
   setStepComplete,
 }: {
-  tokenData: ERC1155TokenData;
+  tokenData: ERC1155ContractData;
   setTokenData: (value: TokenData) => void;
   setStepComplete: (value: boolean) => void;
 }) => {

@@ -11,7 +11,7 @@ import { generateERC1155Source } from "utils/api/generateERC1155Source";
 import { getVerificationApiData } from "constants/supportedNetworks";
 import { Contract } from "types/contract";
 import { ethers } from "ethers";
-import { ERC20TokenData, ERC721TokenData } from "types/tokens";
+import { ERC20ContractData, ERC721ContractData } from "types/tokens";
 
 export default async function handler(
   req: NextApiRequest,
@@ -27,11 +27,11 @@ export default async function handler(
 
   switch (contractType) {
     case "ERC20":
-      contract = (await ERC20.findOne({ contractId })) as ERC20TokenData;
+      contract = (await ERC20.findOne({ contractId })) as ERC20ContractData;
       sourceCode = await generateERC20Source(contractId);
       break;
     case "ERC721":
-      contract = (await ERC721.findOne({ contractId })) as ERC721TokenData;
+      contract = (await ERC721.findOne({ contractId })) as ERC721ContractData;
       const mintFee = contract.options.mintFee;
       const maxSupply = contract.options.maxSupply;
       const mintTokens = contract.options.customPaymentTokenData.address;

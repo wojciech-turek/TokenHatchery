@@ -1,7 +1,7 @@
 import { Switch } from "@headlessui/react";
 import Input from "components/shared/Input";
 import React, { useEffect } from "react";
-import { ERC20TokenData, TokenData } from "types/tokens";
+import { ERC20ContractData, TokenData } from "types/tokens";
 import { classNames } from "utils/client/classNames";
 import { validateInput, validateNumber } from "./validation";
 
@@ -10,17 +10,17 @@ const ERC20Form = ({
   setTokenData,
   setStepComplete,
 }: {
-  tokenData: ERC20TokenData;
+  tokenData: ERC20ContractData;
   setTokenData: (value: TokenData) => void;
   setStepComplete: (value: boolean) => void;
 }) => {
   useEffect(() => {
     if (
-      !validateInput(tokenData.name) || 
+      !validateInput(tokenData.name) ||
       !validateInput(tokenData.symbol) ||
       !validateNumber(tokenData.decimals) ||
       (tokenData.initialSupply !== "" &&
-      !validateNumber(tokenData.initialSupply))
+        !validateNumber(tokenData.initialSupply))
     ) {
       setStepComplete(false);
     } else {

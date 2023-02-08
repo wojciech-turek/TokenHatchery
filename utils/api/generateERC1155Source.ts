@@ -1,18 +1,6 @@
 import { contractMap, loadContract } from "./contractsMap";
 
-export const generateERC1155Source = async (
-  contractId: string,
-  extensions: string[],
-  managementType: string
-) => {
-  const extensionTypeSet = new Set(extensions);
-
-  const burnable = extensionTypeSet.has("Burnable");
-  const pausable = extensionTypeSet.has("Pausable");
-  const supplyTrackable = extensionTypeSet.has("Supply Tracking");
-  const isOwnable = managementType === "Ownable";
-  const isAccessControl = managementType === "AccessControl";
-
+export const generateERC1155Source = async (contractId: string) => {
   const [
     generatedContract,
     ERC1155Contract,
@@ -27,10 +15,6 @@ export const generateERC1155Source = async (
     PausableContract,
     ERC1155SupplyContract,
     OwnableContract,
-    AccessControlContract,
-    IAccessControlContract,
-    StringsContract,
-    MathContract,
   ] = await Promise.all([
     contractMap.get(`/tmp/${contractId}.sol`) ||
       loadContract(`/tmp/${contractId}.sol`),
@@ -87,9 +71,6 @@ export const generateERC1155Source = async (
     "@openzeppelin/contracts/security/Pausable.sol": {
       content: PausableContract,
     },
-    "@openzeppelin/contracts/utils/Context.sol": {
-      content: ContextContract,
-    },
   };
 
   const supplyTrackableExtension = {
@@ -101,20 +82,6 @@ export const generateERC1155Source = async (
   const ownableControl = {
     "@openzeppelin/contracts/access/Ownable.sol": {
       content: OwnableContract,
-    },
-  };
-  const accessControl = {
-    "@openzeppelin/contracts/access/AccessControl.sol": {
-      content: AccessControlContract,
-    },
-    "@openzeppelin/contracts/access/IAccessControl.sol": {
-      content: IAccessControlContract,
-    },
-    "@openzeppelin/contracts/utils/Strings.sol": {
-      content: StringsContract,
-    },
-    "@openzeppelin/contracts/utils/math/Math.sol": {
-      content: MathContract,
     },
   };
 
@@ -150,11 +117,10 @@ export const generateERC1155Source = async (
         content: IERC165Contract,
       },
 
-      ...(burnable && burnableExtension),
-      ...(pausable && pausableExtension),
-      ...(supplyTrackable && supplyTrackableExtension),
-      ...(isOwnable && ownableControl),
-      ...(isAccessControl && accessControl),
+      ...burnableExtension,
+      ...pausableExtension,
+      ...supplyTrackableExtension,
+      ...ownableControl,
     },
     settings: { optimizer: { enabled: true, runs: 200 } },
   };

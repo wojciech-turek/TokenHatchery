@@ -11,19 +11,9 @@ const Erc1155ContractSchema = new Schema({
   },
   address: {
     type: String,
-    required: false,
-  },
-  extensions: {
-    type: Array,
-    required: true,
-  },
-  managementType: {
-    type: String,
-    required: true,
   },
   baseURI: {
     type: String,
-    required: true,
   },
   contractId: {
     type: String,

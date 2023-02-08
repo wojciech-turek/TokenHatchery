@@ -4,7 +4,7 @@ import Input from "components/shared/Input";
 import { ethers } from "ethers";
 import { motion } from "framer-motion";
 import React, { useEffect } from "react";
-import { ERC721TokenData, TokenData } from "types/tokens";
+import { ERC721ContractData, TokenData } from "types/tokens";
 import { classNames } from "utils/client/classNames";
 import { validateInput, validateNumber, validateURL } from "./validation";
 import { erc20ABI } from "@wagmi/core";
@@ -50,7 +50,7 @@ const ERC721Form = ({
   setTokenData,
   setStepComplete,
 }: {
-  tokenData: ERC721TokenData;
+  tokenData: ERC721ContractData;
   setTokenData: (value: TokenData) => void;
   setStepComplete: (value: boolean) => void;
 }) => {
@@ -506,4 +506,3 @@ const ERC721Form = ({
 };
 
 export default ERC721Form;
-

@@ -1,7 +1,11 @@
 import { ethers } from "ethers";
 import useApi from "hooks/useApi";
 import React, { useEffect, useState } from "react";
-import { ERC20TokenData, ERC721TokenData, ERC721TokenOptions, TokenData } from "types/tokens";
+import {
+  ERC721ContractData,
+  ERC721ContractOptions,
+  TokenData,
+} from "types/tokens";
 import { useAccount, useNetwork, useSigner } from "wagmi";
 import { allSupportedNetworks } from "constants/supportedNetworks";
 import SubHeading from "components/SubHeading/SubHeading";
@@ -11,12 +15,14 @@ import { classNames } from "utils/client/classNames";
 import Link from "next/link";
 import Fader from "components/Fader/Fader";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { getSummaryData } from "./summaryTableData";
 
 interface ContractDeployProps {
   tokenData: TokenData;
   setTokenData: (value: TokenData) => void;
   setStepComplete: (value: boolean) => void;
 }
+
 const ContractDeploy = ({
   tokenData,
   setTokenData,
@@ -30,9 +36,8 @@ const ContractDeploy = ({
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    if(tokenData.address !== "") setStepComplete(true);
-  }, [tokenData.address, setStepComplete])
-  
+    if (tokenData.address !== "") setStepComplete(true);
+  }, [tokenData.address, setStepComplete]);
 
   const generateContractMutation = useMutation(generateContract, {
     onMutate: () => {
@@ -49,14 +54,14 @@ const ContractDeploy = ({
       const contract = new ethers.ContractFactory(abi, bytecode, signer);
       const args = [];
       if (tokenData.type === "ERC721") {
-        const { options } = tokenData;
+        const { options } = tokenData as ERC721ContractData;
         const {
           mintFee,
           maxSupply,
           walletLimit,
           customPaymentToken,
           customPaymentTokenData,
-        } = options as ERC721TokenOptions;
+        } = options as ERC721ContractOptions;
         if (mintFee) args.push(mintFee);
         if (maxSupply) args.push(maxSupply);
         if (customPaymentToken) args.push(customPaymentTokenData.address);
@@ -93,84 +98,6 @@ const ContractDeploy = ({
     (network) => network.chainId === chain?.id
   );
 
-  const erc20SummaryData = [
-    {
-      id: 1,
-      title: "Token type",
-      description: tokenData.type,
-    },
-    {
-      id: 2,
-      title: "Token name",
-      description: tokenData.name,
-    },
-    {
-      id: 3,
-      title: "Token symbol",
-      description: (tokenData as ERC20TokenData).symbol,
-    },
-    {
-      id: 4,
-      title: "Token decimals",
-      description: (tokenData as ERC20TokenData).decimals,
-    },
-    {
-      id: 5,
-      title: "Initial supply",
-      description: (tokenData as ERC20TokenData).initialSupply || "0",
-    },
-    {
-      id: 6,
-      title: "Dynamic supply",
-      description: (tokenData as ERC20TokenData).options.dynamicSupply ? "Yes" : "No",
-    }
-  ];
-
-  const erc721SummaryData = [
-    {
-      id: 1,
-      title: "Token type",
-      description: tokenData.type,
-    },
-    {
-      id: 2,
-      title: "Token name",
-      description: tokenData.name,
-    },
-    {
-      id: 3,
-      title: "Token symbol",
-      description: (tokenData as ERC721TokenData).symbol,
-    },
-    {
-      id: 4,
-      title: "Public minting",
-      description: (tokenData as ERC721TokenData).options.publicMinting
-        ? "Yes"
-        : "No",
-    },
-    (tokenData as ERC721TokenData).options.publicMinting
-      ? {
-          id: 5,
-          title: "Custom payment token",
-          description: (tokenData as ERC721TokenData).options.customPaymentToken
-            ? "Yes"
-            : "No",
-        }
-      : null,
-  ];
-
-  const getSummaryData = () => {
-    switch (tokenData.type) {
-      case "ERC20":
-        return erc20SummaryData;
-      case "ERC721":
-        return erc721SummaryData;
-      default:
-        return [];
-    }
-  };
-
   const stages = [
     "Ready to deploy",
     "Generating contract...",
@@ -195,7 +122,7 @@ const ContractDeploy = ({
       <div className="flex flex-col items-start justify-between mt-12 sm:flex-row gap-4">
         <div className="overflow-hidden bg-white shadow sm:rounded-md w-full  sm:w-1/3">
           <ul role="list" className="divide-y divide-gray-200">
-            {getSummaryData().map((item) => {
+            {getSummaryData(tokenData).map((item) => {
               if (!item) return null;
               return (
                 <li key={item.id} className="px-4 py-4 sm:px-6">

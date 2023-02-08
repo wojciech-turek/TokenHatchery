@@ -5,8 +5,6 @@ import React, { useState } from "react";
 import { mintingSteps } from "constants/mintingSteps";
 import WalletConnect from "components/Minting/WalletConnect/WalletConnect";
 import NetworkSelect from "components/Minting/NetworkSelect/NetworkSelect";
-import ExtensionSelect from "components/Minting/ExtensionSelect/ExtensionSelect";
-import { erc1155Extensions } from "constants/availableTokenTypes";
 import ContractDeploy from "components/Minting/ContractDeploy/ContractDeploy";
 import ContractVerify from "components/Minting/ContractVerify/ContractVerify";
 import { TokenData, ContractType } from "types/tokens";
@@ -25,8 +23,6 @@ const Erc1155 = () => {
     networkChainId: 0,
     baseURI: "",
     networkName: "",
-    extensions: [],
-    managementType: "Ownable",
     type: ContractType.ERC1155,
   });
 
@@ -46,16 +42,6 @@ const Erc1155 = () => {
           setStepComplete={handleCompleteStep}
           setTokenData={setTokenData}
           tokenData={tokenData}
-        />
-      ),
-    },
-    {
-      body: (
-        <ExtensionSelect
-          extensions={erc1155Extensions}
-          tokenData={tokenData}
-          setTokenData={setTokenData}
-          setStepComplete={handleCompleteStep}
         />
       ),
     },

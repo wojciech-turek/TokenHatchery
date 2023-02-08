@@ -33,7 +33,7 @@ export const erc20Settings = [
     name: "Custom name and symbol",
   },
   {
-    name: "Custom number of decimals"
+    name: "Custom number of decimals",
   },
   {
     name: "Custom initial supply",
@@ -156,6 +156,6 @@ export const tokenTypes = [
     extensions: erc1155Extensions,
     settings: erc1155Settings,
     link: "/create/erc1155",
-    enabled: false,
+    enabled: true,
   },
 ];
