@@ -15,7 +15,6 @@ const Erc721ContractSchema = new Schema({
   },
   address: {
     type: String,
-    required: false,
   },
   baseURI: {
     type: String,
