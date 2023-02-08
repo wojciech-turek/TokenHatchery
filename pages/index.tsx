@@ -2,6 +2,7 @@ import Features from "components/LandingPage/Features";
 import NFTCollections from "components/LandingPage/NFTCollections";
 import SecuredBy from "components/LandingPage/SecuredBy";
 import { TokensCreated } from "components/LandingPage/TokensCreated";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
@@ -45,6 +46,15 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </div>
+        <div className="flex gap-4 items-center justify-center mt-20 sm:mt-32">
+          <div className="text-gray-900 text-3xl font-bold">MEMBER OF </div>
+          <Image
+            src="/imgs/sagaInnovator.png"
+            alt="Saga Innovators"
+            width={200}
+            height={50}
+          />
         </div>
         <div className="mt-20 sm:mt-32">
           <SecuredBy />
