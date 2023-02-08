@@ -9,7 +9,6 @@ import { useGetContracts } from "hooks/useGetContracts";
 
 const TokenTable = ({ address }: { address: string }) => {
   const { data, isLoading } = useGetContracts(address);
-
   return (
     <div className="relative">
       <motion.div
@@ -90,7 +89,7 @@ const TokenTable = ({ address }: { address: string }) => {
                               <td
                                 colSpan={6}
                                 scope="colgroup"
-                                className="px-4 py-2 text-left text-sm text-center text-gray-900 sm:px-6"
+                                className="px-4 py-2 text-sm text-center text-gray-900 sm:px-6"
                               >
                                 <FolderOpenIcon
                                   className="inline-block w-5 text-gray-400"

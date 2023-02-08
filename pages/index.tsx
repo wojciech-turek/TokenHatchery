@@ -47,8 +47,8 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="flex gap-4 items-center justify-center mt-20 sm:mt-32">
-          <div className="text-gray-900 text-3xl font-bold">MEMBER OF </div>
+        <div className="flex gap-4 py-4 items-center justify-center mt-16 sm:mt-32 border-2 border-gray-50 bg-gray-50">
+          <div className="text-gray-800 text-3xl font-bold">Member of </div>
           <Image
             src="/imgs/sagaInnovator.png"
             alt="Saga Innovators"
