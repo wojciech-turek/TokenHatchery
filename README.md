@@ -8,7 +8,7 @@ This project will always be **opensource** and **free of cost** for people who w
 
 Smart contracts used for token deployment are created with use of [OpenZeppelin Contracts](https://github.com/OpenZeppelin/openzeppelin-contracts) which I find to be very high quality, they are also audited so we can assume relatively safe to use. I have not added any custom code which could break their security.
 
-This project has a live deployment which is currently under development (unstable) available at: [tokenhatchery.com](tokenhatchery.com)
+This project has a live deployment which is currently under development (unstable) available at: [https://token-hatchery.vercel.app/](https://token-hatchery.vercel.app/)
 
 ## Running the project locally
 
